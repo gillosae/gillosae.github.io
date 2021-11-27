@@ -21,3 +21,6 @@ docs:
     children:
       - title: "222"
         url: /docs/configuration/
+
+sidebar:
+  nav: "docs"
