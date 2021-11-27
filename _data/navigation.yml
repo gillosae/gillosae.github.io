@@ -10,3 +10,14 @@ main:
   #   url: /collection-archive/
   # - title: "Sitemap"
   #   url: /sitemap/
+  
+docs:
+  - title: ➕
+    children:
+      - title: "whatever"
+        url: /docs/quick-start-guide/
+
+  - title: ✖️
+    children:
+      - title: "222"
+        url: /docs/configuration/
