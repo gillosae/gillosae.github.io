@@ -1,0 +1,42 @@
+# For documentation on this file, see:
+# https://github.com/riggraz/no-style-please#customize-the-menu
+
+entries:
+  - title: info
+    entries:
+      - title: M.S. in Department of Intelligence and Information
+      - title: Music and Audio Research Group, Seoul National University
+      - title : "Advisor: Kyogu Lee"
+      - title: hyway@snu.ac.kr
+        url: mailto:hyway@snu.ac.kr
+      - title: "<a href='https://github.com/gillosae'>github</a> <a href='https://x.com/gillosaekim'>twitter</a> <a href='https://www.linkedin.com/in/hayoon-kim-ab187032a/'>linkedin</a>"
+      # - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
+
+  - title: research topics
+    entries:
+      - title: Singing Voice Synthesis
+      - title: Multimodal Emotion Analysis
+    # post_list:
+    #   limit: 5
+    #   show_more: true
+    #   show_more_text: See archive...
+    #   show_more_url: archive.html
+
+  # - title: publications
+  #   post_list:
+  #     category: example2
+  #     show_more: true
+  #     show_more_text: See more posts...
+  #     show_more_url: example2-archive.html
+
+  # - title: rss
+  #   url: feed.xml
+  
+  - title: publications
+    entries:
+      - title: '<u>Hayoon Kim</u>, Ahyeon Choi, Sungho Lee, Hyunjin Jung, and Kyogu Lee, "Emosical: An Emotion-Annotated Musical Theatre Dataset," in EMNLP Findings, 2024. <a href="">arXiv</a> <a href="">demo</a> <a href="https://github.com/gillosae/emosical">github</a>'
+        # entries:
+        #   - title: with subsubitems
+        #   - title: example page
+        #     url: about
+      - title: 'Ahyeon Choi, <u>Hayoon Kim</u>, Mina Jo, Subeen Kim, Haesun Joung, Inyong Choi, and Kyogu Lee, "The Impact of Visual Information in Speech Perception for Individuals with Hearing Loss: A mini review," in Frontiers in Psychology, 2024. <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1399084/full">arXiv</a>'
