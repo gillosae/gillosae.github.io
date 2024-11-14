@@ -34,7 +34,7 @@ entries:
   
   - title: publications
     entries:
-      - title: '<u>Hayoon Kim</u>, Ahyeon Choi, Sungho Lee, Hyunjin Jung, and Kyogu Lee, "Emosical: An Emotion-Annotated Musical Theatre Dataset," in EMNLP Findings, 2024. <a href="">arXiv</a> <a href="">demo</a> <a href="https://github.com/gillosae/emosical">github</a>'
+      - title: '<u>Hayoon Kim</u>, Ahyeon Choi, Sungho Lee, Hyunjin Jung, and Kyogu Lee, "Emosical: An Emotion-Annotated Musical Theatre Dataset," in EMNLP Findings, 2024. <a href="">arXiv</a> <a href="emosical">web</a> <a href="https://github.com/gillosae/emosical">github</a>'
         # entries:
         #   - title: with subsubitems
         #   - title: example page

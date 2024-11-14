@@ -24,8 +24,8 @@ This paper presents Emosical, a multimodal open-source dataset of musical films.
 ![Word cloud of Emosical](/images/emotion_wordcloud.png)
 
 ## Ablation Results of Emosical.
-![Emosical Ablation Results](/images/emotion_ablation.png)
-![Emosical Ablation MOS Results](/images/emotion_ablation_mos.png)
+![Emosical Ablation Results](/images/emosical_ablation.png)
+![Emosical Ablation MOS Results](/images/emosical_ablation_mos.png)
 - Ablation 1: Text only. 
 - Ablation 2: Text + Character. 
 - Ablation 3: Text + Character + Scene Summarization.
