@@ -37,7 +37,7 @@ declare global {
 }
 
 // Mobile background image
-import mobileBg from './assets/mobile_bg.jpg';
+import mobileBg from './assets/best/mobile_bg.jpg';
 
 // Dynamically import all images from optimized folder using Vite's import.meta.glob
 const imageModules = import.meta.glob('./assets/optimized/*.{png,jpg,jpeg,JPG,svg}', { eager: true });

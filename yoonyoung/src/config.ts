@@ -1,3 +1,5 @@
+import weddingAudio from './assets/audio/wedding.mp3';
+
 export const WEDDING_CONFIG = {
   // 신랑 신부 정보
   groom: {
@@ -71,7 +73,7 @@ export const WEDDING_CONFIG = {
   audio: {
     enabled: true, // 음악 기능 활성화 여부
     autoPlay: false, // 페이지 로드 시 자동 재생 여부
-    src: '/src/assets/audio/wedding.mp3', // 음악 파일 경로
+    src: weddingAudio, // 음악 파일 경로
     volume: 0.5 // 볼륨 (0.0 ~ 1.0)
   }
 };
