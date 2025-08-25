@@ -396,7 +396,7 @@ function App() {
         </div>
 
         {/* Invitation Section */}
-        <section id="invitation" className="max-w-2xl mx-auto px-6 pb-60 text-center relative z-30 flex-1 flex flex-col justify-center" >
+        <section id="invitation" className="max-w-2xl mx-auto px-6 pb-120 text-center relative z-30 flex-1 flex flex-col justify-center" >
           <h2 className="text-sm font-light mb-4 text-blue-400 tracking-widest">INVITATION</h2>
           <h3 className="text-2xl font-light mb-8 text-blue-400 leading-relaxed">소중한 분들을 초대합니다</h3>
           
