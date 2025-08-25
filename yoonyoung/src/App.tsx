@@ -396,7 +396,7 @@ function App() {
         </div>
 
         {/* Invitation Section */}
-        <section id="invitation" className="max-w-2xl mx-auto px-6 pb-120 text-center relative z-30 flex-1 flex flex-col justify-center" >
+        <section id="invitation" className="max-w-2xl mx-auto px-6 pb-32 text-center relative z-30 flex-1 flex flex-col justify-center" >
           <h2 className="text-sm font-light mb-4 text-blue-400 tracking-widest">INVITATION</h2>
           <h3 className="text-2xl font-light mb-8 text-blue-400 leading-relaxed">소중한 분들을 초대합니다</h3>
           
@@ -404,7 +404,7 @@ function App() {
             <p className="text-sm">우리가 사랑함은 <br/> 그가 먼저 우리를 사랑하셨음이라</p>
             
             
-            <p className="text-sm">- 요한일서 4:19 -</p>
+            <p className="text-sm">- 요한일서 4:19 -</p> 
             
             <div className="my-8">
               <div className="w-16 h-px bg-gray-300 mx-auto"></div>
@@ -429,7 +429,7 @@ function App() {
             
             <button 
               onClick={() => setContactModalOpen(true)}
-              className="mt-8 bg-white text-gray-600 px-8 py-3 rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300"
+              className="mt-8 mb-16 bg-white text-gray-600 px-8 py-3 rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300"
             >
               연락하기
             </button>
