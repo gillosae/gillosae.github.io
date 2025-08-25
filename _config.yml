@@ -26,4 +26,8 @@ plugins:
   - jekyll-seo-tag
   - jekyll-remote-theme
 
+# Include yoonyoung directory in build
+include:
+  - yoonyoung
+
 remote_theme: "riggraz/no-style-please"
