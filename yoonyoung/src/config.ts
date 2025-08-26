@@ -15,7 +15,7 @@ export const WEDDING_CONFIG = {
     mother: {
       name: '유덕희',
       account: {
-        bank: '하나은행', 
+        bank: '농협은행', 
         number: '105-12-257128'
       }
     },
@@ -37,7 +37,7 @@ export const WEDDING_CONFIG = {
     mother: {
       name: '송은영',
       account: {
-        bank: '우리은행',
+        bank: '농협은행',
         number: '302-8944-1924-51'
       }
     },

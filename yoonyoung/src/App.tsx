@@ -42,8 +42,17 @@ import mobileBg from './assets/best/mobile_bg.jpg';
 // Dynamically import all images from optimized folder using Vite's import.meta.glob
 const imageModules = import.meta.glob('./assets/optimized/*.{png,jpg,jpeg,JPG,svg}', { eager: true });
 
-// Convert to simple array of image URLs
-const galleryImageUrls = Object.values(imageModules).map((module) => (module as { default: string }).default);
+// Convert to simple array of image URLs and shuffle them
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+const galleryImageUrls = shuffleArray(Object.values(imageModules).map((module) => (module as { default: string }).default));
 
 function App() {
   // Countdown Timer Logic
@@ -215,13 +224,85 @@ function App() {
   // Gallery modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImg, setModalImg] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAllImages, setShowAllImages] = useState(false);
+  
+  // Touch/swipe state for gallery modal
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+  
+  // Handle touch start
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  
+  // Handle touch move
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  // Handle touch end
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && currentImageIndex < galleryImages.length - 1) {
+      // Swipe left - next image
+      const newIndex = currentImageIndex + 1;
+      setCurrentImageIndex(newIndex);
+      setModalImg(galleryImages[newIndex]);
+    }
+    
+    if (isRightSwipe && currentImageIndex > 0) {
+      // Swipe right - previous image
+      const newIndex = currentImageIndex - 1;
+      setCurrentImageIndex(newIndex);
+      setModalImg(galleryImages[newIndex]);
+    }
+  };
+  
+
   
   // Contact modal state
   const [contactModalOpen, setContactModalOpen] = useState(false);
   
   // Use the dynamically loaded images
   const galleryImages = galleryImageUrls;
+  
+  // Add keyboard event listener
+  useEffect(() => {
+    const handleKeyDownEvent = (e: KeyboardEvent) => {
+      if (!modalOpen) return;
+      
+      if (e.key === 'ArrowLeft' && currentImageIndex > 0) {
+        const newIndex = currentImageIndex - 1;
+        setCurrentImageIndex(newIndex);
+        setModalImg(galleryImages[newIndex]);
+      }
+      
+      if (e.key === 'ArrowRight' && currentImageIndex < galleryImages.length - 1) {
+        const newIndex = currentImageIndex + 1;
+        setCurrentImageIndex(newIndex);
+        setModalImg(galleryImages[newIndex]);
+      }
+      
+      if (e.key === 'Escape') {
+        setModalOpen(false);
+      }
+    };
+    
+    if (modalOpen) {
+      document.addEventListener('keydown', handleKeyDownEvent);
+      return () => document.removeEventListener('keydown', handleKeyDownEvent);
+    }
+  }, [modalOpen, currentImageIndex, galleryImages]);
 
   // Kakao Map ref
   const mapRef = useRef<HTMLDivElement>(null);
@@ -474,7 +555,11 @@ function App() {
               key={idx}
               type="button"
               className="w-full block focus:outline-none"
-              onClick={() => { setModalImg(src); setModalOpen(true); }}
+              onClick={() => { 
+                setModalImg(src); 
+                setCurrentImageIndex(galleryImages.indexOf(src));
+                setModalOpen(true); 
+              }}
             >
               <img
                 src={src}
@@ -521,12 +606,56 @@ function App() {
                 </svg>
               </button>
               
+              {/* 이전 버튼 */}
+              {currentImageIndex > 0 && (
+                <button
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newIndex = currentImageIndex - 1;
+                    setCurrentImageIndex(newIndex);
+                    setModalImg(galleryImages[newIndex]);
+                  }}
+                  aria-label="Previous image"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              )}
+              
+              {/* 다음 버튼 */}
+              {currentImageIndex < galleryImages.length - 1 && (
+                <button
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newIndex = currentImageIndex + 1;
+                    setCurrentImageIndex(newIndex);
+                    setModalImg(galleryImages[newIndex]);
+                  }}
+                  aria-label="Next image"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              )}
+              
               {/* 이미지 */}
               <img
                 src={modalImg}
                 alt="Gallery large view"
                 className="w-full max-h-[90vh] object-contain"
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
               />
+              
+              {/* 이미지 인덱스 표시 */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black bg-opacity-50 px-3 py-1 rounded-full">
+                {currentImageIndex + 1} / {galleryImages.length}
+              </div>
               
               {/* 배경 클릭으로 닫기 */}
               <div 
