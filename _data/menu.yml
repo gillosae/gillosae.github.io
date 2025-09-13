@@ -4,7 +4,7 @@
 entries:
   - title: info
     entries:
-      - title: M.S. in Department of Intelligence and Information
+      - title: Ph.D in Department of Intelligence and Information
       - title: Music and Audio Research Group, Seoul National University
       - title : "Advisor: Kyogu Lee"
       - title: hyway@snu.ac.kr
@@ -14,8 +14,8 @@ entries:
 
   - title: research topics
     entries:
-      - title: Singing Voice Synthesis
-      - title: Multimodal Emotion Analysis
+      - title: Audio Synthesis
+      - title: Accessibility
     # post_list:
     #   limit: 5
     #   show_more: true
@@ -32,9 +32,6 @@ entries:
   # - title: rss
   #   url: feed.xml
   
-  - title: projects
-    entries:
-      - title: '<a href="yoonyoung">윤영 & 다영의 결혼식 초대장</a> - React + TypeScript로 제작된 웹 초대장'
 
   - title: publications
     entries:
