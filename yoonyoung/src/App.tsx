@@ -752,55 +752,52 @@ function App() {
               <div className="text-gray-600 text-sm font-medium">토</div>
             </div>
             
-            {/* Calendar Body - November 2025 */}
+            {/* Calendar Body - October 2025 */}
             <div className="grid grid-cols-7 gap-2">
               {/* Week 1 */}
               <div></div>
               <div></div>
               <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
               <div className="py-2 text-gray-700">1</div>
-              
-              {/* Week 2 */}
-              <div className="py-2 text-blue-400">2</div>
+              <div className="py-2 text-gray-700">2</div>
               <div className="py-2 text-gray-700">3</div>
               <div className="py-2 text-gray-700">4</div>
+              
+              {/* Week 2 */}
               <div className="py-2 text-gray-700">5</div>
               <div className="py-2 text-gray-700">6</div>
               <div className="py-2 text-gray-700">7</div>
               <div className="py-2 text-gray-700">8</div>
-              
-              {/* Week 3 */}
-              <div className="py-2 text-blue-400">9</div>
+              <div className="py-2 text-gray-700">9</div>
               <div className="py-2 text-gray-700">10</div>
               <div className="py-2 text-gray-700">11</div>
-              <div className="py-2 text-gray-700">12</div>
+              
+              {/* Week 3 */}
+              <div className="py-2 bg-blue-400 text-white w-10 h-10 flex items-center justify-center mx-auto rounded-full">12</div>
               <div className="py-2 text-gray-700">13</div>
               <div className="py-2 text-gray-700">14</div>
               <div className="py-2 text-gray-700">15</div>
-              
-              {/* Week 4 */}
-              <div className="py-2 text-blue-400">16</div>
+              <div className="py-2 text-gray-700">16</div>
               <div className="py-2 text-gray-700">17</div>
               <div className="py-2 text-gray-700">18</div>
+              
+              {/* Week 4 */}
               <div className="py-2 text-gray-700">19</div>
               <div className="py-2 text-gray-700">20</div>
               <div className="py-2 text-gray-700">21</div>
               <div className="py-2 text-gray-700">22</div>
-              
-              {/* Week 5 */}
-              <div className="py-2 text-blue-400">23</div>
+              <div className="py-2 text-gray-700">23</div>
               <div className="py-2 text-gray-700">24</div>
               <div className="py-2 text-gray-700">25</div>
+              
+              {/* Week 5 */}
               <div className="py-2 text-gray-700">26</div>
               <div className="py-2 text-gray-700">27</div>
               <div className="py-2 text-gray-700">28</div>
               <div className="py-2 text-gray-700">29</div>
-              
-              {/* Week 6 */}
-              <div className="py-2 bg-blue-400 text-white w-10 h-10 flex items-center justify-center mx-auto">30</div>
+              <div className="py-2 text-gray-700">30</div>
+              <div className="py-2 text-gray-700">31</div>
+              <div></div>
             </div>
           </div>
 
