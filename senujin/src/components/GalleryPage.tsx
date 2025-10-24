@@ -15,6 +15,11 @@ const GalleryPage = ({ folderName, title }: GalleryPageProps) => {
   const [modalImg, setModalImg] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
+  // Loading state
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [minLoadingTimePassed, setMinLoadingTimePassed] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  
   // Touch/swipe state for gallery modal
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -32,9 +37,48 @@ const GalleryPage = ({ folderName, title }: GalleryPageProps) => {
         .map(([, module]) => module.default)
         .sort();
       setGalleryImages(images);
+      
+      // Preload all images
+      if (images.length > 0) {
+        const imagePromises = images.map((src) => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = resolve;
+            img.onerror = reject;
+          });
+        });
+        
+        try {
+          await Promise.all(imagePromises);
+          setImagesLoaded(true);
+        } catch (error) {
+          console.error('Failed to load some images:', error);
+          // Still show content even if some images fail
+          setImagesLoaded(true);
+        }
+      } else {
+        setImagesLoaded(true);
+      }
     };
     loadImages();
   }, [folderName]);
+  
+  // Minimum loading time timer
+  useEffect(() => {
+    const minLoadingDuration = 1500; // 1.5초 (하트 애니메이션 1루프)
+    const timer = setTimeout(() => {
+      setMinLoadingTimePassed(true);
+    }, minLoadingDuration);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // Show content when both loading conditions are met
+  useEffect(() => {
+    if (imagesLoaded && minLoadingTimePassed) {
+      setShowContent(true);
+    }
+  }, [imagesLoaded, minLoadingTimePassed]);
 
   // Handle touch start
   const onTouchStart = (e: React.TouchEvent) => {
@@ -98,6 +142,19 @@ const GalleryPage = ({ folderName, title }: GalleryPageProps) => {
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#E8F4F8'}}>
+      {/* Loading indicator */}
+      {!showContent && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white">
+          <div className="flex flex-col items-center">
+            <img 
+              src={`${import.meta.env.BASE_URL}heart.gif`}
+              alt="Loading" 
+              className="w-8 h-8 animate-heartbeat"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Header with back button and audio control */}
       <div className="fixed top-0 left-0 right-0 z-40">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -137,7 +194,13 @@ const GalleryPage = ({ folderName, title }: GalleryPageProps) => {
       </div>
 
       {/* Gallery Content */}
-      <section className="max-w-2xl md:max-w-3xl mx-auto pt-24 pb-16 px-6 text-center">
+      <section 
+        className="max-w-2xl md:max-w-3xl mx-auto pt-24 pb-16 px-6 text-center"
+        style={{
+          opacity: showContent ? 1 : 0,
+          transition: 'opacity 0.3s ease-in-out'
+        }}
+      >
         <h2 className="text-sm font-light mb-4 text-blue-400 tracking-widest">GALLERY</h2>
         <h3 className="text-2xl font-light mb-12 text-blue-400">{title}</h3>
         
