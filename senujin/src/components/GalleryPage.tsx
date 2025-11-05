@@ -27,15 +27,45 @@ const GalleryPage = ({ folderName, title }: GalleryPageProps) => {
   // Minimum swipe distance (in px)
   const minSwipeDistance = 50;
 
+  // Natural sort function for numeric filenames
+  const naturalSort = (a: string, b: string) => {
+    const extractNumber = (str: string) => {
+      const match = str.match(/(\d+)-(\d+)/);
+      if (match) {
+        return [parseInt(match[1]), parseInt(match[2])];
+      }
+      return [0, 0];
+    };
+    
+    const [aFirst, aSecond] = extractNumber(a);
+    const [bFirst, bSecond] = extractNumber(b);
+    
+    if (aFirst !== bFirst) {
+      return aFirst - bFirst;
+    }
+    return aSecond - bSecond;
+  };
+
   // Load images dynamically based on folder
   useEffect(() => {
     const loadImages = async () => {
       const imageModules = import.meta.glob<{ default: string }>('../assets/**/*.{png,jpg,jpeg,JPG,svg,mp4}', { eager: true });
+      
+      // Folders that need natural sorting
+      const needsNaturalSort = ['best', 'outing1', 'outing2', 'studio'];
+      
       const images = Object.entries(imageModules)
         .filter(([path]) => path.includes(`/${folderName}/`))
         .filter(([path]) => !path.endsWith('.mp4')) // Exclude videos
-        .map(([, module]) => module.default)
-        .sort();
+        .map(([path, module]) => ({ path, url: module.default }))
+        .sort((a, b) => {
+          if (needsNaturalSort.includes(folderName)) {
+            return naturalSort(a.path, b.path);
+          }
+          return a.path.localeCompare(b.path);
+        })
+        .map(item => item.url);
+      
       setGalleryImages(images);
       
       // Preload all images
@@ -228,15 +258,15 @@ const GalleryPage = ({ folderName, title }: GalleryPageProps) => {
               </button>
             )}
             
-            {/* Rest of images in masonry layout */}
-            <div className="columns-2 gap-2">
+            {/* Rest of images - use masonry for fourcut, outing2, daily, and snapshot, grid for others */}
+            <div className={folderName === 'fourcut' || folderName === 'outing2' || folderName === 'daily' || folderName === 'snapshot' ? 'columns-2 gap-2' : 'grid grid-cols-2 gap-2'}>
               {galleryImages.slice((folderName === 'studio' || folderName === 'outing2') ? 1 : 0).map((src, idx) => {
                 const actualIdx = (folderName === 'studio' || folderName === 'outing2') ? idx + 1 : idx;
                 return (
                   <button
                     key={actualIdx}
                     type="button"
-                    className="w-full block focus:outline-none mb-2 break-inside-avoid"
+                    className={`w-full block focus:outline-none ${folderName === 'fourcut' || folderName === 'outing2' || folderName === 'daily' || folderName === 'snapshot' ? 'mb-2 break-inside-avoid' : ''}`}
                     onClick={() => { 
                       setModalImg(src); 
                       setCurrentImageIndex(actualIdx);

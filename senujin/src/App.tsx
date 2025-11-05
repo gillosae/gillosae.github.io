@@ -41,6 +41,14 @@ declare global {
 // Mobile background image
 import mobileBg from './assets/best/mobile_bg.jpg';
 
+// Gallery thumbnail images (first image from each gallery)
+import studioThumb from './assets/studio/1-1.jpg';
+import outing1Thumb from './assets/outing1/2-1.jpg';
+import outing2Thumb from './assets/outing2/3-1.jpg';
+import snapshotThumb from './assets/snapshot/060B2174-39EA-482D-B1C0-6DD7A149E500.jpg';
+import dailyThumb from './assets/daily/164173C9-100F-49E5-8A5A-A6F6878ED5EF.jpg';
+import fourcutThumb from './assets/fourcut/3E0D7DD8-D1FD-49DC-8654-9E55C0D6A1C7.jpg';
+
 // Profile images
 // import groomPhoto from './assets/profile/groom.jpg';
 // import bridePhoto from './assets/profile/bride.jpg';
@@ -48,12 +56,32 @@ import mobileBg from './assets/best/mobile_bg.jpg';
 // Dynamically import all images from best folder using Vite's import.meta.glob
 const imageModules = import.meta.glob('./assets/best/*.{png,jpg,jpeg,JPG,svg}', { eager: true });
 
+// Natural sort function for numeric filenames
+const naturalSort = (a: string, b: string) => {
+  const extractNumber = (str: string) => {
+    const match = str.match(/(\d+)-(\d+)/);
+    if (match) {
+      return [parseInt(match[1]), parseInt(match[2])];
+    }
+    return [0, 0];
+  };
+  
+  const [aFirst, aSecond] = extractNumber(a);
+  const [bFirst, bSecond] = extractNumber(b);
+  
+  if (aFirst !== bFirst) {
+    return aFirst - bFirst;
+  }
+  return aSecond - bSecond;
+};
+
 // Convert to simple array of image URLs (excluding mobile_bg.jpg)
-// Keep original order for consistent layout
+// Sort numerically based on filename
 const galleryImageUrls = Object.entries(imageModules)
   .filter(([path]) => !path.includes('mobile_bg'))
-  .map(([, module]) => (module as { default: string }).default)
-  .sort(); // Sort alphabetically for consistent order
+  .map(([path, module]) => ({ path, url: (module as { default: string }).default }))
+  .sort((a, b) => naturalSort(a.path, b.path))
+  .map(item => item.url);
 
 function App() {
   const navigate = useNavigate();
@@ -209,7 +237,6 @@ function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImg, setModalImg] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showAllImages, setShowAllImages] = useState(false);
   
   // Touch/swipe state for gallery modal
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -534,118 +561,164 @@ function App() {
           <h2 className="text-sm font-light mb-4 text-blue-400 tracking-widest">GALLERY</h2>
           <h3 className="text-2xl font-light mb-12 text-blue-400">우리의 순간</h3>
           
-          {/* Initial 6 images */}
-          <div className="columns-2 gap-2">
-            {galleryImages.slice(0, 6).map((src, idx) => (
-              <button
-                key={idx}
-                type="button"
-                className="w-full block focus:outline-none mb-2 break-inside-avoid"
-                onClick={() => { 
-                  setModalImg(src); 
-                  setCurrentImageIndex(idx);
-                  setModalOpen(true); 
-                }}
-              >
-                <img
-                  src={src}
-                  alt={`Gallery ${idx + 1}`}
-                  className="w-full shadow-md hover:scale-105 transition-transform duration-200"
-                  loading="lazy"
-                />
-              </button>
-            ))}
-          </div>
-          
-          {/* Additional images when expanded */}
-          {showAllImages && galleryImages.length > 6 && (
-            <div className="columns-2 gap-2 mt-2">
-              {galleryImages.slice(6).map((src, idx) => {
-                const actualIdx = 6 + idx;
-                return (
-                  <button
-                    key={actualIdx}
-                    type="button"
-                    className="w-full block focus:outline-none mb-2 break-inside-avoid"
-                    onClick={() => { 
-                      setModalImg(src); 
-                      setCurrentImageIndex(actualIdx);
-                      setModalOpen(true); 
-                    }}
-                  >
-                    <img
-                      src={src}
-                      alt={`Gallery ${actualIdx + 1}`}
-                      className="w-full shadow-md hover:scale-105 transition-transform duration-200"
-                      loading="lazy"
-                    />
-                  </button>
-                );
-              })}
+          {/* All images */}
+          <div>
+            {/* First images in 2-column grid */}
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              {galleryImages.slice(0, -3).map((src, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className="w-full block focus:outline-none"
+                  onClick={() => { 
+                    setModalImg(src); 
+                    setCurrentImageIndex(idx);
+                    setModalOpen(true); 
+                  }}
+                >
+                  <img
+                    src={src}
+                    alt={`Gallery ${idx + 1}`}
+                    className="w-full shadow-md hover:scale-105 transition-transform duration-200"
+                    loading="lazy"
+                  />
+                </button>
+              ))}
             </div>
-          )}
-        
-        {!showAllImages && galleryImages.length > 6 && (
-          <div className="mt-8">
-            <button
-              onClick={() => setShowAllImages(true)}
-              className="bg-white text-gray-600 px-8 py-3 rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300"
-            >
-              더보기 ({galleryImages.length - 6}장 더)
-            </button>
+            
+            {/* Last 3 images in 3-column grid */}
+            {galleryImages.length >= 3 && (
+              <div className="grid grid-cols-3 gap-2">
+                {galleryImages.slice(-3).map((src, idx) => {
+                  const actualIdx = galleryImages.length - 3 + idx;
+                  return (
+                    <button
+                      key={actualIdx}
+                      type="button"
+                      className="w-full block focus:outline-none overflow-hidden"
+                      onClick={() => { 
+                        setModalImg(src); 
+                        setCurrentImageIndex(actualIdx);
+                        setModalOpen(true); 
+                      }}
+                    >
+                      <img
+                        src={src}
+                        alt={`Gallery ${actualIdx + 1}`}
+                        className="w-full h-full object-cover shadow-md hover:scale-105 transition-transform duration-200"
+                        style={{ aspectRatio: '3/4' }}
+                        loading="lazy"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        )}
-        
-        {showAllImages && (
-          <div className="mt-8">
-            <button
-              onClick={() => setShowAllImages(false)}
-              className="bg-white text-gray-600 px-8 py-3 rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300"
-            >
-              접기
-            </button>
-          </div>
-        )}
 
         {/* Gallery Categories */}
-        <div className="mt-16">
-          <h3 className="text-lg font-light mb-6 text-gray-600">더 많은 갤러리</h3>
-          <div className="grid grid-cols-2 gap-3">
+        <div className="mt-3">
+          <div className="grid grid-cols-2 gap-3 auto-rows-[120px]">
+            {/* Studio - Large */}
             <button
               onClick={() => navigate('/gallery/studio')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+              className="relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 row-span-2 group"
+              style={{
+                backgroundImage: `url(${studioThumb})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <div className="text-sm font-light">스튜디오 컷</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <div className="text-lg font-medium">스튜디오 컷</div>
+              </div>
+              <div className="absolute inset-0 bg-blue-400/0 group-hover:bg-blue-400/20 transition-all duration-300"></div>
             </button>
+            
+            {/* Outing1 - Small */}
             <button
               onClick={() => navigate('/gallery/outing1')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+              className="relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group"
+              style={{
+                backgroundImage: `url(${outing1Thumb})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <div className="text-sm font-light">어느 예쁜 날</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                <div className="text-sm font-medium">어느 예쁜 날</div>
+              </div>
+              <div className="absolute inset-0 bg-blue-400/0 group-hover:bg-blue-400/20 transition-all duration-300"></div>
             </button>
+            
+            {/* Outing2 - Small */}
             <button
               onClick={() => navigate('/gallery/outing2')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+              className="relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group"
+              style={{
+                backgroundImage: `url(${outing2Thumb})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <div className="text-sm font-light">푸릇푸릇 우리</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                <div className="text-sm font-medium">푸릇푸릇 우리</div>
+              </div>
+              <div className="absolute inset-0 bg-blue-400/0 group-hover:bg-blue-400/20 transition-all duration-300"></div>
             </button>
+            
+            {/* Snapshot - Small */}
             <button
               onClick={() => navigate('/gallery/snapshot')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+              className="relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group"
+              style={{
+                backgroundImage: `url(${snapshotThumb})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <div className="text-sm font-light">다양한 스냅샷</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                <div className="text-sm font-medium">다양한 스냅샷</div>
+              </div>
+              <div className="absolute inset-0 bg-blue-400/0 group-hover:bg-blue-400/20 transition-all duration-300"></div>
             </button>
+            
+            {/* Daily - Large */}
             <button
               onClick={() => navigate('/gallery/daily')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+              className="relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 row-span-2 group"
+              style={{
+                backgroundImage: `url(${dailyThumb})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <div className="text-sm font-light">우리의 일상</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <div className="text-lg font-medium">우리의 일상</div>
+              </div>
+              <div className="absolute inset-0 bg-blue-400/0 group-hover:bg-blue-400/20 transition-all duration-300"></div>
             </button>
+            
+            {/* Fourcut - Small */}
             <button
               onClick={() => navigate('/gallery/fourcut')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+              className="relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group"
+              style={{
+                backgroundImage: `url(${fourcutThumb})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <div className="text-sm font-light">네컷 세누진</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                <div className="text-sm font-medium">네컷 세누진</div>
+              </div>
+              <div className="absolute inset-0 bg-blue-400/0 group-hover:bg-blue-400/20 transition-all duration-300"></div>
             </button>
           </div>
         </div>
