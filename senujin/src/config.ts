@@ -26,7 +26,7 @@ export const WEDDING_CONFIG = {
   },
   bride: {
     name: '이유진',
-    phone: '010-2089-1151',
+    phone: '010-4773-0092',
     father: {
       name: '이광재',
       account: {

@@ -42,8 +42,8 @@ declare global {
 import mobileBg from './assets/best/mobile_bg.jpg';
 
 // Profile images
-import groomPhoto from './assets/profile/groom.jpg';
-import bridePhoto from './assets/profile/bride.jpg';
+// import groomPhoto from './assets/profile/groom.jpg';
+// import bridePhoto from './assets/profile/bride.jpg';
 
 // Dynamically import all images from best folder using Vite's import.meta.glob
 const imageModules = import.meta.glob('./assets/best/*.{png,jpg,jpeg,JPG,svg}', { eager: true });
@@ -507,7 +507,7 @@ function App() {
       <div style={{backgroundColor: '#E8F4F8', minHeight: '100vh'}}>
 
       {/* Interview/Story Section */}
-        <section id="interview" className="max-w-2xl mx-auto py-16 px-6 text-center">
+        {/* <section id="interview" className="max-w-2xl mx-auto py-16 px-6 text-center">
           <h2 className="text-sm font-light mb-4 text-blue-400 tracking-widest">INTERVIEW</h2>
           <h3 className="text-2xl font-light mb-8 text-gray-700">두 사람의 이야기</h3>
           
@@ -527,124 +527,61 @@ function App() {
               📧 신랑 & 신부의 인터뷰 읽어보기
             </button>
           </div>
-      </section>
+      </section> */}
 
       {/* Gallery Section */}
         <section id="gallery" className="max-w-2xl md:max-w-3xl mx-auto py-16 px-6 text-center">
           <h2 className="text-sm font-light mb-4 text-blue-400 tracking-widest">GALLERY</h2>
           <h3 className="text-2xl font-light mb-12 text-blue-400">우리의 순간</h3>
           
-          {/* Initial 6 images - fixed layout with equal height columns */}
-          <div className="grid grid-cols-2 gap-2 items-start">
-            {/* Left Column */}
-            <div className="flex flex-col gap-2 h-full">
-              {galleryImages.slice(0, 6).filter((_, idx) => idx % 2 === 0).map((src, arrayIdx) => {
-                const actualIdx = arrayIdx * 2;
-                const isLast = arrayIdx === 2; // Last image in left column (3 images total)
-                return (
-                  <button
-                    key={actualIdx}
-                    type="button"
-                    className={`w-full block focus:outline-none ${isLast ? 'flex-1' : ''}`}
-                    onClick={() => { 
-                      setModalImg(src); 
-                      setCurrentImageIndex(actualIdx);
-                      setModalOpen(true); 
-                    }}
-                  >
-                    <img
-                      src={src}
-                      alt={`Gallery ${actualIdx + 1}`}
-                      className={`w-full shadow-md hover:scale-105 transition-transform duration-200 ${isLast ? 'h-full object-cover' : ''}`}
-                      loading="lazy"
-                    />
-                  </button>
-                );
-              })}
-            </div>
-            
-            {/* Right Column */}
-            <div className="flex flex-col gap-2 h-full">
-              {galleryImages.slice(0, 6).filter((_, idx) => idx % 2 === 1).map((src, arrayIdx) => {
-                const actualIdx = arrayIdx * 2 + 1;
-                const isLast = arrayIdx === 2; // Last image in right column (3 images total)
-                return (
-                  <button
-                    key={actualIdx}
-                    type="button"
-                    className={`w-full block focus:outline-none ${isLast ? 'flex-1' : ''}`}
-                    onClick={() => { 
-                      setModalImg(src); 
-                      setCurrentImageIndex(actualIdx);
-                      setModalOpen(true); 
-                    }}
-                  >
-                    <img
-                      src={src}
-                      alt={`Gallery ${actualIdx + 1}`}
-                      className={`w-full shadow-md hover:scale-105 transition-transform duration-200 ${isLast ? 'h-full object-cover' : ''}`}
-                      loading="lazy"
-                    />
-                  </button>
-                );
-              })}
-            </div>
+          {/* Initial 6 images */}
+          <div className="columns-2 gap-2">
+            {galleryImages.slice(0, 6).map((src, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className="w-full block focus:outline-none mb-2 break-inside-avoid"
+                onClick={() => { 
+                  setModalImg(src); 
+                  setCurrentImageIndex(idx);
+                  setModalOpen(true); 
+                }}
+              >
+                <img
+                  src={src}
+                  alt={`Gallery ${idx + 1}`}
+                  className="w-full shadow-md hover:scale-105 transition-transform duration-200"
+                  loading="lazy"
+                />
+              </button>
+            ))}
           </div>
           
           {/* Additional images when expanded */}
           {showAllImages && galleryImages.length > 6 && (
-            <div className="flex gap-2 items-start mt-2">
-              {/* Left Column */}
-              <div className="flex-1 flex flex-col gap-2">
-                {galleryImages.slice(6).filter((_, idx) => idx % 2 === 0).map((src, arrayIdx) => {
-                  const actualIdx = 6 + arrayIdx * 2;
-                  return (
-                    <button
-                      key={actualIdx}
-                      type="button"
-                      className="w-full block focus:outline-none"
-                      onClick={() => { 
-                        setModalImg(src); 
-                        setCurrentImageIndex(actualIdx);
-                        setModalOpen(true); 
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt={`Gallery ${actualIdx + 1}`}
-                        className="w-full shadow-md hover:scale-105 transition-transform duration-200"
-                        loading="lazy"
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-              
-              {/* Right Column */}
-              <div className="flex-1 flex flex-col gap-2">
-                {galleryImages.slice(6).filter((_, idx) => idx % 2 === 1).map((src, arrayIdx) => {
-                  const actualIdx = 6 + arrayIdx * 2 + 1;
-                  return (
-                    <button
-                      key={actualIdx}
-                      type="button"
-                      className="w-full block focus:outline-none"
-                      onClick={() => { 
-                        setModalImg(src); 
-                        setCurrentImageIndex(actualIdx);
-                        setModalOpen(true); 
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt={`Gallery ${actualIdx + 1}`}
-                        className="w-full shadow-md hover:scale-105 transition-transform duration-200"
-                        loading="lazy"
-                      />
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="columns-2 gap-2 mt-2">
+              {galleryImages.slice(6).map((src, idx) => {
+                const actualIdx = 6 + idx;
+                return (
+                  <button
+                    key={actualIdx}
+                    type="button"
+                    className="w-full block focus:outline-none mb-2 break-inside-avoid"
+                    onClick={() => { 
+                      setModalImg(src); 
+                      setCurrentImageIndex(actualIdx);
+                      setModalOpen(true); 
+                    }}
+                  >
+                    <img
+                      src={src}
+                      alt={`Gallery ${actualIdx + 1}`}
+                      className="w-full shadow-md hover:scale-105 transition-transform duration-200"
+                      loading="lazy"
+                    />
+                  </button>
+                );
+              })}
             </div>
           )}
         
@@ -675,22 +612,10 @@ function App() {
           <h3 className="text-lg font-light mb-6 text-gray-600">더 많은 갤러리</h3>
           <div className="grid grid-cols-2 gap-3">
             <button
-              onClick={() => navigate('/gallery/daily')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
-            >
-              <div className="text-sm font-light">우리의 일상</div>
-            </button>
-            <button
               onClick={() => navigate('/gallery/studio')}
               className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
             >
               <div className="text-sm font-light">스튜디오 컷</div>
-            </button>
-            <button
-              onClick={() => navigate('/gallery/snapshot')}
-              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
-            >
-              <div className="text-sm font-light">다양한 스냅샷</div>
             </button>
             <button
               onClick={() => navigate('/gallery/outing1')}
@@ -703,6 +628,18 @@ function App() {
               className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
             >
               <div className="text-sm font-light">푸릇푸릇 우리</div>
+            </button>
+            <button
+              onClick={() => navigate('/gallery/snapshot')}
+              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+            >
+              <div className="text-sm font-light">다양한 스냅샷</div>
+            </button>
+            <button
+              onClick={() => navigate('/gallery/daily')}
+              className="bg-white text-gray-600 px-4 py-3 rounded-lg shadow-sm hover:shadow-md hover:text-blue-400 transition-all duration-300 border border-gray-100"
+            >
+              <div className="text-sm font-light">우리의 일상</div>
             </button>
             <button
               onClick={() => navigate('/gallery/fourcut')}

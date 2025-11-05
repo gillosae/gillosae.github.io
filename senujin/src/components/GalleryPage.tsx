@@ -207,42 +207,36 @@ const GalleryPage = ({ folderName, title }: GalleryPageProps) => {
         {galleryImages.length === 0 ? (
           <div className="text-gray-500">이미지를 불러오는 중...</div>
         ) : (
-          <div className="grid grid-cols-2 gap-2 items-start">
-            {/* Left Column */}
-            <div className="flex flex-col gap-2">
-              {galleryImages.filter((_, idx) => idx % 2 === 0).map((src, arrayIdx) => {
-                const actualIdx = arrayIdx * 2;
-                return (
-                  <button
-                    key={actualIdx}
-                    type="button"
-                    className="w-full block focus:outline-none"
-                    onClick={() => { 
-                      setModalImg(src); 
-                      setCurrentImageIndex(actualIdx);
-                      setModalOpen(true); 
-                    }}
-                  >
-                    <img
-                      src={src}
-                      alt={`Gallery ${actualIdx + 1}`}
-                      className="w-full shadow-md hover:scale-105 transition-transform duration-200"
-                      loading="lazy"
-                    />
-                  </button>
-                );
-              })}
-            </div>
+          <div>
+            {/* Studio and outing2 folders: First image full width */}
+            {(folderName === 'studio' || folderName === 'outing2') && galleryImages.length > 0 && (
+              <button
+                type="button"
+                className="w-full block focus:outline-none mb-2"
+                onClick={() => { 
+                  setModalImg(galleryImages[0]); 
+                  setCurrentImageIndex(0);
+                  setModalOpen(true); 
+                }}
+              >
+                <img
+                  src={galleryImages[0]}
+                  alt="Gallery 1"
+                  className="w-full shadow-md hover:scale-105 transition-transform duration-200"
+                  loading="lazy"
+                />
+              </button>
+            )}
             
-            {/* Right Column */}
-            <div className="flex flex-col gap-2">
-              {galleryImages.filter((_, idx) => idx % 2 === 1).map((src, arrayIdx) => {
-                const actualIdx = arrayIdx * 2 + 1;
+            {/* Rest of images in masonry layout */}
+            <div className="columns-2 gap-2">
+              {galleryImages.slice((folderName === 'studio' || folderName === 'outing2') ? 1 : 0).map((src, idx) => {
+                const actualIdx = (folderName === 'studio' || folderName === 'outing2') ? idx + 1 : idx;
                 return (
                   <button
                     key={actualIdx}
                     type="button"
-                    className="w-full block focus:outline-none"
+                    className="w-full block focus:outline-none mb-2 break-inside-avoid"
                     onClick={() => { 
                       setModalImg(src); 
                       setCurrentImageIndex(actualIdx);
