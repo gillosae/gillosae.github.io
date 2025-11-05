@@ -31,6 +31,3 @@ dist-ssr
 *.heic
 *.CR3
 *.cr3
-
-# Temporary dev/prod swap file
-index.prod.html
