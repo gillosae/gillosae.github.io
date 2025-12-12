@@ -43,9 +43,13 @@ body {
     width: 150px;
     height: auto;
     z-index: 1000;
-    cursor: pointer;
+    cursor: pointer !important;
     transition: opacity 0.2s ease;
-    pointer-events: auto;
+    pointer-events: auto !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .noot-noot:hover {

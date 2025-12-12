@@ -19,7 +19,7 @@
     </div>
 
     <!-- Noot Noot -->
-    <img src="noot-noot-meme.gif?v=2" alt="Noot Noot" class="noot-noot" id="noot-noot-gif">
+    <img src="noot-noot-meme.gif?v=2" alt="Noot Noot" class="noot-noot" id="noot-noot-gif" draggable="false">
     <audio id="noot-noot-sound" preload="auto">
         <source src="noot-noot.mp3" type="audio/mpeg">
     </audio>
@@ -147,30 +147,50 @@
         let isAnimating = false;
 
         if (nootNootGif && nootNootSound) {
-            nootNootGif.addEventListener('click', () => {
+            console.log('Pingu initialized!'); // Debug log
+            
+            const handleNootNoot = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('Pingu clicked!', isAnimating); // Debug log
+                
                 // Prevent re-clicking while animating
                 if (isAnimating) return;
                 
                 isAnimating = true;
                 nootNootGif.style.pointerEvents = 'none';
+                nootNootGif.style.cursor = 'default';
                 
                 // Reload GIF immediately
                 const src = nootNootGif.src;
+                const baseSrc = src.split('?')[0];
                 nootNootGif.src = '';
-                nootNootGif.src = src.split('?')[0] + '?t=' + new Date().getTime();
+                setTimeout(() => {
+                    nootNootGif.src = baseSrc + '?t=' + new Date().getTime();
+                }, 10);
                 
-                // Play sound after 1 second delay
+                // Play sound after delay
                 setTimeout(() => {
                     nootNootSound.currentTime = 0;
-                    nootNootSound.play().catch(e => console.log('Audio play failed:', e));
+                    nootNootSound.play()
+                        .then(() => console.log('Sound played!'))
+                        .catch(e => console.log('Audio play failed:', e));
                 }, 800);
                 
-                // Re-enable clicking after animation completes (2.5 seconds)
+                // Re-enable clicking after animation completes
                 setTimeout(() => {
                     isAnimating = false;
                     nootNootGif.style.pointerEvents = 'auto';
+                    nootNootGif.style.cursor = 'pointer';
+                    console.log('Ready for next click!'); // Debug log
                 }, 2500);
-            });
+            };
+            
+            nootNootGif.addEventListener('click', handleNootNoot);
+            nootNootGif.addEventListener('touchstart', handleNootNoot); // Mobile support
+        } else {
+            console.error('Pingu or sound not found!'); // Debug log
         }
     </script>
 </body>
