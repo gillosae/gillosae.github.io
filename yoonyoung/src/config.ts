@@ -4,46 +4,46 @@ export const WEDDING_CONFIG = {
   // 신랑 신부 정보
   groom: {
     name: '이윤철',
-    phone: '010-4424-2495',
+    phone: '010-1234-5678',
     father: {
       name: '이창석',
       account: {
-        bank: '하나은행',
-        number: '244-910287-59007'
+        bank: '은행',
+        number: '1234-567-890000'
       }
     },
     mother: {
       name: '유덕희',
       account: {
-        bank: '농협은행', 
-        number: '105-12-257128'
+        bank: '은행', 
+        number: '1234-567-890000'
       }
     },
     account: {
-      bank: '하나은행',
-      number: '620-251545-430'
+      bank: '은행',
+      number: '1234-567-890000'
     }
   },
   bride: {
     name: '이다영',
-    phone: '010-5755-6922',
+    phone: '010-1234-5678',
     father: {
       name: '이태광',
       account: {
-        bank: '우리은행',
-        number: '479-230-98202003'
+        bank: '은행',
+        number: ''
       }
     },
     mother: {
       name: '송은영',
       account: {
-        bank: '농협은행',
-        number: '302-8944-1924-51'
+        bank: '은행',
+        number: '1234-567-890000'
       }
     },
     account: {
-      bank: '우리은행',
-      number: '1002-188-006922'
+      bank: '은행',
+      number: '1234-567-890000'
     }
   },
   // 웨딩 날짜 및 시간

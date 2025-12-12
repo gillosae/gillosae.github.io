@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <link rel="stylesheet" href="countdown.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Countdown -->
+        <div class="main-countdown">
+            <h1 id="main-title">ACL ARR</h1>
+            <div class="main-timer" id="main-timer"></div>
+        </div>
+
+        <!-- Secondary Countdowns -->
+        <div class="secondary-countdowns" id="secondary-countdowns"></div>
+    </div>
+
+    <!-- Noot Noot -->
+    <img src="noot-noot-meme.gif?v=2" alt="Noot Noot" class="noot-noot" id="noot-noot-gif">
+
+    <!-- Load configuration -->
+    <script src="countdown-config.js"></script>
+    
+    <script>
+
+        function calculateTimeLeft(targetDate) {
+            const now = new Date().getTime();
+            const target = new Date(targetDate).getTime();
+            const difference = target - now;
+
+            if (difference <= 0) {
+                return null;
+            }
+
+            return {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((difference % (1000 * 60)) / 1000)
+            };
+        }
+
+        function formatNumber(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function updateMainCountdown() {
+            const targetDate = `${config.main.date}T${config.main.time}`;
+            const timeLeft = calculateTimeLeft(targetDate);
+            const timerElement = document.getElementById('main-timer');
+            const titleElement = document.getElementById('main-title');
+
+            titleElement.textContent = config.main.name;
+
+            if (!timeLeft) {
+                timerElement.innerHTML = '<div class="expired">Event has passed!</div>';
+                return;
+            }
+
+            timerElement.innerHTML = `
+                <div class="main-time-unit">
+                    <div class="main-time-value">${formatNumber(timeLeft.days)}</div>
+                    <div class="main-time-label">DAYS</div>
+                </div>
+                <div class="colon">:</div>
+                <div class="main-time-unit">
+                    <div class="main-time-value">${formatNumber(timeLeft.hours)}</div>
+                    <div class="main-time-label">HOURS</div>
+                </div>
+                <div class="colon">:</div>
+                <div class="main-time-unit">
+                    <div class="main-time-value">${formatNumber(timeLeft.minutes)}</div>
+                    <div class="main-time-label">MINUTES</div>
+                </div>
+                <div class="colon">:</div>
+                <div class="main-time-unit">
+                    <div class="main-time-value main-seconds">${formatNumber(timeLeft.seconds)}</div>
+                    <div class="main-time-label">SECONDS</div>
+                </div>
+            `;
+        }
+
+        function updateSecondaryCountdowns() {
+            const container = document.getElementById('secondary-countdowns');
+            container.innerHTML = '';
+
+            config.secondary.forEach((countdown, index) => {
+                const targetDate = `${countdown.date}T${countdown.time}`;
+                const timeLeft = calculateTimeLeft(targetDate);
+
+                const card = document.createElement('div');
+                card.className = 'countdown-card';
+                card.innerHTML = `<h2>${countdown.name}</h2>`;
+
+                if (!timeLeft) {
+                    card.innerHTML += '<div class="expired">Passed!</div>';
+                } else {
+                    card.innerHTML += `
+                        <div class="countdown-timer">
+                            <div class="time-unit">
+                                <div class="time-value">${formatNumber(timeLeft.days)}</div>
+                                <div class="time-label">DAYS</div>
+                            </div>
+                            <div class="colon-small">:</div>
+                            <div class="time-unit">
+                                <div class="time-value">${formatNumber(timeLeft.hours)}</div>
+                                <div class="time-label">HRS</div>
+                            </div>
+                            <div class="colon-small">:</div>
+                            <div class="time-unit">
+                                <div class="time-value">${formatNumber(timeLeft.minutes)}</div>
+                                <div class="time-label">MIN</div>
+                            </div>
+                            <div class="colon-small">:</div>
+                            <div class="time-unit">
+                                <div class="time-value small-seconds">${formatNumber(timeLeft.seconds)}</div>
+                                <div class="time-label">SEC</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.appendChild(card);
+            });
+        }
+
+        function updateAllCountdowns() {
+            updateMainCountdown();
+            updateSecondaryCountdowns();
+        }
+
+        // Initial update
+        updateAllCountdowns();
+
+        // Update every second
+        setInterval(updateAllCountdowns, 1000);
+
+        // Keep Pingu animated with intervals
+        const nootNootGif = document.getElementById('noot-noot-gif');
+        if (nootNootGif) {
+            setInterval(() => {
+                const src = nootNootGif.src;
+                nootNootGif.src = '';
+                nootNootGif.src = src.split('?')[0] + '?t=' + new Date().getTime();
+            }, 8000); // Reload every 8 seconds (animation plays, then rests)
+        }
+    </script>
+</body>
+</html>
+
