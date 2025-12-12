@@ -31,7 +31,7 @@ export const WEDDING_CONFIG = {
       name: '이태광',
       account: {
         bank: '은행',
-        number: ''
+        number: '1234-567-890000'
       }
     },
     mother: {

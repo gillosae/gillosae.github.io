@@ -20,6 +20,9 @@
 
     <!-- Noot Noot -->
     <img src="noot-noot-meme.gif?v=2" alt="Noot Noot" class="noot-noot" id="noot-noot-gif">
+    <audio id="noot-noot-sound" preload="auto">
+        <source src="noot-noot.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Load configuration -->
     <script src="countdown-config.js"></script>
@@ -138,14 +141,36 @@
         // Update every second
         setInterval(updateAllCountdowns, 1000);
 
-        // Keep Pingu animated with intervals
+        // Make Pingu animate on click with sound
         const nootNootGif = document.getElementById('noot-noot-gif');
-        if (nootNootGif) {
-            setInterval(() => {
+        const nootNootSound = document.getElementById('noot-noot-sound');
+        let isAnimating = false;
+
+        if (nootNootGif && nootNootSound) {
+            nootNootGif.addEventListener('click', () => {
+                // Prevent re-clicking while animating
+                if (isAnimating) return;
+                
+                isAnimating = true;
+                nootNootGif.style.pointerEvents = 'none';
+                
+                // Reload GIF immediately
                 const src = nootNootGif.src;
                 nootNootGif.src = '';
                 nootNootGif.src = src.split('?')[0] + '?t=' + new Date().getTime();
-            }, 8000); // Reload every 8 seconds (animation plays, then rests)
+                
+                // Play sound after 1 second delay
+                setTimeout(() => {
+                    nootNootSound.currentTime = 0;
+                    nootNootSound.play().catch(e => console.log('Audio play failed:', e));
+                }, 800);
+                
+                // Re-enable clicking after animation completes (2.5 seconds)
+                setTimeout(() => {
+                    isAnimating = false;
+                    nootNootGif.style.pointerEvents = 'auto';
+                }, 2500);
+            });
         }
     </script>
 </body>
