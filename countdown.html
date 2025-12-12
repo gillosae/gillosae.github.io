@@ -19,7 +19,7 @@
     </div>
 
     <!-- Noot Noot -->
-    <img src="noot-noot-meme.gif?v=2" alt="Noot Noot" class="noot-noot" id="noot-noot-gif" draggable="false">
+    <img src="noot-noot-meme.gif?v=2" alt="" class="noot-noot" id="noot-noot-gif" draggable="false">
     <audio id="noot-noot-sound" preload="auto">
         <source src="noot-noot.mp3" type="audio/mpeg">
     </audio>
@@ -162,13 +162,10 @@
                 nootNootGif.style.pointerEvents = 'none';
                 nootNootGif.style.cursor = 'default';
                 
-                // Reload GIF immediately
+                // Reload GIF without clearing (prevents glitch)
                 const src = nootNootGif.src;
                 const baseSrc = src.split('?')[0];
-                nootNootGif.src = '';
-                setTimeout(() => {
-                    nootNootGif.src = baseSrc + '?t=' + new Date().getTime();
-                }, 10);
+                nootNootGif.src = baseSrc + '?t=' + new Date().getTime();
                 
                 // Play sound after delay
                 setTimeout(() => {
