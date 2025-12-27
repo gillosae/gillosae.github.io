@@ -19,8 +19,8 @@ const config = {
         },
         {
             name: "ISMIR",
-            date: "2026-04-01",
-            time: "23:59:59"
+            date: "2026-04-28",
+            time: "21:00:00"
         },
         {
             name: "ASSETS",
