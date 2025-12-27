@@ -18,6 +18,11 @@ const config = {
             time: "21:00:00"
         },
         {
+            name: "MM",
+            date: "2026-04-02",
+            time: "21:00:00"
+        },
+        {
             name: "ISMIR",
             date: "2026-04-28",
             time: "21:00:00"
@@ -26,11 +31,6 @@ const config = {
             name: "ASSETS",
             date: "2026-04-15",
             time: "23:59:59"
-        },
-        {
-            name: "MM",
-            date: "2026-04-02",
-            time: "21:00:00"
         }
     ]
 };
