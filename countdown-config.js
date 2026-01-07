@@ -5,16 +5,16 @@
 const config = {
     // Main countdown (displayed large at the top)
     main: {
-        name: "ACL ARR",
-        date: "2026-01-06",
+        name: "Interspeech",
+        date: "2026-02-26",
         time: "21:00:00"
     },
     
     // Secondary countdowns (displayed smaller below)
     secondary: [
         {
-            name: "Interspeech",
-            date: "2026-02-26",
+            name: "EMNLP ARR",
+            date: "2026-03-17",
             time: "21:00:00"
         },
         {
@@ -24,7 +24,7 @@ const config = {
         },
         {
             name: "ISMIR",
-            date: "2026-04-28",
+            date: "2026-04-21",
             time: "21:00:00"
         },
         {

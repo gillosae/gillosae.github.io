@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일본어 가나 훈련</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+JP:wght@400;700&family=Zen+Maru+Gothic:wght@400;700&family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@400;700&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        body.click-mode {
+            cursor: pointer;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .title {
+            font-size: 1.2rem;
+            color: #e94560;
+            letter-spacing: 0.3em;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 4rem 6rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 35px 60px -15px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .card.correct {
+            border-color: #4ade80;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(74, 222, 128, 0.3);
+        }
+
+        .card.wrong {
+            border-color: #f87171;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(248, 113, 113, 0.3);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+
+        .hiragana {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 12rem;
+            font-weight: 400;
+            line-height: 1;
+            color: #fff;
+            text-shadow: 0 0 60px rgba(233, 69, 96, 0.3);
+            transition: transform 0.2s ease, font-size 0.3s ease;
+        }
+
+        .hiragana.char-2 {
+            font-size: 9rem;
+        }
+
+        .hiragana.char-3 {
+            font-size: 7rem;
+        }
+
+        .pronunciation {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #e94560;
+            margin-top: 2rem;
+            min-height: 3.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pronunciation.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 타이핑 입력 */
+        .typing-area {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .typing-area.visible {
+            display: block;
+        }
+
+        .typing-input {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            padding: 0.8rem 1.5rem;
+            width: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .typing-input:focus {
+            border-color: #e94560;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .typing-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 듣기 버튼 */
+        .listen-btn {
+            margin: 1.5rem auto 0;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid #e94560;
+            border-radius: 12px;
+            color: #e94560;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .listen-btn:hover {
+            background: #e94560;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .listen-btn:active {
+            transform: scale(0.95);
+        }
+
+        .listen-btn.playing {
+            background: #e94560;
+            color: #fff;
+            animation: pulse-btn 1s infinite;
+        }
+
+        @keyframes pulse-btn {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .listen-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .voice-select {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' fill-opacity='0.5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
+            padding-right: 2rem;
+        }
+
+        .voice-select:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .voice-select:focus {
+            border-color: #e94560;
+        }
+
+        .voice-select option {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 0.5rem;
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 3rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.1em;
+        }
+
+        .hint span {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin: 0 0.2rem;
+        }
+
+        /* 상단 컨트롤 영역 */
+        .controls {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            z-index: 100;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .toggle-group.font-group {
+            flex-wrap: wrap;
+            max-width: 280px;
+        }
+
+        .toggle-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .toggle-btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .toggle-btn.active {
+            background: rgba(233, 69, 96, 0.2);
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        .progress {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: right;
+        }
+
+        .progress-count {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #e94560;
+        }
+
+        .stats {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 0.75rem;
+        }
+
+        .stat-correct {
+            color: #4ade80;
+        }
+
+        .stat-wrong {
+            color: #f87171;
+        }
+
+        .round-info {
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 표 보기 버튼 */
+        .chart-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-btn {
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chart-btn:hover {
+            background: rgba(233, 69, 96, 0.2);
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        /* 모달 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.visible .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #e94560;
+        }
+
+        .modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-reset {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-reset:hover {
+            background: rgba(233, 69, 96, 0.3);
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #e94560;
+        }
+
+        .chart-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .chart-section {
+            text-align: center;
+        }
+
+        .chart-section-title {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.8rem;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+
+        .chart-cell {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .chart-cell:hover {
+            background: rgba(233, 69, 96, 0.2);
+            transform: scale(1.1);
+        }
+
+        .chart-cell.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .chart-cell.clicked {
+            opacity: 0.2;
+            transform: scale(1);
+        }
+
+        .chart-cell.clicked:hover {
+            opacity: 0.4;
+        }
+
+        .chart-char {
+            font-size: 1.4rem;
+            color: #fff;
+        }
+
+        .chart-pron {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .modal {
+                padding: 1.5rem;
+            }
+
+            .chart-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .chart-cell {
+                width: 40px;
+                height: 40px;
+            }
+
+            .chart-char {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Particle effects */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(233, 69, 96, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Card flip animation */
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                    0 0 0 0 rgba(233, 69, 96, 0);
+            }
+            50% {
+                box-shadow: 
+                    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                    0 0 0 20px rgba(233, 69, 96, 0);
+            }
+        }
+
+        .card.revealed {
+            animation: pulse 2s ease-in-out;
+        }
+
+        /* Character change animation */
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .hiragana.new {
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 768px) {
+            .hiragana {
+                font-size: 8rem;
+            }
+
+            .hiragana.char-2 {
+                font-size: 6rem;
+            }
+
+            .hiragana.char-3 {
+                font-size: 5rem;
+            }
+
+            .card {
+                padding: 3rem 4rem;
+            }
+
+            .pronunciation {
+                font-size: 2rem;
+            }
+
+            .controls {
+                left: 1rem;
+                top: 1rem;
+            }
+
+            .toggle-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hiragana {
+                font-size: 6rem;
+            }
+
+            .hiragana.char-2 {
+                font-size: 4.5rem;
+            }
+
+            .hiragana.char-3 {
+                font-size: 3.5rem;
+            }
+
+            .card {
+                padding: 2rem 3rem;
+                border-radius: 16px;
+            }
+
+            .pronunciation {
+                font-size: 1.5rem;
+            }
+
+            .title {
+                font-size: 1rem;
+            }
+
+            .typing-input {
+                width: 150px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="click-mode">
+    <div class="particles" id="particles"></div>
+    
+    <div class="controls">
+        <div>
+            <div class="toggle-label">글꼴</div>
+            <div class="toggle-group font-group">
+                <button class="toggle-btn active" data-font="'Noto Sans JP', sans-serif">Sans</button>
+                <button class="toggle-btn" data-font="'Noto Serif JP', serif">Serif</button>
+                <button class="toggle-btn" data-font="'Zen Maru Gothic', sans-serif">Zen</button>
+                <button class="toggle-btn" data-font="'Kosugi Maru', sans-serif">Kosugi</button>
+                <button class="toggle-btn" data-font="'M PLUS Rounded 1c', sans-serif">M+</button>
+                <button class="toggle-btn" data-font="'Hachi Maru Pop', cursive">Hachi</button>
+                <button class="toggle-btn" data-font="random">랜덤</button>
+            </div>
+        </div>
+        <div>
+            <div class="toggle-label">모드</div>
+            <div class="toggle-group">
+                <button class="toggle-btn active" id="btn-mode-click">클릭</button>
+                <button class="toggle-btn" id="btn-mode-typing">타이핑</button>
+            </div>
+        </div>
+        <div>
+            <div class="toggle-label">글자 수</div>
+            <div class="toggle-group">
+                <button class="toggle-btn active" id="btn-char-1">한 글자</button>
+                <button class="toggle-btn" id="btn-char-2">두 글자</button>
+                <button class="toggle-btn" id="btn-char-3">세 글자</button>
+            </div>
+        </div>
+        <div>
+            <div class="toggle-label">문자</div>
+            <div class="toggle-group">
+                <button class="toggle-btn active" id="btn-script-hiragana">히라가나</button>
+                <button class="toggle-btn" id="btn-script-katakana">가타카나</button>
+                <button class="toggle-btn" id="btn-script-mixed">혼용</button>
+            </div>
+        </div>
+        <div>
+            <div class="toggle-label">음성</div>
+            <select class="voice-select" id="voice-select">
+                <option value="">로딩중...</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="progress">
+        <span class="progress-count" id="count">0</span>
+        <br>학습 횟수
+        <div class="stats">
+            <div class="stats-row">
+                <span class="stat-correct">정답: <span id="correct-count">0</span></span>
+                <span class="stat-wrong">오답: <span id="wrong-count">0</span></span>
+            </div>
+        </div>
+        <div class="round-info">
+            라운드 <span id="round">1</span> · <span id="remaining">71</span>개 남음
+        </div>
+        <div class="chart-buttons">
+            <button class="chart-btn" id="btn-hiragana-chart">ひ 표</button>
+            <button class="chart-btn" id="btn-katakana-chart">カ 표</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="title" id="main-title">히라가나 훈련</h1>
+        <div class="card" id="card">
+            <div class="hiragana" id="hiragana">あ</div>
+            <div class="pronunciation" id="pronunciation">아</div>
+            <div class="typing-area" id="typing-area">
+                <input type="text" class="typing-input" id="typing-input" placeholder="발음 입력" autocomplete="off">
+            </div>
+            <button class="listen-btn" id="listen-btn">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+                듣기
+            </button>
+        </div>
+    </div>
+
+    <div class="hint" id="hint">
+        <span>클릭</span> 발음 보기 → 다음 글자
+    </div>
+
+    <!-- 히라가나 모달 -->
+    <div class="modal-overlay" id="hiragana-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">히라가나 표</h2>
+                <div class="modal-controls">
+                    <button class="modal-reset" id="reset-hiragana">리셋</button>
+                    <button class="modal-close" id="close-hiragana">&times;</button>
+                </div>
+            </div>
+            <div class="chart-container" id="hiragana-chart"></div>
+        </div>
+    </div>
+
+    <!-- 가타카나 모달 -->
+    <div class="modal-overlay" id="katakana-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">가타카나 표</h2>
+                <div class="modal-controls">
+                    <button class="modal-reset" id="reset-katakana">리셋</button>
+                    <button class="modal-close" id="close-katakana">&times;</button>
+                </div>
+            </div>
+            <div class="chart-container" id="katakana-chart"></div>
+        </div>
+    </div>
+
+    <script>
+        // 히라가나와 한국어 발음 매핑
+        const hiragana = [
+            // 기본 모음
+            { char: 'あ', pron: '아' },
+            { char: 'い', pron: '이' },
+            { char: 'う', pron: '우' },
+            { char: 'え', pron: '에' },
+            { char: 'お', pron: '오' },
+            
+            // か행
+            { char: 'か', pron: '카' },
+            { char: 'き', pron: '키' },
+            { char: 'く', pron: '쿠' },
+            { char: 'け', pron: '케' },
+            { char: 'こ', pron: '코' },
+            
+            // さ행
+            { char: 'さ', pron: '사' },
+            { char: 'し', pron: '시' },
+            { char: 'す', pron: '스' },
+            { char: 'せ', pron: '세' },
+            { char: 'そ', pron: '소' },
+            
+            // た행
+            { char: 'た', pron: '타' },
+            { char: 'ち', pron: '치' },
+            { char: 'つ', pron: '츠' },
+            { char: 'て', pron: '테' },
+            { char: 'と', pron: '토' },
+            
+            // な행
+            { char: 'な', pron: '나' },
+            { char: 'に', pron: '니' },
+            { char: 'ぬ', pron: '누' },
+            { char: 'ね', pron: '네' },
+            { char: 'の', pron: '노' },
+            
+            // は행
+            { char: 'は', pron: '하' },
+            { char: 'ひ', pron: '히' },
+            { char: 'ふ', pron: '후' },
+            { char: 'へ', pron: '헤' },
+            { char: 'ほ', pron: '호' },
+            
+            // ま행
+            { char: 'ま', pron: '마' },
+            { char: 'み', pron: '미' },
+            { char: 'む', pron: '무' },
+            { char: 'め', pron: '메' },
+            { char: 'も', pron: '모' },
+            
+            // や행
+            { char: 'や', pron: '야' },
+            { char: 'ゆ', pron: '유' },
+            { char: 'よ', pron: '요' },
+            
+            // ら행
+            { char: 'ら', pron: '라' },
+            { char: 'り', pron: '리' },
+            { char: 'る', pron: '루' },
+            { char: 'れ', pron: '레' },
+            { char: 'ろ', pron: '로' },
+            
+            // わ행
+            { char: 'わ', pron: '와' },
+            { char: 'を', pron: '오/를' },
+            { char: 'ん', pron: '응' },
+            
+            // 탁음 (가행)
+            { char: 'が', pron: '가' },
+            { char: 'ぎ', pron: '기' },
+            { char: 'ぐ', pron: '구' },
+            { char: 'げ', pron: '게' },
+            { char: 'ご', pron: '고' },
+            
+            // 탁음 (사행)
+            { char: 'ざ', pron: '자' },
+            { char: 'じ', pron: '지' },
+            { char: 'ず', pron: '즈' },
+            { char: 'ぜ', pron: '제' },
+            { char: 'ぞ', pron: '조' },
+            
+            // 탁음 (타행)
+            { char: 'だ', pron: '다' },
+            { char: 'ぢ', pron: '지' },
+            { char: 'づ', pron: '즈' },
+            { char: 'で', pron: '데' },
+            { char: 'ど', pron: '도' },
+            
+            // 탁음 (하행)
+            { char: 'ば', pron: '바' },
+            { char: 'び', pron: '비' },
+            { char: 'ぶ', pron: '부' },
+            { char: 'べ', pron: '베' },
+            { char: 'ぼ', pron: '보' },
+            
+            // 반탁음
+            { char: 'ぱ', pron: '파' },
+            { char: 'ぴ', pron: '피' },
+            { char: 'ぷ', pron: '푸' },
+            { char: 'ぺ', pron: '페' },
+            { char: 'ぽ', pron: '포' }
+        ];
+
+        // 가타카나와 한국어 발음 매핑
+        const katakana = [
+            // 기본 모음
+            { char: 'ア', pron: '아' },
+            { char: 'イ', pron: '이' },
+            { char: 'ウ', pron: '우' },
+            { char: 'エ', pron: '에' },
+            { char: 'オ', pron: '오' },
+            
+            // カ행
+            { char: 'カ', pron: '카' },
+            { char: 'キ', pron: '키' },
+            { char: 'ク', pron: '쿠' },
+            { char: 'ケ', pron: '케' },
+            { char: 'コ', pron: '코' },
+            
+            // サ행
+            { char: 'サ', pron: '사' },
+            { char: 'シ', pron: '시' },
+            { char: 'ス', pron: '스' },
+            { char: 'セ', pron: '세' },
+            { char: 'ソ', pron: '소' },
+            
+            // タ행
+            { char: 'タ', pron: '타' },
+            { char: 'チ', pron: '치' },
+            { char: 'ツ', pron: '츠' },
+            { char: 'テ', pron: '테' },
+            { char: 'ト', pron: '토' },
+            
+            // ナ행
+            { char: 'ナ', pron: '나' },
+            { char: 'ニ', pron: '니' },
+            { char: 'ヌ', pron: '누' },
+            { char: 'ネ', pron: '네' },
+            { char: 'ノ', pron: '노' },
+            
+            // ハ행
+            { char: 'ハ', pron: '하' },
+            { char: 'ヒ', pron: '히' },
+            { char: 'フ', pron: '후' },
+            { char: 'ヘ', pron: '헤' },
+            { char: 'ホ', pron: '호' },
+            
+            // マ행
+            { char: 'マ', pron: '마' },
+            { char: 'ミ', pron: '미' },
+            { char: 'ム', pron: '무' },
+            { char: 'メ', pron: '메' },
+            { char: 'モ', pron: '모' },
+            
+            // ヤ행
+            { char: 'ヤ', pron: '야' },
+            { char: 'ユ', pron: '유' },
+            { char: 'ヨ', pron: '요' },
+            
+            // ラ행
+            { char: 'ラ', pron: '라' },
+            { char: 'リ', pron: '리' },
+            { char: 'ル', pron: '루' },
+            { char: 'レ', pron: '레' },
+            { char: 'ロ', pron: '로' },
+            
+            // ワ행
+            { char: 'ワ', pron: '와' },
+            { char: 'ヲ', pron: '오/를' },
+            { char: 'ン', pron: '응' },
+            
+            // 탁음 (カ행)
+            { char: 'ガ', pron: '가' },
+            { char: 'ギ', pron: '기' },
+            { char: 'グ', pron: '구' },
+            { char: 'ゲ', pron: '게' },
+            { char: 'ゴ', pron: '고' },
+            
+            // 탁음 (サ행)
+            { char: 'ザ', pron: '자' },
+            { char: 'ジ', pron: '지' },
+            { char: 'ズ', pron: '즈' },
+            { char: 'ゼ', pron: '제' },
+            { char: 'ゾ', pron: '조' },
+            
+            // 탁음 (タ행)
+            { char: 'ダ', pron: '다' },
+            { char: 'ヂ', pron: '지' },
+            { char: 'ヅ', pron: '즈' },
+            { char: 'デ', pron: '데' },
+            { char: 'ド', pron: '도' },
+            
+            // 탁음 (ハ행)
+            { char: 'バ', pron: '바' },
+            { char: 'ビ', pron: '비' },
+            { char: 'ブ', pron: '부' },
+            { char: 'ベ', pron: '베' },
+            { char: 'ボ', pron: '보' },
+            
+            // 반탁음
+            { char: 'パ', pron: '파' },
+            { char: 'ピ', pron: '피' },
+            { char: 'プ', pron: '푸' },
+            { char: 'ペ', pron: '페' },
+            { char: 'ポ', pron: '포' }
+        ];
+
+        // 상태 변수
+        let currentIndex = 0;
+        let currentItem = null;
+        let currentItems = []; // 여러 글자용
+        let isRevealed = false;
+        let count = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let round = 1;
+
+        // 모드 설정
+        let fontMode = 'fixed'; // 'fixed' or 'random'
+        let inputMode = 'click'; // 'click' or 'typing'
+        let charCount = 1; // 1, 2, or 3
+        let scriptMode = 'hiragana'; // 'hiragana', 'katakana', or 'mixed'
+
+        // 현재 사용할 문자 배열을 반환
+        function getCurrentCharacters() {
+            if (scriptMode === 'hiragana') return hiragana;
+            if (scriptMode === 'katakana') return katakana;
+            return [...hiragana, ...katakana]; // mixed
+        }
+
+        // 틀린 횟수 추적 (글자별)
+        const wrongHistory = {};
+        hiragana.forEach(item => {
+            wrongHistory[item.char] = 0;
+        });
+        katakana.forEach(item => {
+            wrongHistory[item.char] = 0;
+        });
+
+        // DOM 요소
+        const hiraganaEl = document.getElementById('hiragana');
+        const pronunciationEl = document.getElementById('pronunciation');
+        const cardEl = document.getElementById('card');
+        const countEl = document.getElementById('count');
+        const correctCountEl = document.getElementById('correct-count');
+        const wrongCountEl = document.getElementById('wrong-count');
+        const roundEl = document.getElementById('round');
+        const remainingEl = document.getElementById('remaining');
+        const hintEl = document.getElementById('hint');
+        const typingAreaEl = document.getElementById('typing-area');
+        const typingInputEl = document.getElementById('typing-input');
+        const listenBtn = document.getElementById('listen-btn');
+
+        // TTS (Text-to-Speech) 설정
+        let japaneseVoices = [];
+        let currentVoiceIndex = 0;
+        
+        function initTTS() {
+            // 음성 목록이 로드될 때까지 대기
+            function loadVoices() {
+                const voices = speechSynthesis.getVoices();
+                // 일본어 음성들 찾기
+                japaneseVoices = voices.filter(voice => 
+                    voice.lang.startsWith('ja') || voice.lang.includes('JP')
+                );
+                
+                // 여성 음성을 우선 선택 (보통 이름에 여성 이름이 포함됨)
+                const femaleKeywords = ['kyoko', 'haruka', 'female', 'woman', 'google', 'o-ren'];
+                const femaleVoiceIndex = japaneseVoices.findIndex(v => 
+                    femaleKeywords.some(k => v.name.toLowerCase().includes(k))
+                );
+                
+                if (femaleVoiceIndex !== -1) {
+                    currentVoiceIndex = femaleVoiceIndex;
+                }
+                
+                updateVoiceDropdown();
+            }
+            
+            loadVoices();
+            // Chrome에서는 비동기로 로드됨
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        }
+        
+        function updateVoiceDropdown() {
+            const voiceSelect = document.getElementById('voice-select');
+            if (japaneseVoices.length > 0 && voiceSelect) {
+                voiceSelect.innerHTML = '';
+                japaneseVoices.forEach((voice, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = voice.name.replace('Google ', '').replace('Microsoft ', '');
+                    if (index === currentVoiceIndex) {
+                        option.selected = true;
+                    }
+                    voiceSelect.appendChild(option);
+                });
+            } else if (voiceSelect) {
+                voiceSelect.innerHTML = '<option value="">음성 없음</option>';
+            }
+        }
+
+        function speakText(text) {
+            // 이전 음성 중단
+            speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ja-JP';
+            utterance.rate = 0.8; // 약간 느리게
+            utterance.pitch = 1;
+            
+            if (japaneseVoices.length > 0) {
+                utterance.voice = japaneseVoices[currentVoiceIndex];
+            }
+
+            // 재생 상태 표시
+            listenBtn.classList.add('playing');
+            
+            utterance.onend = () => {
+                listenBtn.classList.remove('playing');
+            };
+            
+            utterance.onerror = () => {
+                listenBtn.classList.remove('playing');
+            };
+
+            speechSynthesis.speak(utterance);
+        }
+
+        // 듣기 버튼 이벤트
+        listenBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentItem && currentItem.chars) {
+                speakText(currentItem.chars);
+            }
+        });
+
+        // 음성 선택 드롭다운 이벤트
+        const voiceSelect = document.getElementById('voice-select');
+        voiceSelect.addEventListener('change', (e) => {
+            e.stopPropagation();
+            currentVoiceIndex = parseInt(e.target.value) || 0;
+            // 변경된 음성으로 샘플 재생
+            speakText('あ');
+        });
+        voiceSelect.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // 글꼴 목록
+        const fonts = [
+            "'Noto Sans JP', sans-serif",
+            "'Noto Serif JP', serif",
+            "'Zen Maru Gothic', sans-serif",
+            "'Kosugi Maru', sans-serif",
+            "'M PLUS Rounded 1c', sans-serif",
+            "'Hachi Maru Pop', cursive"
+        ];
+        // Fisher-Yates 셔플 알고리즘
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // 가중치 기반 셔플 (틀린 횟수가 많을수록 더 자주 나옴)
+        function createWeightedList() {
+            const list = [];
+            const chars = getCurrentCharacters();
+            chars.forEach(item => {
+                // 기본 1회 + 틀린 횟수만큼 추가
+                const weight = 1 + (wrongHistory[item.char] || 0) * 2;
+                for (let i = 0; i < weight; i++) {
+                    list.push(item);
+                }
+            });
+            return shuffle(list);
+        }
+
+        let shuffledCharacters = shuffle(getCurrentCharacters());
+
+        let selectedFont = "'Noto Sans JP', sans-serif";
+
+        function getFont() {
+            if (fontMode === 'fixed') {
+                return selectedFont;
+            }
+            return fonts[Math.floor(Math.random() * fonts.length)];
+        }
+
+        function getNextCharacter() {
+            if (currentIndex >= shuffledCharacters.length) {
+                // 새 라운드 시작
+                round++;
+                roundEl.textContent = round;
+                
+                // 2라운드부터는 가중치 기반으로 선택
+                if (round >= 2) {
+                    shuffledCharacters = createWeightedList();
+                } else {
+                    shuffledCharacters = shuffle(getCurrentCharacters());
+                }
+                currentIndex = 0;
+            }
+            
+            remainingEl.textContent = shuffledCharacters.length - currentIndex;
+            return shuffledCharacters[currentIndex++];
+        }
+
+        // 랜덤으로 글자 하나 선택 (가중치 적용)
+        function getRandomCharacter() {
+            if (round >= 2) {
+                // 가중치 기반 선택
+                const weightedList = createWeightedList();
+                return weightedList[Math.floor(Math.random() * weightedList.length)];
+            }
+            const chars = getCurrentCharacters();
+            return chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        // 여러 글자 조합 생성
+        function generateCharacters() {
+            const items = [];
+            
+            if (charCount === 1) {
+                // 한 글자: 순서대로 (기존 로직)
+                items.push(getNextCharacter());
+            } else {
+                // 두/세 글자: 랜덤 조합
+                for (let i = 0; i < charCount; i++) {
+                    items.push(getRandomCharacter());
+                }
+            }
+            
+            return {
+                chars: items.map(i => i.char).join(''),
+                // 발음에서 슬래시가 있으면 첫 번째만 사용
+                pron: items.map(i => i.pron.split('/')[0]).join(''),
+                items: items
+            };
+        }
+
+        function showNewCharacter() {
+            const generated = generateCharacters();
+            currentItem = generated;
+            currentItems = generated.items;
+            
+            // 발음 즉시 숨김
+            pronunciationEl.style.transition = 'none';
+            pronunciationEl.classList.remove('visible');
+            cardEl.classList.remove('revealed', 'correct', 'wrong');
+            
+            void pronunciationEl.offsetWidth;
+            pronunciationEl.style.transition = '';
+            
+            hiraganaEl.classList.remove('new', 'char-2', 'char-3');
+            void hiraganaEl.offsetWidth;
+            hiraganaEl.classList.add('new');
+            
+            // 글자 수에 따라 크기 클래스 추가
+            if (charCount === 2) {
+                hiraganaEl.classList.add('char-2');
+            } else if (charCount === 3) {
+                hiraganaEl.classList.add('char-3');
+            }
+            
+            hiraganaEl.textContent = generated.chars;
+            hiraganaEl.style.fontFamily = getFont();
+            pronunciationEl.textContent = generated.pron;
+            isRevealed = false;
+
+            // 타이핑 모드면 입력 초기화 및 포커스
+            if (inputMode === 'typing') {
+                typingInputEl.value = '';
+                typingInputEl.focus();
+            }
+        }
+
+        function handleCorrect() {
+            correctCount++;
+            correctCountEl.textContent = correctCount;
+            count++;
+            countEl.textContent = count;
+            
+            cardEl.classList.add('correct');
+            pronunciationEl.classList.add('visible');
+            
+            setTimeout(() => {
+                showNewCharacter();
+            }, 500);
+        }
+
+        function handleWrong() {
+            wrongCount++;
+            wrongCountEl.textContent = wrongCount;
+            
+            // 틀린 글자들 모두 기록
+            currentItems.forEach(item => {
+                wrongHistory[item.char]++;
+            });
+            
+            cardEl.classList.add('wrong');
+            pronunciationEl.classList.add('visible');
+            
+            // 틀린 경우 잠시 후 입력 초기화
+            if (inputMode === 'typing') {
+                setTimeout(() => {
+                    typingInputEl.value = '';
+                    typingInputEl.focus();
+                    cardEl.classList.remove('wrong');
+                }, 1000);
+            }
+        }
+
+        function handleClickMode() {
+            if (!isRevealed) {
+                pronunciationEl.classList.add('visible');
+                cardEl.classList.add('revealed');
+                isRevealed = true;
+            } else {
+                count++;
+                countEl.textContent = count;
+                showNewCharacter();
+            }
+        }
+
+        function checkAnswer(input) {
+            const answer = input.trim();
+            if (!answer) return;
+
+            // 정답 확인
+            const isCorrect = (answer === currentItem.pron);
+
+            if (isCorrect) {
+                handleCorrect();
+            } else {
+                handleWrong();
+            }
+        }
+
+        // 클릭 이벤트 (클릭 모드용)
+        document.body.addEventListener('click', (e) => {
+            if (inputMode !== 'click') return;
+            if (e.target.closest('.controls')) return;
+            handleClickMode();
+        });
+
+        // 키보드 이벤트
+        document.addEventListener('keydown', (e) => {
+            if (inputMode === 'click') {
+                if (e.code === 'Space' || e.code === 'Enter') {
+                    e.preventDefault();
+                    handleClickMode();
+                }
+            }
+        });
+
+        // 타이핑 입력 이벤트
+        typingInputEl.addEventListener('keydown', (e) => {
+            if (e.code === 'Enter') {
+                e.preventDefault();
+                checkAnswer(typingInputEl.value);
+            }
+        });
+
+        // 글꼴 토글
+        const fontButtons = document.querySelectorAll('.font-group .toggle-btn');
+
+        fontButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // 모든 버튼 비활성화 후 클릭된 버튼만 활성화
+                fontButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const fontValue = btn.dataset.font;
+                if (fontValue === 'random') {
+                    fontMode = 'random';
+                } else {
+                    fontMode = 'fixed';
+                    selectedFont = fontValue;
+                }
+                
+                hiraganaEl.style.fontFamily = getFont();
+            });
+        });
+
+        // 모드 토글
+        const btnModeClick = document.getElementById('btn-mode-click');
+        const btnModeTyping = document.getElementById('btn-mode-typing');
+
+        function setInputMode(mode) {
+            inputMode = mode;
+            btnModeClick.classList.toggle('active', mode === 'click');
+            btnModeTyping.classList.toggle('active', mode === 'typing');
+            
+            document.body.classList.toggle('click-mode', mode === 'click');
+            typingAreaEl.classList.toggle('visible', mode === 'typing');
+            
+            // 힌트 텍스트 변경
+            if (mode === 'click') {
+                hintEl.innerHTML = '<span>클릭</span> 발음 보기 → 다음 글자';
+            } else {
+                hintEl.innerHTML = '<span>Enter</span> 정답 제출';
+            }
+
+            // 타이핑 모드로 전환 시 포커스
+            if (mode === 'typing') {
+                pronunciationEl.classList.remove('visible');
+                isRevealed = false;
+                typingInputEl.value = '';
+                typingInputEl.focus();
+            }
+        }
+
+        btnModeClick.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setInputMode('click');
+        });
+
+        btnModeTyping.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setInputMode('typing');
+        });
+
+        // 글자 수 토글
+        const btnChar1 = document.getElementById('btn-char-1');
+        const btnChar2 = document.getElementById('btn-char-2');
+        const btnChar3 = document.getElementById('btn-char-3');
+
+        function setCharCount(count) {
+            charCount = count;
+            btnChar1.classList.toggle('active', count === 1);
+            btnChar2.classList.toggle('active', count === 2);
+            btnChar3.classList.toggle('active', count === 3);
+            showNewCharacter();
+        }
+
+        btnChar1.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setCharCount(1);
+        });
+
+        btnChar2.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setCharCount(2);
+        });
+
+        btnChar3.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setCharCount(3);
+        });
+
+        // 문자 종류 토글 (히라가나/가타카나/혼용)
+        const btnScriptHiragana = document.getElementById('btn-script-hiragana');
+        const btnScriptKatakana = document.getElementById('btn-script-katakana');
+        const btnScriptMixed = document.getElementById('btn-script-mixed');
+        const mainTitleEl = document.getElementById('main-title');
+
+        function setScriptMode(mode) {
+            scriptMode = mode;
+            btnScriptHiragana.classList.toggle('active', mode === 'hiragana');
+            btnScriptKatakana.classList.toggle('active', mode === 'katakana');
+            btnScriptMixed.classList.toggle('active', mode === 'mixed');
+            
+            // 타이틀 변경
+            if (mode === 'hiragana') {
+                mainTitleEl.textContent = '히라가나 훈련';
+            } else if (mode === 'katakana') {
+                mainTitleEl.textContent = '가타카나 훈련';
+            } else {
+                mainTitleEl.textContent = '가나 혼용 훈련';
+            }
+            
+            // 라운드 초기화 및 새 문자 리스트 생성
+            round = 1;
+            roundEl.textContent = round;
+            currentIndex = 0;
+            shuffledCharacters = shuffle(getCurrentCharacters());
+            showNewCharacter();
+        }
+
+        btnScriptHiragana.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setScriptMode('hiragana');
+        });
+
+        btnScriptKatakana.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setScriptMode('katakana');
+        });
+
+        btnScriptMixed.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setScriptMode('mixed');
+        });
+
+        // 문자표 모달
+        const hiraganaModal = document.getElementById('hiragana-modal');
+        const katakanaModal = document.getElementById('katakana-modal');
+        const btnHiraganaChart = document.getElementById('btn-hiragana-chart');
+        const btnKatakanaChart = document.getElementById('btn-katakana-chart');
+        const closeHiragana = document.getElementById('close-hiragana');
+        const closeKatakana = document.getElementById('close-katakana');
+
+        // 문자표 데이터 (행 순서대로)
+        const chartData = {
+            hiragana: {
+                basic: [
+                    ['あ', 'い', 'う', 'え', 'お'],
+                    ['か', 'き', 'く', 'け', 'こ'],
+                    ['さ', 'し', 'す', 'せ', 'そ'],
+                    ['た', 'ち', 'つ', 'て', 'と'],
+                    ['な', 'に', 'ぬ', 'ね', 'の'],
+                    ['は', 'ひ', 'ふ', 'へ', 'ほ'],
+                    ['ま', 'み', 'む', 'め', 'も'],
+                    ['や', '', 'ゆ', '', 'よ'],
+                    ['ら', 'り', 'る', 'れ', 'ろ'],
+                    ['わ', '', 'ん', '', 'を']
+                ],
+                dakuten: [
+                    ['が', 'ぎ', 'ぐ', 'げ', 'ご'],
+                    ['ざ', 'じ', 'ず', 'ぜ', 'ぞ'],
+                    ['だ', 'ぢ', 'づ', 'で', 'ど'],
+                    ['ば', 'び', 'ぶ', 'べ', 'ぼ'],
+                    ['ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ']
+                ]
+            },
+            katakana: {
+                basic: [
+                    ['ア', 'イ', 'ウ', 'エ', 'オ'],
+                    ['カ', 'キ', 'ク', 'ケ', 'コ'],
+                    ['サ', 'シ', 'ス', 'セ', 'ソ'],
+                    ['タ', 'チ', 'ツ', 'テ', 'ト'],
+                    ['ナ', 'ニ', 'ヌ', 'ネ', 'ノ'],
+                    ['ハ', 'ヒ', 'フ', 'ヘ', 'ホ'],
+                    ['マ', 'ミ', 'ム', 'メ', 'モ'],
+                    ['ヤ', '', 'ユ', '', 'ヨ'],
+                    ['ラ', 'リ', 'ル', 'レ', 'ロ'],
+                    ['ワ', '', 'ン', '', 'ヲ']
+                ],
+                dakuten: [
+                    ['ガ', 'ギ', 'グ', 'ゲ', 'ゴ'],
+                    ['ザ', 'ジ', 'ズ', 'ゼ', 'ゾ'],
+                    ['ダ', 'ヂ', 'ヅ', 'デ', 'ド'],
+                    ['バ', 'ビ', 'ブ', 'ベ', 'ボ'],
+                    ['パ', 'ピ', 'プ', 'ペ', 'ポ']
+                ]
+            }
+        };
+
+        const pronunciations = [
+            ['아', '이', '우', '에', '오'],
+            ['카', '키', '쿠', '케', '코'],
+            ['사', '시', '스', '세', '소'],
+            ['타', '치', '츠', '테', '토'],
+            ['나', '니', '누', '네', '노'],
+            ['하', '히', '후', '헤', '호'],
+            ['마', '미', '무', '메', '모'],
+            ['야', '', '유', '', '요'],
+            ['라', '리', '루', '레', '로'],
+            ['와', '', '응', '', '오']
+        ];
+
+        const dakutenPronunciations = [
+            ['가', '기', '구', '게', '고'],
+            ['자', '지', '즈', '제', '조'],
+            ['다', '지', '즈', '데', '도'],
+            ['바', '비', '부', '베', '보'],
+            ['파', '피', '푸', '페', '포']
+        ];
+
+        function createChartSection(title, rows, pronRows) {
+            const section = document.createElement('div');
+            section.className = 'chart-section';
+            
+            const sectionTitle = document.createElement('div');
+            sectionTitle.className = 'chart-section-title';
+            sectionTitle.textContent = title;
+            section.appendChild(sectionTitle);
+
+            const grid = document.createElement('div');
+            grid.className = 'chart-grid';
+
+            // 현재 선택된 글꼴 가져오기
+            const currentFont = fontMode === 'fixed' ? selectedFont : getFont();
+
+            rows.forEach((row, rowIdx) => {
+                row.forEach((char, colIdx) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'chart-cell' + (char === '' ? ' empty' : '');
+                    
+                    if (char) {
+                        const charSpan = document.createElement('span');
+                        charSpan.className = 'chart-char';
+                        charSpan.textContent = char;
+                        charSpan.style.fontFamily = currentFont;
+                        cell.appendChild(charSpan);
+
+                        const pronSpan = document.createElement('span');
+                        pronSpan.className = 'chart-pron';
+                        pronSpan.textContent = pronRows[rowIdx][colIdx];
+                        cell.appendChild(pronSpan);
+
+                        // 클릭 이벤트 - 페이드아웃 토글
+                        cell.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            cell.classList.toggle('clicked');
+                        });
+                    }
+                    
+                    grid.appendChild(cell);
+                });
+            });
+
+            section.appendChild(grid);
+            return section;
+        }
+
+        function populateChart(containerId, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            const basicSection = createChartSection('기본', chartData[type].basic, pronunciations);
+            const dakutenSection = createChartSection('탁음/반탁음', chartData[type].dakuten, dakutenPronunciations);
+            
+            container.appendChild(basicSection);
+            container.appendChild(dakutenSection);
+        }
+
+        function openModal(modal) {
+            modal.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modal) {
+            modal.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+
+        btnHiraganaChart.addEventListener('click', (e) => {
+            e.stopPropagation();
+            populateChart('hiragana-chart', 'hiragana');
+            openModal(hiraganaModal);
+        });
+
+        btnKatakanaChart.addEventListener('click', (e) => {
+            e.stopPropagation();
+            populateChart('katakana-chart', 'katakana');
+            openModal(katakanaModal);
+        });
+
+        closeHiragana.addEventListener('click', () => closeModal(hiraganaModal));
+        closeKatakana.addEventListener('click', () => closeModal(katakanaModal));
+
+        // 리셋 버튼 이벤트
+        const resetHiragana = document.getElementById('reset-hiragana');
+        const resetKatakana = document.getElementById('reset-katakana');
+
+        function resetChartClicks(containerId) {
+            const container = document.getElementById(containerId);
+            const clickedCells = container.querySelectorAll('.chart-cell.clicked');
+            clickedCells.forEach(cell => cell.classList.remove('clicked'));
+        }
+
+        resetHiragana.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetChartClicks('hiragana-chart');
+        });
+
+        resetKatakana.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetChartClicks('katakana-chart');
+        });
+
+        // 모달 바깥 클릭 시 닫기
+        hiraganaModal.addEventListener('click', (e) => {
+            if (e.target === hiraganaModal) closeModal(hiraganaModal);
+        });
+        katakanaModal.addEventListener('click', (e) => {
+            if (e.target === katakanaModal) closeModal(katakanaModal);
+        });
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape') {
+                closeModal(hiraganaModal);
+                closeModal(katakanaModal);
+            }
+        });
+
+        // 파티클 생성
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // 초기화
+        initTTS();
+        createParticles();
+        showNewCharacter();
+    </script>
+</body>
+</html>

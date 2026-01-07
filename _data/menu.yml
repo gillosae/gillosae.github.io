@@ -33,6 +33,11 @@ entries:
   #   url: feed.xml
   
 
+  - title: projects
+    entries:
+      - title: 일본어 가나 훈련
+        url: taberu
+
   - title: publications
     entries:
       - title: '<u>Hayoon Kim</u>, Ahyeon Choi, Sungho Lee, Hyunjin Jung, and Kyogu Lee, "Emosical: An Emotion-Annotated Musical Theatre Dataset," in EMNLP Findings, 2024. <a href="">arXiv</a> <a href="emosical">web</a> <a href="https://github.com/gillosae/emosical">github</a>'
