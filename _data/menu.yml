@@ -14,7 +14,7 @@ entries:
 
   - title: research topics
     entries:
-      - title: Audio Synthesis
+      - title: Audio and Multimodal Generation
       - title: Accessibility
     # post_list:
     #   limit: 5
@@ -35,6 +35,7 @@ entries:
   
   - title: publications
     entries:
+      - title: '<u>Hayoon Kim</u>, Eunice Hong, and Kyogu Lee, "Auditory Illusion Benchmark for Large Audio Language Models," in ICASSP, 2026. <a href="">arXiv</a> <a href="emosical">web</a> <a href="">github</a>'
       - title: '<u>Hayoon Kim</u>, Ahyeon Choi, Sungho Lee, Hyunjin Jung, and Kyogu Lee, "Emosical: An Emotion-Annotated Musical Theatre Dataset," in EMNLP Findings, 2024. <a href="">arXiv</a> <a href="emosical">web</a> <a href="https://github.com/gillosae/emosical">github</a>'
         # entries:
         #   - title: with subsubitems
