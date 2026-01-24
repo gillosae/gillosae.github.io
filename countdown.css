@@ -76,11 +76,16 @@ body {
 }
 
 .main-date {
-    font-size: 1.3rem;
-    color: #666666;
-    margin-bottom: 25px;
+    display: inline-block;
+    font-size: 1.1rem;
+    color: #ffffff;
+    background: linear-gradient(135deg, #4169a6 0%, #5a7fb8 100%);
+    padding: 8px 20px;
+    border-radius: 25px;
+    margin-bottom: 30px;
     font-weight: 500;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    box-shadow: 0 3px 10px rgba(65, 105, 166, 0.3);
 }
 
 .main-timer {
@@ -165,8 +170,16 @@ body {
 .countdown-card h2 {
     font-size: 1.1rem;
     color: #4169a6;
-    margin-bottom: 20px;
+    margin-bottom: 6px;
     font-weight: 600;
+}
+
+.card-date {
+    font-size: 0.75rem;
+    color: #888888;
+    margin-bottom: 15px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 .countdown-timer {
@@ -259,7 +272,8 @@ body {
     }
     
     .main-date {
-        font-size: 1.1rem;
+        font-size: 1rem;
+        padding: 7px 18px;
     }
     
     .main-time-label {
@@ -278,8 +292,14 @@ body {
     }
     
     .main-date {
-        font-size: 1rem;
-        margin-bottom: 15px;
+        font-size: 0.85rem;
+        padding: 6px 14px;
+        margin-bottom: 18px;
+    }
+    
+    .card-date {
+        font-size: 0.65rem;
+        margin-bottom: 10px;
     }
 
     .main-time-value {
@@ -313,7 +333,7 @@ body {
     
     .countdown-card h2 {
         font-size: 0.9rem;
-        margin-bottom: 10px;
+        margin-bottom: 4px;
     }
     
     .time-value {
@@ -347,8 +367,14 @@ body {
     }
     
     .main-date {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
+        padding: 5px 12px;
         margin-bottom: 12px;
+    }
+    
+    .card-date {
+        font-size: 0.6rem;
+        margin-bottom: 8px;
     }
 
     .main-timer {
@@ -383,7 +409,7 @@ body {
     
     .countdown-card h2 {
         font-size: 0.85rem;
-        margin-bottom: 8px;
+        margin-bottom: 3px;
     }
     
     .time-label {
@@ -429,8 +455,14 @@ body {
     }
     
     .main-date {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
+        padding: 4px 10px;
         margin-bottom: 10px;
+    }
+    
+    .card-date {
+        font-size: 0.55rem;
+        margin-bottom: 6px;
     }
 
     .main-timer {
@@ -465,7 +497,7 @@ body {
     
     .countdown-card h2 {
         font-size: 0.8rem;
-        margin-bottom: 6px;
+        margin-bottom: 2px;
     }
     
     .time-label {

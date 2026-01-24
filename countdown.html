@@ -51,10 +51,11 @@
             return num.toString().padStart(2, '0');
         }
 
-        function formatDate(dateStr) {
-            // dateStr is in format "YYYY-MM-DD"
+        function formatDate(dateStr, timeStr) {
+            // dateStr is in format "YYYY-MM-DD", timeStr is "HH:MM:SS"
             const [year, month, day] = dateStr.split('-');
-            return `KST ${year}/${month}/${day}`;
+            const [hour, minute] = timeStr.split(':');
+            return `${year}.${month}.${day} ${hour}:${minute} KST`;
         }
 
         function updateMainCountdown() {
@@ -65,7 +66,7 @@
             const dateElement = document.getElementById('main-date');
 
             titleElement.textContent = config.main.name;
-            dateElement.textContent = formatDate(config.main.date);
+            dateElement.textContent = formatDate(config.main.date, config.main.time);
 
             if (!timeLeft) {
                 timerElement.innerHTML = '<div class="expired">Event has passed!</div>';
@@ -105,7 +106,10 @@
 
                 const card = document.createElement('div');
                 card.className = 'countdown-card';
-                card.innerHTML = `<h2>${countdown.name}</h2>`;
+                card.innerHTML = `
+                    <h2>${countdown.name}</h2>
+                    <div class="card-date">${formatDate(countdown.date, countdown.time)}</div>
+                `;
 
                 if (!timeLeft) {
                     card.innerHTML += '<div class="expired">Passed!</div>';
