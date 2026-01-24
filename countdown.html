@@ -10,8 +10,10 @@
     <div class="container">
         <!-- Main Countdown -->
         <div class="main-countdown">
-            <h1 id="main-title">ACL ARR</h1>
-            <div class="main-date" id="main-date"></div>
+            <div class="main-header">
+                <h1 id="main-title">ACL ARR</h1>
+                <div class="main-date" id="main-date"></div>
+            </div>
             <div class="main-timer" id="main-timer"></div>
         </div>
 
@@ -51,11 +53,14 @@
             return num.toString().padStart(2, '0');
         }
 
-        function formatDate(dateStr, timeStr) {
+        function formatDate(dateStr, timeStr, singleLine = false) {
             // dateStr is in format "YYYY-MM-DD", timeStr is "HH:MM:SS"
             const [year, month, day] = dateStr.split('-');
             const [hour, minute] = timeStr.split(':');
-            return `${year}.${month}.${day} ${hour}:${minute} KST`;
+            if (singleLine) {
+                return `${year}/${month}/${day} ${hour}:${minute} KST`;
+            }
+            return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span></div><div class="date-line2">${hour}:${minute} KST</div>`;
         }
 
         function updateMainCountdown() {
@@ -66,7 +71,7 @@
             const dateElement = document.getElementById('main-date');
 
             titleElement.textContent = config.main.name;
-            dateElement.textContent = formatDate(config.main.date, config.main.time);
+            dateElement.innerHTML = formatDate(config.main.date, config.main.time);
 
             if (!timeLeft) {
                 timerElement.innerHTML = '<div class="expired">Event has passed!</div>';
@@ -107,8 +112,10 @@
                 const card = document.createElement('div');
                 card.className = 'countdown-card';
                 card.innerHTML = `
-                    <h2>${countdown.name}</h2>
-                    <div class="card-date">${formatDate(countdown.date, countdown.time)}</div>
+                    <div class="card-header">
+                        <h2>${countdown.name}</h2>
+                        <div class="card-date">${formatDate(countdown.date, countdown.time, true)}</div>
+                    </div>
                 `;
 
                 if (!timeLeft) {
