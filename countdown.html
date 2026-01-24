@@ -11,6 +11,7 @@
         <!-- Main Countdown -->
         <div class="main-countdown">
             <h1 id="main-title">ACL ARR</h1>
+            <div class="main-date" id="main-date"></div>
             <div class="main-timer" id="main-timer"></div>
         </div>
 
@@ -50,13 +51,21 @@
             return num.toString().padStart(2, '0');
         }
 
+        function formatDate(dateStr) {
+            // dateStr is in format "YYYY-MM-DD"
+            const [year, month, day] = dateStr.split('-');
+            return `KST ${year}/${month}/${day}`;
+        }
+
         function updateMainCountdown() {
             const targetDate = `${config.main.date}T${config.main.time}`;
             const timeLeft = calculateTimeLeft(targetDate);
             const timerElement = document.getElementById('main-timer');
             const titleElement = document.getElementById('main-title');
+            const dateElement = document.getElementById('main-date');
 
             titleElement.textContent = config.main.name;
+            dateElement.textContent = formatDate(config.main.date);
 
             if (!timeLeft) {
                 timerElement.innerHTML = '<div class="expired">Event has passed!</div>';

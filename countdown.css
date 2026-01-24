@@ -71,8 +71,16 @@ body {
 .main-countdown h1 {
     font-size: 3.5rem;
     color: #4169a6;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     font-weight: 700;
+}
+
+.main-date {
+    font-size: 1.3rem;
+    color: #666666;
+    margin-bottom: 25px;
+    font-weight: 500;
+    letter-spacing: 1px;
 }
 
 .main-timer {
@@ -250,6 +258,10 @@ body {
         font-size: 3rem;
     }
     
+    .main-date {
+        font-size: 1.1rem;
+    }
+    
     .main-time-label {
         font-size: 1.2rem;
     }
@@ -262,6 +274,11 @@ body {
 
     .main-countdown h1 {
         font-size: 2rem;
+        margin-bottom: 8px;
+    }
+    
+    .main-date {
+        font-size: 1rem;
         margin-bottom: 15px;
     }
 
@@ -326,6 +343,11 @@ body {
     
     .main-countdown h1 {
         font-size: 1.6rem;
+        margin-bottom: 6px;
+    }
+    
+    .main-date {
+        font-size: 0.85rem;
         margin-bottom: 12px;
     }
 
@@ -403,6 +425,11 @@ body {
     
     .main-countdown h1 {
         font-size: 1.4rem;
+        margin-bottom: 5px;
+    }
+    
+    .main-date {
+        font-size: 0.75rem;
         margin-bottom: 10px;
     }
 
