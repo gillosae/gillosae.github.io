@@ -6,17 +6,17 @@ entries:
     entries:
       - title: Ph.D in Department of Intelligence and Information
       - title: Music and Audio Research Group, Seoul National University
-      - title : "Advisor: Kyogu Lee"
+      - title: "Advisor: Kyogu Lee"
       - title: hyway@snu.ac.kr
         url: mailto:hyway@snu.ac.kr
-      - title: "<a href='https://github.com/gillosae'>github</a> <a href='https://x.com/gillosaekim'>twitter</a> <a href='https://www.linkedin.com/in/hayoon-kim-ab187032a/'>linkedin</a>"
+      - title: "<a href='https://scholar.google.com/citations?user=zYOzjfQAAAAJ&hl'>scholar</a> <a href='https://github.com/gillosae'>github</a> <a href='https://x.com/gillosaekim'>twitter</a> <a href='https://www.linkedin.com/in/hayoon-kim-ab187032a/'>linkedin</a>"
       # - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
 
   - title: research interest
     entries:
-      - title: topic: human-centered audio understanding and generation.
-      - title: method: data-centric modeling and learning-based audio systems.
-      - title: application: expressive audio systems and accessibility.
+      - title: "topic: human-centered audio understanding and generation."
+      - title: "method: data-centric modeling and learning-based audio systems."
+      - title: "application: expressive audio systems and accessibility."
     # post_list:
     #   limit: 5
     #   show_more: true
