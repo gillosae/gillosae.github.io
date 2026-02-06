@@ -58,7 +58,7 @@
             const [year, month, day] = dateStr.split('-');
             const [hour, minute] = timeStr.split(':');
             if (singleLine) {
-                return `${year}/${month}/${day} ${hour}:${minute} KST`;
+                return `${year}/${month}/${day}`;
             }
             return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span></div><div class="date-line2">${hour}:${minute} KST</div>`;
         }
