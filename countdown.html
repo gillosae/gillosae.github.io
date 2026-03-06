@@ -63,15 +63,33 @@
             return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span></div><div class="date-line2">${hour}:${minute} KST</div>`;
         }
 
-        function updateMainCountdown() {
-            const targetDate = `${config.main.date}T${config.main.time}`;
-            const timeLeft = calculateTimeLeft(targetDate);
+        function getVisibleEvents() {
+            const upcoming = config.events.filter(e => {
+                return calculateTimeLeft(`${e.date}T${e.time}`) !== null;
+            });
+            return {
+                primary: upcoming[0] || null,
+                secondaries: upcoming.slice(1, 5)
+            };
+        }
+
+        function updateMainCountdown(primary) {
             const timerElement = document.getElementById('main-timer');
             const titleElement = document.getElementById('main-title');
             const dateElement = document.getElementById('main-date');
 
-            titleElement.textContent = config.main.name;
-            dateElement.innerHTML = formatDate(config.main.date, config.main.time);
+            if (!primary) {
+                titleElement.textContent = 'All Done!';
+                dateElement.innerHTML = '';
+                timerElement.innerHTML = '<div class="expired">No upcoming events</div>';
+                return;
+            }
+
+            const targetDate = `${primary.date}T${primary.time}`;
+            const timeLeft = calculateTimeLeft(targetDate);
+
+            titleElement.textContent = primary.name;
+            dateElement.innerHTML = formatDate(primary.date, primary.time);
 
             if (!timeLeft) {
                 timerElement.innerHTML = '<div class="expired">Event has passed!</div>';
@@ -101,11 +119,11 @@
             `;
         }
 
-        function updateSecondaryCountdowns() {
+        function updateSecondaryCountdowns(secondaries) {
             const container = document.getElementById('secondary-countdowns');
             container.innerHTML = '';
 
-            config.secondary.forEach((countdown, index) => {
+            secondaries.forEach((countdown) => {
                 const targetDate = `${countdown.date}T${countdown.time}`;
                 const timeLeft = calculateTimeLeft(targetDate);
 
@@ -151,8 +169,9 @@
         }
 
         function updateAllCountdowns() {
-            updateMainCountdown();
-            updateSecondaryCountdowns();
+            const { primary, secondaries } = getVisibleEvents();
+            updateMainCountdown(primary);
+            updateSecondaryCountdowns(secondaries);
         }
 
         // Initial update
