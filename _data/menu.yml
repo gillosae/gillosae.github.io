@@ -43,3 +43,4 @@ entries:
         #   - title: example page
         #     url: about
       - title: 'Ahyeon Choi, <u>Hayoon Kim</u>, Mina Jo, Subeen Kim, Haesun Joung, Inyong Choi, and Kyogu Lee, "The Impact of Visual Information in Speech Perception for Individuals with Hearing Loss: A mini review," in Frontiers in Psychology, 2024. <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1399084/full">frontiers</a>'
+      - title: 'Kyungsu Kim, Jinwoo Lee, <u>Hayoon Kim</u>, and Kyogu Lee, "Conditional Foley Sound Synthesis with Limited Data," in DCASE, 2023. <a href="https://dcase.community/documents/challenge2023/technical_reports/DCASE2023_Lee_115_t7.pdf">DCASE</a>'
