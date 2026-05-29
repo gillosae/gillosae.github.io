@@ -61,14 +61,15 @@
             return num.toString().padStart(2, '0');
         }
 
-        function formatDate(dateStr, timeStr, singleLine = false) {
+        function formatDate(dateStr, timeStr, singleLine = false, est = false) {
             // dateStr is in format "YYYY-MM-DD", timeStr is "HH:MM:SS"
             const [year, month, day] = dateStr.split('-');
             const [hour, minute] = timeStr.split(':');
+            const estSuffix = est ? ' (est)' : '';
             if (singleLine) {
-                return `${year}/${month}/${day}`;
+                return `${year}/${month}/${day}${estSuffix}`;
             }
-            return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span></div><div class="date-line2">${hour}:${minute} KST</div>`;
+            return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span>${estSuffix}</div><div class="date-line2">${hour}:${minute} KST</div>`;
         }
 
         function getVisibleEvents() {
@@ -96,8 +97,8 @@
             const targetDate = `${primary.date}T${primary.time}`;
             const timeLeft = calculateTimeLeft(targetDate);
 
-            titleElement.textContent = primary.est ? `${primary.name} (est)` : primary.name;
-            dateElement.innerHTML = formatDate(primary.date, primary.time);
+            titleElement.textContent = primary.name;
+            dateElement.innerHTML = formatDate(primary.date, primary.time, false, primary.est);
 
             if (!timeLeft) {
                 timerElement.innerHTML = '<div class="expired">Event has passed!</div>';
@@ -139,8 +140,8 @@
                 card.className = 'countdown-card';
                 card.innerHTML = `
                     <div class="card-header">
-                        <h2>${countdown.est ? `${countdown.name} (est)` : countdown.name}</h2>
-                        <div class="card-date">${formatDate(countdown.date, countdown.time, true)}</div>
+                        <h2>${countdown.name}</h2>
+                        <div class="card-date">${formatDate(countdown.date, countdown.time, true, countdown.est)}</div>
                     </div>
                 `;
 
