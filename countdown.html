@@ -96,7 +96,7 @@
             const targetDate = `${primary.date}T${primary.time}`;
             const timeLeft = calculateTimeLeft(targetDate);
 
-            titleElement.textContent = primary.name;
+            titleElement.textContent = primary.est ? `${primary.name} (est)` : primary.name;
             dateElement.innerHTML = formatDate(primary.date, primary.time);
 
             if (!timeLeft) {
@@ -139,7 +139,7 @@
                 card.className = 'countdown-card';
                 card.innerHTML = `
                     <div class="card-header">
-                        <h2>${countdown.name}</h2>
+                        <h2>${countdown.est ? `${countdown.name} (est)` : countdown.name}</h2>
                         <div class="card-date">${formatDate(countdown.date, countdown.time, true)}</div>
                     </div>
                 `;

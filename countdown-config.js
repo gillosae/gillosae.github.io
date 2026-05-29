@@ -8,29 +8,34 @@
 const config = {
     events: [
         {
-            name: "MM",
-            date: "2026-04-02",
-            time: "21:00:00"
+            name: "AAAI",
+            date: "2026-07-22",
+            time: "21:00:00",
+            est: false
         },
         {
-            name: "ASSETS",
-            date: "2026-04-23",
-            time: "23:59:59"
+            name: "ICASSP",
+            date: "2026-09-17",
+            time: "21:00:00",
+            est: false
         },
         {
-            name: "ISMIR",
-            date: "2026-04-28",
-            time: "21:00:00"
+            name: "CHI",
+            date: "2026-09-11",
+            time: "21:00:00",
+            est: false
         },
         {
-            name: "NeurIPS",
-            date: "2026-05-08",
-            time: "21:00:00"
+            name: "ICLR",
+            date: "2026-09-25",
+            time: "21:00:00",
+            est: true
         },
         {
-            name: "EMNLP ARR",
-            date: "2026-05-26",
-            time: "21:00:00"
+            name: "AAAI",
+            date: "2026-11-14",
+            time: "21:00:00",
+            est: true
         }
     ]
 };
