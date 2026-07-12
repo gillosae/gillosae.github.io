@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2S4N123Q9E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2S4N123Q9E');
+    </script>
+    <link rel="stylesheet" href="countdown.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Countdown -->
+        <div class="main-countdown">
+            <div class="main-header">
+                <h1 id="main-title">ACL ARR</h1>
+                <div class="main-date" id="main-date"></div>
+            </div>
+            <div class="main-timer" id="main-timer"></div>
+        </div>
+
+        <!-- Secondary Countdowns -->
+        <div class="secondary-countdowns" id="secondary-countdowns"></div>
+    </div>
+
+    <!-- Noot Noot -->
+    <img src="noot-noot-meme-transparent.gif?v=3" alt="" class="noot-noot" id="noot-noot-gif" draggable="false">
+    <audio id="noot-noot-sound" preload="auto">
+        <source src="noot-noot.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Load configuration -->
+    <script src="countdown-config.js?v=2"></script>
+    
+    <script>
+
+        function calculateTimeLeft(targetDate) {
+            const now = new Date().getTime();
+            const target = new Date(targetDate).getTime();
+            const difference = target - now;
+
+            if (difference <= 0) {
+                return null;
+            }
+
+            return {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((difference % (1000 * 60)) / 1000)
+            };
+        }
+
+        function formatNumber(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function formatDate(dateStr, timeStr, singleLine = false, est = false) {
+            // dateStr is in format "YYYY-MM-DD", timeStr is "HH:MM:SS"
+            const [year, month, day] = dateStr.split('-');
+            const [hour, minute] = timeStr.split(':');
+            const estSuffix = est ? ' (est)' : '';
+            if (singleLine) {
+                return `${year}/${month}/${day}${estSuffix}`;
+            }
+            return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span>${estSuffix}</div><div class="date-line2">${hour}:${minute} KST</div>`;
+        }
+
+        function getVisibleEvents() {
+            const upcoming = config.events.filter(e => {
+                return calculateTimeLeft(`${e.date}T${e.time}`) !== null;
+            });
+            return {
+                primary: upcoming[0] || null,
+                secondaries: upcoming.slice(1, 5)
+            };
+        }
+
+        function updateMainCountdown(primary) {
+            const timerElement = document.getElementById('main-timer');
+            const titleElement = document.getElementById('main-title');
+            const dateElement = document.getElementById('main-date');
+
+            if (!primary) {
+                titleElement.textContent = 'All Done!';
+                dateElement.innerHTML = '';
+                timerElement.innerHTML = '<div class="expired">No upcoming events</div>';
+                return;
+            }
+
+            const targetDate = `${primary.date}T${primary.time}`;
+            const timeLeft = calculateTimeLeft(targetDate);
+
+            titleElement.textContent = primary.name;
+            dateElement.innerHTML = formatDate(primary.date, primary.time, false, primary.est);
+
+            if (!timeLeft) {
+                timerElement.innerHTML = '<div class="expired">Event has passed!</div>';
+                return;
+            }
+
+            timerElement.innerHTML = `
+                <div class="main-time-unit">
+                    <div class="main-time-value">${formatNumber(timeLeft.days)}</div>
+                    <div class="main-time-label">DAYS</div>
+                </div>
+                <div class="colon">:</div>
+                <div class="main-time-unit">
+                    <div class="main-time-value">${formatNumber(timeLeft.hours)}</div>
+                    <div class="main-time-label">HOURS</div>
+                </div>
+                <div class="colon">:</div>
+                <div class="main-time-unit">
+                    <div class="main-time-value">${formatNumber(timeLeft.minutes)}</div>
+                    <div class="main-time-label">MINUTES</div>
+                </div>
+                <div class="colon">:</div>
+                <div class="main-time-unit">
+                    <div class="main-time-value main-seconds">${formatNumber(timeLeft.seconds)}</div>
+                    <div class="main-time-label">SECONDS</div>
+                </div>
+            `;
+        }
+
+        function updateSecondaryCountdowns(secondaries) {
+            const container = document.getElementById('secondary-countdowns');
+            container.innerHTML = '';
+
+            secondaries.forEach((countdown) => {
+                const targetDate = `${countdown.date}T${countdown.time}`;
+                const timeLeft = calculateTimeLeft(targetDate);
+
+                const card = document.createElement('div');
+                card.className = 'countdown-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h2>${countdown.name}</h2>
+                        <div class="card-date">${formatDate(countdown.date, countdown.time, true, countdown.est)}</div>
+                    </div>
+                `;
+
+                if (!timeLeft) {
+                    card.innerHTML += '<div class="expired">Passed!</div>';
+                } else {
+                    card.innerHTML += `
+                        <div class="countdown-timer">
+                            <div class="time-unit">
+                                <div class="time-value">${formatNumber(timeLeft.days)}</div>
+                                <div class="time-label">DAYS</div>
+                            </div>
+                            <div class="colon-small">:</div>
+                            <div class="time-unit">
+                                <div class="time-value">${formatNumber(timeLeft.hours)}</div>
+                                <div class="time-label">HRS</div>
+                            </div>
+                            <div class="colon-small">:</div>
+                            <div class="time-unit">
+                                <div class="time-value">${formatNumber(timeLeft.minutes)}</div>
+                                <div class="time-label">MIN</div>
+                            </div>
+                            <div class="colon-small">:</div>
+                            <div class="time-unit">
+                                <div class="time-value small-seconds">${formatNumber(timeLeft.seconds)}</div>
+                                <div class="time-label">SEC</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.appendChild(card);
+            });
+        }
+
+        function updateAllCountdowns() {
+            const { primary, secondaries } = getVisibleEvents();
+            updateMainCountdown(primary);
+            updateSecondaryCountdowns(secondaries);
+        }
+
+        // Initial update
+        updateAllCountdowns();
+
+        // Update every second
+        setInterval(updateAllCountdowns, 1000);
+
+        // Make Pingu animate on click with sound
+        const nootNootGif = document.getElementById('noot-noot-gif');
+        const nootNootSound = document.getElementById('noot-noot-sound');
+        let isAnimating = false;
+
+        if (nootNootGif && nootNootSound) {
+            console.log('Pingu initialized!'); // Debug log
+            
+            const handleNootNoot = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('Pingu clicked!', isAnimating); // Debug log
+                
+                // Prevent re-clicking while animating
+                if (isAnimating) return;
+                
+                isAnimating = true;
+                gtag('event', 'pingu_click');
+                nootNootGif.style.pointerEvents = 'none';
+                nootNootGif.style.cursor = 'default';
+                
+                // Reload GIF without clearing (prevents glitch)
+                const src = nootNootGif.src;
+                const baseSrc = src.split('?')[0];
+                nootNootGif.src = baseSrc + '?t=' + new Date().getTime();
+                
+                // Play sound after delay
+                setTimeout(() => {
+                    nootNootSound.currentTime = 0;
+                    nootNootSound.play()
+                        .then(() => console.log('Sound played!'))
+                        .catch(e => console.log('Audio play failed:', e));
+                }, 800);
+                
+                // Re-enable clicking after animation completes
+                setTimeout(() => {
+                    isAnimating = false;
+                    nootNootGif.style.pointerEvents = 'auto';
+                    nootNootGif.style.cursor = 'pointer';
+                    console.log('Ready for next click!'); // Debug log
+                }, 2500);
+            };
+            
+            nootNootGif.addEventListener('click', handleNootNoot);
+            nootNootGif.addEventListener('touchstart', handleNootNoot); // Mobile support
+        } else {
+            console.error('Pingu or sound not found!'); // Debug log
+        }
+    </script>
+</body>
+</html>
+

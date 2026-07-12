@@ -1,0 +1,43 @@
+# For documentation on this file, see:
+# https://github.com/riggraz/no-style-please#customize-the-menu
+
+entries:
+  - title: info
+    entries:
+      - title: Ph.D in Department of Intelligence and Information
+      - title: Music and Audio Research Group, Seoul National University
+      - title: "Advisor: Kyogu Lee"
+      - title: hyway@snu.ac.kr
+        url: mailto:hyway@snu.ac.kr
+      - title: "<a href='https://scholar.google.com/citations?user=zYOzjfQAAAAJ&hl'>scholar</a> <a href='https://github.com/gillosae'>github</a> <a href='https://x.com/gillosaekim'>twitter</a> <a href='https://www.linkedin.com/in/hayoon-kim-ab187032a/'>linkedin</a>"
+      # - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
+
+  - title: research interest
+    entries:
+      - title: "topic: human-centered audio understanding and generation."
+      - title: "method: data-centric modeling and learning-based audio systems."
+      - title: "application: expressive audio systems and accessibility."
+    # post_list:
+    #   limit: 5
+    #   show_more: true
+    #   show_more_text: See archive...
+    #   show_more_url: archive.html
+
+  # - title: publications
+  #   post_list:
+  #     category: example2
+  #     show_more: true
+  #     show_more_text: See more posts...
+  #     show_more_url: example2-archive.html
+
+  # - title: rss
+  #   url: feed.xml
+  
+  
+  - title: publications
+    entries:
+      - title: '<u>Hayoon Kim</u>, and Kyogu Lee, "Vocal Music under Phoneme-Conditional Analysis," in ISMIR, 2026. <a href="">arXiv</a> <a href="phoneme">web</a> <a href="">github</a>'
+      - title: '<u>Hayoon Kim</u>, Eunice Hong, and Kyogu Lee, "Auditory Illusion Benchmark for Large Audio Language Models," in ICASSP, 2026. <a href="">arXiv</a> <a href="aib">web</a> <a href="">github</a>'
+      - title: '<u>Hayoon Kim</u>, Ahyeon Choi, Sungho Lee, Hyunjin Jung, and Kyogu Lee, "Emosical: An Emotion-Annotated Musical Theatre Dataset," in EMNLP Findings, 2024. <a href="">acl</a> <a href="emosical">web</a> <a href="https://github.com/gillosae/emosical">github</a>'
+      - title: 'Ahyeon Choi, <u>Hayoon Kim</u>, Mina Jo, Subeen Kim, Haesun Joung, Inyong Choi, and Kyogu Lee, "The Impact of Visual Information in Speech Perception for Individuals with Hearing Loss: A mini review," in Frontiers in Psychology, 2024. <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1399084/full">frontiers</a>'
+      - title: 'Kyungsu Kim, Jinwoo Lee, <u>Hayoon Kim</u>, and Kyogu Lee, "Conditional Foley Sound Synthesis with Limited Data," in DCASE, 2023. <a href="https://dcase.community/documents/challenge2023/technical_reports/DCASE2023_Lee_115_t7.pdf">DCASE</a>'
