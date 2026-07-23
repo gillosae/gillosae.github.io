@@ -19,12 +19,6 @@ const config = {
             est: false
         },
         {
-            name: "CHI",
-            date: "2026-09-10",
-            time: "23:59:59",
-            est: false
-        },
-        {
             name: "ICASSP",
             date: "2026-09-16",
             time: "23:59:59",
@@ -39,6 +33,18 @@ const config = {
         {
             name: "CVPR",
             date: "2026-11-13",
+            time: "23:59:59",
+            est: true
+        },
+        {
+            name: "ICML",
+            date: "2027-1-15",
+            time: "23:59:59",
+            est: true
+        },
+        {
+            name: "Interspeech",
+            date: "2027-3-1",
             time: "23:59:59",
             est: true
         }
