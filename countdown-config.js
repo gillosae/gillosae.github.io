@@ -38,13 +38,13 @@ const config = {
         },
         {
             name: "ICML",
-            date: "2027-1-15",
+            date: "2027-01-15",
             time: "23:59:59",
             est: true
         },
         {
             name: "Interspeech",
-            date: "2027-3-1",
+            date: "2027-03-01",
             time: "23:59:59",
             est: true
         }
