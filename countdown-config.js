@@ -6,35 +6,40 @@
 // The next 4 upcoming events are shown as secondaries.
 
 const config = {
+    // All event date/time values below are written in AoE (Anywhere on Earth = UTC-12).
+    // The page converts them to each visitor's local timezone automatically.
+    // (Change this offset if the times below are ever written in another zone,
+    //  e.g. "+09:00" for KST.)
+    timezone: "-12:00",
     events: [
         {
             name: "AAAI",
-            date: "2026-07-22",
-            time: "21:00:00",
+            date: "2026-07-28",
+            time: "23:59:59",
             est: false
         },
         {
             name: "CHI",
-            date: "2026-09-11",
-            time: "21:00:00",
+            date: "2026-09-10",
+            time: "23:59:59",
             est: false
         },
         {
             name: "ICASSP",
-            date: "2026-09-17",
-            time: "21:00:00",
+            date: "2026-09-16",
+            time: "23:59:59",
             est: false
         },
         {
             name: "ICLR",
-            date: "2026-09-25",
-            time: "21:00:00",
+            date: "2026-09-24",
+            time: "23:59:59",
             est: true
         },
         {
             name: "CVPR",
-            date: "2026-11-14",
-            time: "21:00:00",
+            date: "2026-11-13",
+            time: "23:59:59",
             est: true
         }
     ]

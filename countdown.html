@@ -36,13 +36,38 @@
     </audio>
 
     <!-- Load configuration -->
-    <script src="countdown-config.js?v=2"></script>
+    <script src="countdown-config.js?v=3"></script>
     
     <script>
 
+        // Config times are written in a fixed timezone (AoE = UTC-12 by default).
+        // Parsing them WITH that offset gives one absolute instant, identical for
+        // every visitor; display then renders it in the viewer's local timezone.
+        const CONFIG_TZ = (typeof config !== 'undefined' && config.timezone) || '-12:00';
+
+        function getEventDate(event) {
+            return new Date(`${event.date}T${event.time}${CONFIG_TZ}`);
+        }
+
+        function getLocalTimeZoneLabel(date) {
+            try {
+                const parts = new Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
+                    .formatToParts(date);
+                const name = parts.find(p => p.type === 'timeZoneName');
+                if (name && name.value) return name.value;
+            } catch (e) { /* fall through */ }
+            // Fallback: build "UTC+9" style label from the raw offset
+            const offsetMin = -date.getTimezoneOffset();
+            const sign = offsetMin < 0 ? '-' : '+';
+            const abs = Math.abs(offsetMin);
+            const h = Math.floor(abs / 60);
+            const m = abs % 60;
+            return `UTC${sign}${h}${m ? ':' + formatNumber(m) : ''}`;
+        }
+
         function calculateTimeLeft(targetDate) {
             const now = new Date().getTime();
-            const target = new Date(targetDate).getTime();
+            const target = targetDate instanceof Date ? targetDate.getTime() : new Date(targetDate).getTime();
             const difference = target - now;
 
             if (difference <= 0) {
@@ -61,20 +86,23 @@
             return num.toString().padStart(2, '0');
         }
 
-        function formatDate(dateStr, timeStr, singleLine = false, est = false) {
-            // dateStr is in format "YYYY-MM-DD", timeStr is "HH:MM:SS"
-            const [year, month, day] = dateStr.split('-');
-            const [hour, minute] = timeStr.split(':');
+        function formatDate(date, singleLine = false, est = false) {
+            // `date` is the absolute event instant; render it in the viewer's local time
+            const year = date.getFullYear();
+            const month = formatNumber(date.getMonth() + 1);
+            const day = formatNumber(date.getDate());
+            const hour = formatNumber(date.getHours());
+            const minute = formatNumber(date.getMinutes());
             const estSuffix = est ? ' (est)' : '';
             if (singleLine) {
                 return `${year}/${month}/${day}${estSuffix}`;
             }
-            return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span>${estSuffix}</div><div class="date-line2">${hour}:${minute} KST</div>`;
+            return `<div class="date-line1">${year}/<span class="date-highlight">${month}/${day}</span>${estSuffix}</div><div class="date-line2">${hour}:${minute} ${getLocalTimeZoneLabel(date)}</div>`;
         }
 
         function getVisibleEvents() {
             const upcoming = config.events.filter(e => {
-                return calculateTimeLeft(`${e.date}T${e.time}`) !== null;
+                return calculateTimeLeft(getEventDate(e)) !== null;
             });
             return {
                 primary: upcoming[0] || null,
@@ -94,11 +122,11 @@
                 return;
             }
 
-            const targetDate = `${primary.date}T${primary.time}`;
+            const targetDate = getEventDate(primary);
             const timeLeft = calculateTimeLeft(targetDate);
 
             titleElement.textContent = primary.name;
-            dateElement.innerHTML = formatDate(primary.date, primary.time, false, primary.est);
+            dateElement.innerHTML = formatDate(targetDate, false, primary.est);
 
             if (!timeLeft) {
                 timerElement.innerHTML = '<div class="expired">Event has passed!</div>';
@@ -133,7 +161,7 @@
             container.innerHTML = '';
 
             secondaries.forEach((countdown) => {
-                const targetDate = `${countdown.date}T${countdown.time}`;
+                const targetDate = getEventDate(countdown);
                 const timeLeft = calculateTimeLeft(targetDate);
 
                 const card = document.createElement('div');
@@ -141,7 +169,7 @@
                 card.innerHTML = `
                     <div class="card-header">
                         <h2>${countdown.name}</h2>
-                        <div class="card-date">${formatDate(countdown.date, countdown.time, true, countdown.est)}</div>
+                        <div class="card-date">${formatDate(targetDate, true, countdown.est)}</div>
                     </div>
                 `;
 
