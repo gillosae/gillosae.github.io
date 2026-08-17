@@ -17,409 +17,233 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:        #f4f4f6;
-    --bg-blur:   rgba(244,244,246,.82);
-    --surface:   #ffffff;
-    --surface-2: #f9f9fb;
-    --line:      #e5e5ea;
-    --line-2:    #d6d6dd;
-    --ink:       #16161a;
-    --ink-2:     #5a5a66;
-    --ink-3:     #91919c;
-    --accent:    #1d4ed8;
-    --shadow-sm: 0 1px 2px rgba(16,16,24,.05);
-    --shadow-md: 0 4px 16px rgba(16,16,24,.07), 0 1px 3px rgba(16,16,24,.05);
-    --shadow-lg: 0 24px 56px rgba(16,16,24,.16), 0 4px 12px rgba(16,16,24,.08);
+    --bg:#fbfbfc; --panel:#f1f1f4; --line:#e6e6ea; --ink:#15151a; --ink2:#6a6a76; --ink3:#9b9ba6;
+    --accent:#2b6ef6; --tile-edge:rgba(0,0,0,.07); --shadow:0 6px 20px rgba(18,18,28,.10);
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg:        #09090b;
-      --bg-blur:   rgba(9,9,11,.82);
-      --surface:   #15151a;
-      --surface-2: #1b1b21;
-      --line:      #26262d;
-      --line-2:    #34343d;
-      --ink:       #f3f3f5;
-      --ink-2:     #a3a3ae;
-      --ink-3:     #71717c;
-      --accent:    #7da2f9;
-      --shadow-sm: none;
-      --shadow-md: 0 4px 16px rgba(0,0,0,.4);
-      --shadow-lg: 0 24px 56px rgba(0,0,0,.6);
-    }
+    :root { --bg:#0b0b0e; --panel:#191920; --line:#25252d; --ink:#f2f2f5; --ink2:#9a9aa6; --ink3:#6b6b76;
+            --accent:#6f9dff; --tile-edge:rgba(255,255,255,.10); --shadow:0 6px 24px rgba(0,0,0,.5); }
   }
-  :root[data-theme="light"] {
-    --bg:#f4f4f6; --bg-blur:rgba(244,244,246,.82); --surface:#fff; --surface-2:#f9f9fb;
-    --line:#e5e5ea; --line-2:#d6d6dd; --ink:#16161a; --ink-2:#5a5a66; --ink-3:#91919c; --accent:#1d4ed8;
-    --shadow-sm:0 1px 2px rgba(16,16,24,.05);
-    --shadow-md:0 4px 16px rgba(16,16,24,.07), 0 1px 3px rgba(16,16,24,.05);
-    --shadow-lg:0 24px 56px rgba(16,16,24,.16), 0 4px 12px rgba(16,16,24,.08);
-  }
-  :root[data-theme="dark"] {
-    --bg:#09090b; --bg-blur:rgba(9,9,11,.82); --surface:#15151a; --surface-2:#1b1b21;
-    --line:#26262d; --line-2:#34343d; --ink:#f3f3f5; --ink-2:#a3a3ae; --ink-3:#71717c; --accent:#7da2f9;
-    --shadow-sm:none; --shadow-md:0 4px 16px rgba(0,0,0,.4); --shadow-lg:0 24px 56px rgba(0,0,0,.6);
-  }
+  :root[data-theme="light"] { --bg:#fbfbfc; --panel:#f1f1f4; --line:#e6e6ea; --ink:#15151a; --ink2:#6a6a76;
+    --ink3:#9b9ba6; --accent:#2b6ef6; --tile-edge:rgba(0,0,0,.07); --shadow:0 6px 20px rgba(18,18,28,.10); }
+  :root[data-theme="dark"] { --bg:#0b0b0e; --panel:#191920; --line:#25252d; --ink:#f2f2f5; --ink2:#9a9aa6;
+    --ink3:#6b6b76; --accent:#6f9dff; --tile-edge:rgba(255,255,255,.10); --shadow:0 6px 24px rgba(0,0,0,.5); }
 
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    padding-bottom: 4rem;
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Noto Sans KR','Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; padding-bottom: 72px;
   }
-  .num { font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
-  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
   button, input { font: inherit; color: inherit; }
+  .n { font-family:'Inter',sans-serif; font-variant-numeric: tabular-nums; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 20px; }
 
-  /* ---------- header ---------- */
-  .page-header { padding: 44px 0 20px; text-align: center; }
-  .page-header h1 {
-    margin: 0; font-family: 'Inter', sans-serif; font-size: 1.55rem; font-weight: 800;
-    letter-spacing: -.03em; display: inline-flex; align-items: center; gap: .45rem;
-  }
-  .page-header h1 .glyph { font-size: 1.15em; line-height: 1; }
-  .home-link {
-    display: inline-block; margin-top: 12px; font-size: .72rem; font-weight: 500;
-    color: var(--ink-3); text-decoration: none; letter-spacing: .04em;
-    padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line);
-    transition: color .15s, border-color .15s;
-  }
-  .home-link:hover { color: var(--ink); border-color: var(--line-2); }
+  /* header + hero */
+  header { text-align: center; padding: 52px 0 0; }
+  h1 { margin: 0; font-family:'Inter',sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -.03em; }
+  .home { display: inline-block; margin-top: 10px; font-size: .72rem; color: var(--ink3); text-decoration: none; letter-spacing: .06em; }
+  .home:hover { color: var(--ink); }
 
-  /* ---------- hero progress panel ---------- */
-  .hero {
-    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
-    padding: 22px 24px 18px; margin: 24px 0 8px; box-shadow: var(--shadow-sm);
-    text-align: left;
-  }
-  .hero-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-  .hero-label {
-    font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-    color: var(--ink-3);
-  }
-  .hero-pct { font-family:'Inter',sans-serif; font-size: .82rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
-  .hero-count { font-family:'Inter',sans-serif; font-size: 2.3rem; font-weight: 800; letter-spacing: -.035em; line-height: 1.1; margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .hero-count .of { color: var(--ink-3); font-size: .5em; font-weight: 600; letter-spacing: -.01em; }
-  .track { height: 6px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; margin-top: 14px; }
-  @media (prefers-color-scheme: dark) { .track { background: #101014; } }
-  :root[data-theme="dark"] .track { background: #101014; }
-  .track-fill {
-    height: 100%; border-radius: 999px; background: var(--accent);
-    transform-origin: left center; animation: grow .7s cubic-bezier(.16,1,.3,1) both;
-  }
-  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-  .hero-row {
-    display: flex; flex-wrap: wrap; gap: 0; margin-top: 16px; padding-top: 14px;
-    border-top: 1px solid var(--line);
-  }
-  .hero-stat { flex: 1 1 0; min-width: 68px; text-align: center; position: relative; }
-  .hero-stat + .hero-stat::before {
-    content: ''; position: absolute; left: 0; top: 10%; height: 80%; width: 1px; background: var(--line);
-  }
-  .hero-stat-num { font-family:'Inter',sans-serif; font-size: 1.05rem; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-  .hero-stat-num .of { color: var(--ink-3); font-size: .72em; font-weight: 600; }
-  .hero-stat-label { font-size: .64rem; color: var(--ink-3); margin-top: 1px; letter-spacing: .02em; }
+  .hero { text-align: center; margin: 34px 0 30px; }
+  .hero-num { font-family:'Inter',sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.045em; line-height: 1; }
+  .hero-num b { font-size: 3.1rem; font-weight: 800; }
+  .hero-num span { font-size: 1.15rem; font-weight: 600; color: var(--ink3); margin-left: 4px; }
+  .track { width: min(320px, 78%); height: 4px; margin: 18px auto 0; border-radius: 99px; background: var(--panel); overflow: hidden; }
+  .track i { display: block; height: 100%; border-radius: 99px; background: var(--accent);
+             transform-origin: left; animation: g .8s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes g { from { transform: scaleX(0); } }
+  .hero-sub { margin-top: 14px; font-size: .74rem; color: var(--ink3); letter-spacing: .01em; }
+  .hero-sub b { font-family:'Inter',sans-serif; font-weight: 700; color: var(--ink2); font-variant-numeric: tabular-nums; }
 
-  /* ---------- tabs ---------- */
-  .tabs-outer { position: sticky; top: 0; z-index: 30; padding: 14px 0 10px; background: var(--bg-blur); backdrop-filter: saturate(180%) blur(12px); }
-  .tabs { display: flex; justify-content: center; }
-  .tabs-track {
-    display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px;
-    background: var(--surface-2); border: 1px solid var(--line);
-  }
-  .tab {
-    border: 0; background: transparent; cursor: pointer; border-radius: 999px;
-    padding: 7px 20px; font-size: .8rem; font-weight: 700; color: var(--ink-3);
-    letter-spacing: -.01em; transition: color .15s, background .15s, box-shadow .15s;
-  }
-  .tab:hover { color: var(--ink-2); }
-  .tab.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
-  @media (prefers-color-scheme: dark) { .tab.active { background: #2a2a33; } }
-  :root[data-theme="dark"] .tab.active { background: #2a2a33; }
+  /* tabs */
+  .tabs { position: sticky; top: 0; z-index: 20; display: flex; justify-content: center;
+          padding: 12px 0; background: var(--bg); }
+  .tabs-in { display: inline-flex; gap: 2px; padding: 3px; border-radius: 99px; background: var(--panel); }
+  .tab { border: 0; background: none; cursor: pointer; border-radius: 99px; padding: 7px 19px;
+         font-size: .79rem; font-weight: 700; color: var(--ink3); letter-spacing: -.01em; transition: .16s; }
+  .tab:hover { color: var(--ink2); }
+  .tab.active { background: var(--bg); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.10); }
+  @media (prefers-color-scheme: dark) { .tab.active { background: #32323d; } }
+  :root[data-theme="dark"] .tab.active { background: #32323d; }
+  .panel { display: none; }
+  .panel.active { display: block; }
 
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
+  /* controls */
+  .bar { margin: 14px 0 26px; }
+  .find { position: relative; }
+  .find svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px;
+              fill: none; stroke: var(--ink3); stroke-width: 2; }
+  .find input { width: 100%; padding: 11px 15px 11px 38px; border-radius: 13px; border: 1px solid var(--line);
+                background: var(--bg); font-size: .85rem; transition: .16s; }
+  .find input::placeholder { color: var(--ink3); }
+  .find input:focus { outline: none; border-color: var(--accent); }
+  .find input::-webkit-search-cancel-button { filter: grayscale(1) opacity(.45); }
 
-  /* ---------- toolbar ---------- */
-  .toolbar { margin: 6px 0 20px; }
-  .search-wrap { position: relative; margin-bottom: 10px; }
-  .search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; fill: none; stroke: var(--ink-3); stroke-width: 2; }
-  .search-input {
-    width: 100%; padding: 10px 14px 10px 36px; border-radius: 12px;
-    border: 1px solid var(--line); background: var(--surface); font-size: .85rem;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .search-input::placeholder { color: var(--ink-3); }
-  .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,78,216,.12); }
-  .search-input::-webkit-search-cancel-button { filter: grayscale(1) opacity(.5); }
+  .opts { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; justify-content: space-between; margin-top: 13px; }
+  .set { display: inline-flex; flex-wrap: wrap; gap: 3px; }
+  .opt { border: 0; background: none; cursor: pointer; padding: 5px 11px; border-radius: 99px;
+         font-size: .745rem; font-weight: 600; color: var(--ink3); white-space: nowrap; transition: .16s; }
+  .opt:hover { color: var(--ink); }
+  .opt.on { background: var(--ink); color: var(--bg); }
 
-  .rows { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
-  .seg { display: inline-flex; flex-wrap: wrap; gap: 4px; }
-  .chip-btn {
-    border: 1px solid var(--line); background: var(--surface); cursor: pointer;
-    padding: 5px 12px; border-radius: 999px; font-size: .73rem; font-weight: 600;
-    color: var(--ink-2); white-space: nowrap; transition: all .15s;
+  /* tile grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 24px 14px; }
+  .cell { position: relative; background: none; border: 0; padding: 0; cursor: pointer;
+          display: flex; flex-direction: column; align-items: center; gap: 9px; font: inherit; color: inherit; text-align: center; }
+  .tile {
+    position: relative; width: 56px; height: 56px; border-radius: 15px; overflow: hidden;
+    box-shadow: inset 0 0 0 1px var(--tile-edge);
+    transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s;
   }
-  .chip-btn:hover { border-color: var(--line-2); color: var(--ink); }
-  .chip-btn.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-  @media (prefers-color-scheme: dark) { .chip-btn.active { background: var(--accent); border-color: var(--accent); color: #09090b; } }
-  :root[data-theme="dark"] .chip-btn.active { background: var(--accent); border-color: var(--accent); color: #09090b; }
+  .tile img { width: 56px; height: 56px; object-fit: cover; display: block; }
+  .tile .mg { width: 56px; height: 56px; display: grid; place-items: center; color: #fff;
+              font-family:'Inter',sans-serif; font-size: .82rem; font-weight: 800; letter-spacing: -.02em; }
+  .cell:hover .tile { transform: translateY(-3px) scale(1.04); box-shadow: inset 0 0 0 1px var(--tile-edge), var(--shadow); }
+  .cell.off .tile img, .cell.off .tile .mg { filter: grayscale(1); opacity: .5; }
+  @media (prefers-color-scheme: dark) { .cell.off .tile img { filter: grayscale(1) brightness(1.45); opacity: .42; } }
+  :root[data-theme="dark"] .cell.off .tile img { filter: grayscale(1) brightness(1.45); opacity: .42; }
 
-  .result-count { font-size: .7rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .name { font-size: .68rem; font-weight: 600; line-height: 1.34; letter-spacing: -.015em;
+          height: 2.68em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .cell.off .name { color: var(--ink3); font-weight: 500; }
 
-  /* ---------- grid + cards ---------- */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 10px; }
+  .cnt { position: absolute; top: -4px; right: -4px; min-width: 17px; height: 17px; padding: 0 4px;
+         border-radius: 99px; background: var(--accent); color: #fff; font-family:'Inter',sans-serif;
+         font-size: .61rem; font-weight: 800; display: grid; place-items: center;
+         box-shadow: 0 0 0 2.5px var(--bg); }
 
-  .card {
-    position: relative; background: var(--surface); border: 1px solid var(--line);
-    border-radius: 16px; padding: 15px 8px 11px; cursor: pointer; text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 9px;
-    transition: transform .16s cubic-bezier(.16,1,.3,1), box-shadow .16s, border-color .16s;
-  }
-  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--line-2); }
-  .card.flown { box-shadow: inset 0 0 0 1.5px var(--ring); }
-  .card.flown:hover { box-shadow: inset 0 0 0 1.5px var(--ring), var(--shadow-md); }
+  /* groups */
+  .grp { margin-top: 30px; }
+  .grp:first-child { margin-top: 0; }
+  .grp-h { display: flex; align-items: baseline; gap: 8px; margin: 0 0 15px; padding-bottom: 9px; border-bottom: 1px solid var(--line); }
+  .grp-h .t { font-size: .8rem; font-weight: 700; letter-spacing: -.01em; }
+  .grp-h .f { font-size: 1rem; line-height: 1; }
+  .grp-h .c { margin-left: auto; font-family:'Inter',sans-serif; font-size: .7rem; font-weight: 600; color: var(--ink3); font-variant-numeric: tabular-nums; }
 
-  /* landscape logo box: airline artwork is a mix of square icons and wide
-     wordmarks, so give both a common height and let contain do the work */
-  /* height must be an explicit length, not 100%: a non-stretched grid item
-     falls back to auto and the logo's 1:1 intrinsic ratio then blows it up */
-  .logo { width: 100%; height: 38px; display: grid; place-items: center; overflow: hidden; }
-  .logo img { width: 100%; height: 38px; object-fit: contain; display: block; }
-  .logo .mono {
-    min-width: 46px; height: 34px; padding: 0 9px; border-radius: 10px;
-    display: grid; place-items: center; color: #fff; white-space: nowrap;
-    font-family: 'Inter', sans-serif; font-size: .72rem; font-weight: 800;
-    letter-spacing: -.02em; text-shadow: 0 1px 2px rgba(0,0,0,.18);
-  }
-  /* filter the artwork itself, never the box: brightening a mono badge would
-     blow its fill out to white and swallow the white code text inside it */
-  .card:not(.flown) .logo img { filter: grayscale(1) opacity(.5); }
-  .card:not(.flown) .logo .mono { filter: grayscale(1); opacity: .55; }
-  /* most airline marks are dark artwork drawn for white backgrounds, so on a
-     dark canvas ghost the unflown ones lighter and put flown ones on a plate */
-  @media (prefers-color-scheme: dark) {
-    .card:not(.flown) .logo img { filter: grayscale(1) brightness(2.4) opacity(.5); }
-    .card.flown .logo.plate, .logo.lg.plate { background: #fff; }
-    .card.flown { box-shadow: inset 0 0 0 1.5px var(--ring-solid); }
-    .card.flown:hover { box-shadow: inset 0 0 0 1.5px var(--ring-solid), var(--shadow-md); }
-  }
-  :root[data-theme="dark"] .card:not(.flown) .logo img { filter: grayscale(1) brightness(2.4) opacity(.5); }
-  :root[data-theme="dark"] .card.flown .logo.plate,
-  :root[data-theme="dark"] .logo.lg.plate { background: #fff; }
-  :root[data-theme="dark"] .card.flown { box-shadow: inset 0 0 0 1.5px var(--ring-solid); }
-  :root[data-theme="light"] .card:not(.flown) .logo img { filter: grayscale(1) opacity(.5); }
-  :root[data-theme="light"] .card.flown .logo.plate,
-  :root[data-theme="light"] .logo.lg.plate { background: transparent; }
-  .logo.plate { border-radius: 9px; }
-  .logo.lg.plate { border-radius: 13px; }
-  .logo.lg { width: 78px; height: 56px; flex-shrink: 0; }
-  .logo.lg img { height: 56px; }
-  .logo.lg .mono { min-width: 62px; height: 46px; border-radius: 14px; font-size: .92rem; }
+  /* airport rows */
+  .rows { display: flex; flex-direction: column; gap: 5px; }
+  .row { display: flex; align-items: center; gap: 13px; border: 1px solid var(--line); border-radius: 13px;
+         padding: 11px 15px; cursor: pointer; background: none; width: 100%; text-align: left; transition: .16s; }
+  .row:hover { border-color: var(--ink3); }
+  .row .code { font-family:'Inter',sans-serif; font-size: .76rem; font-weight: 800; color: var(--accent); width: 2.5rem; flex-shrink: 0; }
+  .row .an { flex: 1; font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row .an i { color: var(--ink3); font-style: normal; }
+  .row .rc { font-family:'Inter',sans-serif; font-size: .72rem; font-weight: 700; color: var(--ink3); flex-shrink: 0; }
 
-  .card-name {
-    font-size: .715rem; font-weight: 600; line-height: 1.3; letter-spacing: -.01em;
-    height: 2.6em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; width: 100%;
-  }
-  .card:not(.flown) .card-name { color: var(--ink-2); }
-  .card-sub { font-size: .625rem; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .none { text-align: center; padding: 58px 20px; color: var(--ink3); }
+  .none span { font-size: 1.7rem; opacity: .45; display: block; margin-bottom: 12px; }
+  .none p { margin: 0; font-size: .82rem; line-height: 1.65; }
+  .none code { font-size: .78em; background: var(--panel); border-radius: 5px; padding: 1px 5px; }
 
-  .tick {
-    position: absolute; top: -5px; right: -5px; min-width: 19px; height: 19px; padding: 0 5px;
-    border-radius: 999px; background: var(--ring-solid); color: #fff;
-    font-family: 'Inter', sans-serif; font-size: .62rem; font-weight: 800;
-    display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,.22);
-    border: 2px solid var(--surface); box-sizing: content-box;
-  }
-
-  /* ---------- group headings ---------- */
-  .group { margin: 26px 0 0; }
-  .group:first-child { margin-top: 4px; }
-  .group-head {
-    display: flex; align-items: center; gap: 8px; margin: 0 0 12px;
-    padding-bottom: 8px; border-bottom: 1px solid var(--line);
-  }
-  .group-flag { font-size: .95rem; line-height: 1; }
-  .group-name { font-size: .82rem; font-weight: 700; letter-spacing: -.01em; }
-  .group-prog { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-  .group-count { font-family:'Inter',sans-serif; font-size: .7rem; font-weight: 600; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-  .group-bar { width: 46px; height: 4px; border-radius: 999px; background: var(--line); overflow: hidden; }
-  .group-bar span { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
-
-  /* ---------- airports ---------- */
-  .rowlist { display: flex; flex-direction: column; gap: 6px; }
-  .arow {
-    display: flex; align-items: center; gap: 12px; background: var(--surface);
-    border: 1px solid var(--line); border-radius: 13px; padding: 10px 14px; cursor: pointer;
-    transition: transform .15s, box-shadow .15s, border-color .15s;
-  }
-  .arow:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--line-2); }
-  .acode {
-    font-family:'Inter',sans-serif; font-size: .72rem; font-weight: 800; letter-spacing: .01em;
-    color: #fff; background: var(--ring-solid); padding: 4px 7px; border-radius: 7px; flex-shrink: 0;
-  }
-  .aname { flex: 1; font-size: .8rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .acity { color: var(--ink-3); font-weight: 400; }
-  .acount { font-family:'Inter',sans-serif; font-size: .7rem; font-weight: 700; color: var(--ink-3); flex-shrink: 0; font-variant-numeric: tabular-nums; }
-
-  /* ---------- empty ---------- */
-  .empty { text-align: center; padding: 56px 20px; color: var(--ink-3); }
-  .empty .big { font-size: 1.8rem; opacity: .5; display: block; margin-bottom: 10px; }
-  .empty p { margin: 0; font-size: .82rem; line-height: 1.6; }
-  .empty code { font-size: .78em; background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
-
-  /* ---------- modal ---------- */
-  .overlay {
-    position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
-    padding: 18px; background: rgba(9,9,12,.5); backdrop-filter: blur(4px);
-    opacity: 0; visibility: hidden; transition: opacity .2s ease;
-  }
-  .overlay.open { opacity: 1; visibility: visible; }
-  .sheet {
-    position: relative; width: 100%; max-width: 456px; max-height: 86vh; overflow: hidden auto;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
-    box-shadow: var(--shadow-lg); transform: translateY(10px) scale(.985);
-    transition: transform .24s cubic-bezier(.16,1,.3,1);
-  }
-  .overlay.open .sheet { transform: none; }
-  .sheet-bar { height: 4px; background: var(--ring-solid, var(--accent)); }
-  .sheet-body { padding: 20px 22px 22px; }
-  .sheet-close {
-    position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
-    border: 1px solid var(--line); background: var(--surface); color: var(--ink-3);
-    font-size: 1rem; line-height: 1; cursor: pointer; display: grid; place-items: center; z-index: 2;
-    transition: all .15s;
-  }
-  .sheet-close:hover { color: var(--ink); border-color: var(--line-2); }
-  .sheet-head { display: flex; gap: 14px; align-items: center; padding-right: 34px; }
-  .sheet-head h2 { margin: 0; font-size: 1.12rem; font-weight: 700; letter-spacing: -.025em; line-height: 1.25; }
-  .sheet-sub { font-size: .78rem; color: var(--ink-2); margin-top: 3px; }
-  .metas { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 14px; }
-  .meta {
-    font-size: .67rem; font-weight: 600; color: var(--ink-2); background: var(--surface-2);
-    border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; white-space: nowrap;
-  }
-  .sheet-count {
-    font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
-    color: var(--ink-3); margin: 20px 0 9px;
-  }
-  .flights { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
-  .fitem { background: var(--surface-2); border: 1px solid var(--line); border-radius: 13px; padding: 11px 13px; }
-  .fdate { font-family:'Inter',sans-serif; font-size: .68rem; font-weight: 600; color: var(--ink-3); letter-spacing: .02em; }
-  .froute {
-    font-family:'Inter',sans-serif; font-size: .98rem; font-weight: 700; letter-spacing: -.015em;
-    margin: 3px 0 0; display: flex; align-items: center; gap: 7px;
-  }
-  .froute .arr { color: var(--ink-3); font-weight: 500; }
-  .fmeta { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-  .fmeta span {
-    font-size: .655rem; font-weight: 600; color: var(--ink-2); background: var(--surface);
-    border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px;
-  }
-  .fnote { font-size: .755rem; color: var(--ink-2); margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--line); }
-
-  footer.foot { text-align: center; color: var(--ink-3); font-size: .67rem; margin-top: 44px; letter-spacing: .02em; }
-  footer.foot a { color: inherit; }
+  /* sheet */
+  .ov { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+        padding: 18px; background: rgba(8,8,12,.5); backdrop-filter: blur(5px);
+        opacity: 0; visibility: hidden; transition: opacity .2s; }
+  .ov.open { opacity: 1; visibility: visible; }
+  .sheet { position: relative; width: 100%; max-width: 440px; max-height: 86vh; overflow: hidden auto;
+           background: var(--bg); border-radius: 24px; box-shadow: 0 30px 70px rgba(0,0,0,.35);
+           transform: translateY(12px) scale(.985); transition: transform .24s cubic-bezier(.16,1,.3,1); padding: 26px 24px 24px; }
+  .ov.open .sheet { transform: none; }
+  .x { position: absolute; top: 16px; right: 16px; width: 29px; height: 29px; border-radius: 50%; border: 0;
+       background: var(--panel); color: var(--ink2); font-size: .95rem; cursor: pointer; display: grid; place-items: center; }
+  .x:hover { color: var(--ink); }
+  .sh-h { display: flex; gap: 15px; align-items: center; padding-right: 32px; }
+  .tile.big, .tile.big img, .tile.big .mg { width: 62px; height: 62px; }
+  .tile.big { border-radius: 17px; }
+  .tile.big .mg { font-size: .95rem; }
+  .sh-h h2 { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: -.025em; line-height: 1.25; }
+  .sh-h p { margin: 3px 0 0; font-size: .78rem; color: var(--ink2); }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 16px; }
+  .tags b { font-size: .67rem; font-weight: 600; color: var(--ink2); background: var(--panel); border-radius: 99px; padding: 4px 10px; }
+  .lbl { font-size: .67rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin: 22px 0 10px; }
+  .fl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+  .fl li { background: var(--panel); border-radius: 14px; padding: 12px 14px; }
+  .fl .d { font-family:'Inter',sans-serif; font-size: .68rem; font-weight: 600; color: var(--ink3); }
+  .fl .r { font-family:'Inter',sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: -.015em; margin-top: 3px; }
+  .fl .r i { color: var(--ink3); font-style: normal; font-weight: 500; margin: 0 5px; }
+  .fl .m { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+  .fl .m span { font-size: .655rem; font-weight: 600; color: var(--ink2); background: var(--bg); border-radius: 7px; padding: 3px 8px; }
+  .fl .nt { font-size: .755rem; color: var(--ink2); margin-top: 9px; }
 
   @media (max-width: 600px) {
     body { font-size: 14px; }
-    .wrap { padding: 0 14px; }
-    .page-header { padding: 32px 0 14px; }
-    .page-header h1 { font-size: 1.35rem; }
-    .hero { padding: 18px 18px 15px; border-radius: 18px; }
-    .hero-count { font-size: 1.95rem; }
-    .grid { grid-template-columns: repeat(auto-fill, minmax(102px, 1fr)); gap: 8px; }
-    .logo { height: 34px; }
-    .logo img { height: 34px; }
-    .logo.lg { width: 68px; height: 50px; }
-    .logo.lg img { height: 50px; }
-    .tab { padding: 7px 15px; font-size: .76rem; }
-    .sheet-body { padding: 18px 17px 20px; }
-    .group-bar { display: none; }
+    .wrap { padding: 0 16px; }
+    header { padding: 36px 0 0; }
+    .hero { margin: 26px 0 22px; }
+    .hero-num b { font-size: 2.5rem; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 20px 10px; }
+    .tile, .tile img, .tile .mg { width: 50px; height: 50px; }
+    .tile { border-radius: 14px; }
+    .sheet { padding: 22px 18px 20px; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
-  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="page-header">
-      <h1><span class="glyph">✈️</span> Flying</h1><br>
-      <a class="home-link" href="/">.. home</a>
-      <div id="hero-mount"></div>
+    <header>
+      <h1>✈︎ Flying</h1><br>
+      <a class="home" href="/">.. home</a>
+      <div class="hero" id="hero"></div>
     </header>
 
-    <div class="tabs-outer">
-      <nav class="tabs">
-        <div class="tabs-track">
-          <button class="tab active" data-tab="airlines">항공사</button>
-          <button class="tab" data-tab="aircraft">기종</button>
-          <button class="tab" data-tab="airports">공항</button>
-        </div>
-      </nav>
+    <div class="tabs">
+      <div class="tabs-in">
+        <button class="tab active" data-tab="air">항공사</button>
+        <button class="tab" data-tab="ac">기종</button>
+        <button class="tab" data-tab="ap">공항</button>
+      </div>
     </div>
 
-    <section id="tab-airlines" class="tab-panel active">
-      <div class="toolbar">
-        <div class="search-wrap">
+    <section id="tab-air" class="panel active">
+      <div class="bar">
+        <div class="find">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input type="search" class="search-input" id="airline-search" placeholder="항공사 · 국가 · 코드 검색">
+          <input type="search" id="q-air" placeholder="항공사 검색">
         </div>
-        <div class="rows">
-          <div class="seg" id="airline-sort-group">
-            <button class="chip-btn active" data-sort="alpha">알파벳순</button>
-            <button class="chip-btn" data-sort="country">국적별</button>
-            <button class="chip-btn" data-sort="destinations">취항지순</button>
-            <button class="chip-btn" data-sort="passengers">탑승객순</button>
+        <div class="opts">
+          <div class="set" id="sort-air">
+            <button class="opt on" data-sort="alpha">알파벳순</button>
+            <button class="opt" data-sort="country">국적별</button>
+            <button class="opt" data-sort="destinations">취항지순</button>
+            <button class="opt" data-sort="passengers">탑승객순</button>
           </div>
-          <div class="seg" id="airline-filter-group">
-            <button class="chip-btn active" data-filter="all">전체</button>
-            <button class="chip-btn" data-filter="flown">탄 것</button>
-            <button class="chip-btn" data-filter="not-flown">안 탄 것</button>
+          <div class="set" id="filt-air">
+            <button class="opt on" data-filter="all">전체</button>
+            <button class="opt" data-filter="flown">탄 것</button>
+            <button class="opt" data-filter="not">안 탄 것</button>
           </div>
         </div>
       </div>
-      <div id="airline-grid" class="grid"></div>
+      <div id="g-air" class="grid"></div>
     </section>
 
-    <section id="tab-aircraft" class="tab-panel">
-      <div class="toolbar">
-        <div class="search-wrap">
+    <section id="tab-ac" class="panel">
+      <div class="bar">
+        <div class="find">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input type="search" class="search-input" id="aircraft-search" placeholder="기종 · 제작사 검색">
+          <input type="search" id="q-ac" placeholder="기종 검색">
         </div>
-        <div class="rows">
-          <span class="result-count" id="aircraft-count"></span>
-          <div class="seg" id="aircraft-filter-group">
-            <button class="chip-btn active" data-filter="all">전체</button>
-            <button class="chip-btn" data-filter="flown">탄 것</button>
-            <button class="chip-btn" data-filter="not-flown">안 탄 것</button>
+        <div class="opts">
+          <div class="set" id="filt-ac">
+            <button class="opt on" data-filter="all">전체</button>
+            <button class="opt" data-filter="flown">탄 것</button>
+            <button class="opt" data-filter="not">안 탄 것</button>
           </div>
         </div>
       </div>
-      <div id="aircraft-grid"></div>
+      <div id="g-ac"></div>
     </section>
 
-    <section id="tab-airports" class="tab-panel">
-      <div id="airport-list"></div>
-    </section>
-
-    <footer class="foot">OpenFlights · soaring-symbols · Wikipedia</footer>
+    <section id="tab-ap" class="panel"><div id="g-ap"></div></section>
   </div>
 
-  <div class="overlay" id="modal">
+  <div class="ov" id="ov">
     <div class="sheet">
-      <div class="sheet-bar" id="sheet-bar"></div>
-      <button class="sheet-close" id="modal-close" aria-label="닫기">&times;</button>
-      <div class="sheet-body" id="modal-content"></div>
+      <button class="x" id="x" aria-label="닫기">&times;</button>
+      <div id="sh"></div>
     </div>
   </div>
 
@@ -427,416 +251,278 @@
 (function(){
   "use strict";
 
-  var CAT_COLOR = { narrowbody:'#2563eb', widebody:'#7c3aed', regional:'#0d9488', turboprop:'#16a34a', supersonic:'#dc2626' };
-  var CAT_LABEL = { narrowbody:'협동체', widebody:'광동체', regional:'리저널', turboprop:'터보프롭', supersonic:'초음속기' };
-  var CAT_ORDER = ['narrowbody','widebody','regional','turboprop','supersonic'];
+  var CAT_C = { narrowbody:'#2f6df0', widebody:'#7a4ceb', regional:'#0e9488', turboprop:'#12a150', supersonic:'#dc2626' };
+  var CAT_L = { narrowbody:'협동체', widebody:'광동체', regional:'리저널', turboprop:'터보프롭', supersonic:'초음속기' };
+  var CAT_O = ['narrowbody','widebody','regional','turboprop','supersonic'];
   var CABIN = { economy:'이코노미', premium_economy:'프리미엄 이코노미', business:'비즈니스', first:'퍼스트' };
+  var PAL = ['#2f6df0','#4f46e5','#7a4ceb','#9333ea','#be123c','#db2777',
+             '#dc2626','#ea580c','#b45309','#12a150','#0e9488','#0891b2'];
 
-  // curated fallback palette -- keeps the 570+ logo-less badges harmonious
-  // instead of scattering random hues across the grid
-  var PALETTE = ['#2563eb','#4f46e5','#7c3aed','#9333ea','#be123c','#db2777',
-                 '#dc2626','#ea580c','#b45309','#16a34a','#0d9488','#0891b2'];
+  var air = [], ac = [], ap = [], mine = { flights:[], hiddenAirlines:[], customAirlines:[] };
+  var apBy = {}, acBy = {}, fAir = {}, fAc = {}, visits = {};
+  var S = { sort:'alpha', filter:'all', q:'', acFilter:'all', acQ:'' };
 
-  var airlines = [], aircraft = [], airports = [];
-  var flightsData = { flights: [], hiddenAirlines: [], customAirlines: [] };
-  var airportsByIata = {}, aircraftByCode = {};
-  var flightsByAirline = {}, flightsByAircraft = {}, airportVisits = {};
-  var state = { sort:'alpha', filter:'all', search:'', acFilter:'all', acSearch:'' };
+  function e(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function hash(s,n){ var h=0; s=s||'X';
+    for(var i=0;i<s.length;i++) h=(s.charCodeAt(i)+((h<<5)-h))|0; return Math.abs(h)%n; }
+  function pal(s){ return PAL[hash(s,PAL.length)]; }
 
-  function esc(s){
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
-      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
-    });
-  }
-  function hashIdx(str, n){
-    var h = 0; str = str || 'X';
-    for (var i = 0; i < str.length; i++) h = (str.charCodeAt(i) + ((h << 5) - h)) | 0;
-    return Math.abs(h) % n;
-  }
-  function rgba(hex, a){
-    var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '');
-    if (!m) return 'rgba(120,120,130,' + a + ')';
-    return 'rgba(' + parseInt(m[1],16) + ',' + parseInt(m[2],16) + ',' + parseInt(m[3],16) + ',' + a + ')';
-  }
-  function brandOf(a){
-    if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) return a.color;
-    return PALETTE[hashIdx(a.iata || a.id || a.name, PALETTE.length)];
-  }
-  function initials(a){ return (a.iata || a.name.slice(0,2)).toUpperCase(); }
-  function acName(code){ var x = aircraftByCode[code]; return x ? x.name : code; }
-
-  // logos: self-hosted MIT SVGs (soaring-symbols) for major carriers; everyone
-  // else tries a live logo by IATA code, degrading to a monogram chip on 404.
-  window.__logoErr = function(img, color, txt){
-    var s = document.createElement('span');
-    s.className = 'mono';
-    s.style.background = color;
-    s.textContent = txt;
-    if (img.parentNode) img.parentNode.classList.remove('plate');
-    img.replaceWith(s);
+  window.__tf = function(img, color, txt){
+    var d = document.createElement('div');
+    d.className = 'mg'; d.style.background = color; d.textContent = txt;
+    img.replaceWith(d);
   };
-  function monoChip(color, txt, lg){
-    return '<div class="logo' + (lg ? ' lg' : '') + '"><span class="mono" style="background:' +
-           color + '">' + txt + '</span></div>';
+  function tile(o, big){
+    // one shape for every airline: a square brand tile, or a colour+code
+    // monogram for the handful with no artwork anywhere
+    var cls = 'tile' + (big ? ' big' : '');
+    var code = (o.iata || o.name.slice(0,2)).toUpperCase(), col = pal(o.iata || o.name);
+    if (o.sq) {
+      return '<div class="' + cls + '"><img src="logos/sq/' + encodeURIComponent(o.iata) + '.png" alt="" ' +
+             'loading="lazy" decoding="async" onerror="__tf(this,\'' + col + '\',\'' + e(code) + '\')"></div>';
+    }
+    return '<div class="' + cls + '"><div class="mg" style="background:' + col + '">' + e(code) + '</div></div>';
   }
-  function logoHTML(a, lg){
-    var color = brandOf(a), txt = esc(initials(a));
-    var src = a.hasLogo ? 'logos/' + a.slug + '.svg'
-            : (a.iata ? 'https://pics.avs.io/200/200/' + encodeURIComponent(a.iata) + '.png' : '');
-    if (!src) return monoChip(color, txt, lg);
-    return '<div class="logo plate' + (lg ? ' lg' : '') + '"><img src="' + src + '" alt="" loading="lazy" ' +
-           'decoding="async" onerror="__logoErr(this,\'' + color + '\',\'' + txt + '\')"></div>';
+  function acTile(x, big){
+    var c = CAT_C[x.category] || '#64748b';
+    return '<div class="tile' + (big?' big':'') + '"><div class="mg" style="background:' + c + '">' + e(x.code) + '</div></div>';
   }
+  function acName(c){ var x = acBy[c]; return x ? x.name : c; }
 
-  // ---------- data ----------
-  function loadData(){
-    return Promise.all([
-      fetch('data/airlines.json').then(function(r){ return r.json(); }),
-      fetch('data/aircraft.json').then(function(r){ return r.json(); }),
-      fetch('data/airports.json').then(function(r){ return r.json(); }),
-      fetch('data/my-flights.json').then(function(r){ return r.json(); })
-    ]).then(function(res){
-      aircraft = res[1]; airports = res[2];
-      flightsData = res[3] || { flights:[], hiddenAirlines:[], customAirlines:[] };
-      airports.forEach(function(a){ airportsByIata[a.iata] = a; });
-      aircraft.forEach(function(a){ aircraftByCode[a.code] = a; });
-
-      var hidden = {};
-      (flightsData.hiddenAirlines || []).forEach(function(id){ hidden[id] = true; });
-      airlines = res[0].filter(function(a){ return !hidden[a.id]; });
-      (flightsData.customAirlines || []).forEach(function(c){
-        airlines.push({
-          id:c.id, name:c.name, iata:c.iata||'', icao:'', country:c.country||'',
-          countryCode:c.countryCode||'', flag:c.flag||'🏳️', destinations:0,
-          passengersMillions:null, alliance:'', flagCarrier:false,
-          color:c.color||'', hasLogo:false, slug:''
-        });
+  function load(){
+    return Promise.all(['data/airlines.json','data/aircraft.json','data/airports.json','data/my-flights.json']
+      .map(function(u){ return fetch(u).then(function(r){ return r.json(); }); })
+    ).then(function(r){
+      ac = r[1]; ap = r[2]; mine = r[3] || mine;
+      ap.forEach(function(a){ apBy[a.iata] = a; });
+      ac.forEach(function(a){ acBy[a.code] = a; });
+      var hid = {}; (mine.hiddenAirlines||[]).forEach(function(i){ hid[i] = 1; });
+      air = r[0].filter(function(a){ return !hid[a.id]; });
+      (mine.customAirlines||[]).forEach(function(c){
+        air.push({ id:c.id, name:c.name, iata:c.iata||'', country:c.country||'', flag:c.flag||'🏳️',
+                   destinations:0, passengersMillions:null, alliance:'', flagCarrier:false, sq:false, icao:'' });
       });
-
-      (flightsData.flights || []).forEach(function(f){
-        if (f.airline) (flightsByAirline[f.airline] = flightsByAirline[f.airline] || []).push(f);
-        if (f.aircraft) (flightsByAircraft[f.aircraft] = flightsByAircraft[f.aircraft] || []).push(f);
+      (mine.flights||[]).forEach(function(f){
+        if (f.airline) (fAir[f.airline] = fAir[f.airline]||[]).push(f);
+        if (f.aircraft) (fAc[f.aircraft] = fAc[f.aircraft]||[]).push(f);
         [f.from, f.to].forEach(function(c){
           if (!c) return;
-          airportVisits[c] = airportVisits[c] || { count:0, flights:[] };
-          airportVisits[c].count++; airportVisits[c].flights.push(f);
+          visits[c] = visits[c] || { n:0, f:[] }; visits[c].n++; visits[c].f.push(f);
         });
       });
     });
   }
 
-  // ---------- cards ----------
-  function airlineCard(a){
-    var n = (flightsByAirline[a.id] || []).length, brand = brandOf(a);
-    return '<div class="card' + (n ? ' flown' : '') + '" data-type="airline" data-id="' + esc(a.id) + '"' +
-      ' style="--ring:' + rgba(brand,.5) + ';--ring-solid:' + brand + '">' +
-      (n ? '<div class="tick num">' + n + '</div>' : '') +
-      logoHTML(a, false) +
-      '<div class="card-name">' + esc(a.name) + '</div>' +
-      '<div class="card-sub">' + (a.flag || '') + ' ' + esc(a.iata || a.country) + '</div>' +
-    '</div>';
+  function cell(o, n, art){
+    return '<button class="cell' + (n?'':' off') + '" data-t="' + o._t + '" data-id="' + e(o._id) + '">' +
+      art + (n ? '<span class="cnt n">' + n + '</span>' : '') +
+      '<span class="name">' + e(o._n) + '</span></button>';
+  }
+  function airCell(a){
+    a._t='air'; a._id=a.id; a._n=a.name;
+    return cell(a, (fAir[a.id]||[]).length, tile(a));
+  }
+  function acCell(x){
+    x._t='ac'; x._id=x.code; x._n=x.name;
+    return cell(x, (fAc[x.code]||[]).length, acTile(x));
+  }
+  function head(flag, name, done, all){
+    return '<div class="grp-h">' + (flag?'<span class="f">'+flag+'</span>':'') +
+      '<span class="t">' + e(name) + '</span><span class="c">' + done + ' / ' + all + '</span></div>';
   }
 
-  function aircraftCard(x){
-    var n = (flightsByAircraft[x.code] || []).length, c = CAT_COLOR[x.category] || '#64748b';
-    return '<div class="card' + (n ? ' flown' : '') + '" data-type="aircraft" data-id="' + esc(x.code) + '"' +
-      ' style="--ring:' + rgba(c,.5) + ';--ring-solid:' + c + '">' +
-      (n ? '<div class="tick num">' + n + '</div>' : '') +
-      monoChip(c, esc(x.code), false) +
-      '<div class="card-name">' + esc(x.name) + '</div>' +
-      '<div class="card-sub">' + esc(x.manufacturer) + '</div>' +
-    '</div>';
-  }
-
-  function groupHead(flag, name, flown, total){
-    var pct = total ? Math.round(flown / total * 100) : 0;
-    return '<div class="group-head">' +
-      (flag ? '<span class="group-flag">' + flag + '</span>' : '') +
-      '<span class="group-name">' + esc(name) + '</span>' +
-      '<span class="group-prog">' +
-        '<span class="group-count">' + flown + ' / ' + total + '</span>' +
-        '<span class="group-bar"><span style="width:' + pct + '%"></span></span>' +
-      '</span></div>';
-  }
-
-  // ---------- airlines ----------
-  function visibleAirlines(){
-    var q = state.search.trim().toLowerCase();
-    return airlines.filter(function(a){
-      if (q && (a.name + ' ' + a.country + ' ' + (a.iata||'')).toLowerCase().indexOf(q) === -1) return false;
-      var flown = (flightsByAirline[a.id] || []).length > 0;
-      if (state.filter === 'flown' && !flown) return false;
-      if (state.filter === 'not-flown' && flown) return false;
-      return true;
+  function renderAir(){
+    var box = document.getElementById('g-air'), q = S.q.trim().toLowerCase();
+    var L = air.filter(function(a){
+      if (q && (a.name+' '+a.country+' '+(a.iata||'')).toLowerCase().indexOf(q) < 0) return false;
+      var f = (fAir[a.id]||[]).length > 0;
+      return !(S.filter==='flown' && !f) && !(S.filter==='not' && f);
     });
-  }
-
-  function renderAirlines(){
-    var grid = document.getElementById('airline-grid');
-    var list = visibleAirlines();
-    grid.className = state.sort === 'country' ? '' : 'grid';
-
-    if (!list.length){
-      grid.className = '';
-      grid.innerHTML = '<div class="empty"><span class="big">🔍</span><p>조건에 맞는 항공사가 없어요.</p></div>';
-      return;
-    }
-
-    if (state.sort === 'country'){
-      var g = {};
-      list.forEach(function(a){ (g[a.country] = g[a.country] || []).push(a); });
-      grid.innerHTML = Object.keys(g).sort(function(x,y){ return x.localeCompare(y); }).map(function(c){
-        var items = g[c].sort(function(x,y){ return x.name.localeCompare(y.name); });
-        var flown = items.filter(function(a){ return (flightsByAirline[a.id]||[]).length; }).length;
-        return '<div class="group">' + groupHead(items[0].flag, c, flown, items.length) +
-          '<div class="grid">' + items.map(airlineCard).join('') + '</div></div>';
+    box.className = S.sort==='country' ? '' : 'grid';
+    if (!L.length){ box.className=''; box.innerHTML='<div class="none"><span>🔍</span><p>결과가 없어요.</p></div>'; return; }
+    if (S.sort==='country'){
+      var g = {}; L.forEach(function(a){ (g[a.country]=g[a.country]||[]).push(a); });
+      box.innerHTML = Object.keys(g).sort().map(function(c){
+        var it = g[c].sort(function(x,y){ return x.name.localeCompare(y.name); });
+        var d = it.filter(function(a){ return (fAir[a.id]||[]).length; }).length;
+        return '<div class="grp">' + head(it[0].flag, c, d, it.length) +
+               '<div class="grid">' + it.map(airCell).join('') + '</div></div>';
       }).join('');
     } else {
-      if (state.sort === 'alpha') list.sort(function(a,b){ return a.name.localeCompare(b.name); });
-      else if (state.sort === 'destinations') list.sort(function(a,b){ return (b.destinations - a.destinations) || a.name.localeCompare(b.name); });
-      else if (state.sort === 'passengers') list.sort(function(a,b){
-        var x = a.passengersMillions, y = b.passengersMillions;
-        if (x == null && y == null) return a.name.localeCompare(b.name);
-        if (x == null) return 1;
-        if (y == null) return -1;
-        return y - x;
-      });
-      grid.innerHTML = list.map(airlineCard).join('');
+      L.sort(S.sort==='destinations' ? function(a,b){ return (b.destinations-a.destinations)||a.name.localeCompare(b.name); }
+        : S.sort==='passengers' ? function(a,b){
+            var x=a.passengersMillions, y=b.passengersMillions;
+            if (x==null&&y==null) return a.name.localeCompare(b.name);
+            if (x==null) return 1; if (y==null) return -1; return y-x; }
+        : function(a,b){ return a.name.localeCompare(b.name); });
+      box.innerHTML = L.map(airCell).join('');
     }
-    bindCards(grid);
+    bind(box);
   }
 
-  // ---------- aircraft ----------
-  function renderAircraft(){
-    var box = document.getElementById('aircraft-grid');
-    var q = state.acSearch.trim().toLowerCase();
-    var list = aircraft.filter(function(x){
-      if (q && (x.name + ' ' + x.manufacturer + ' ' + x.code).toLowerCase().indexOf(q) === -1) return false;
-      var flown = (flightsByAircraft[x.code] || []).length > 0;
-      if (state.acFilter === 'flown' && !flown) return false;
-      if (state.acFilter === 'not-flown' && flown) return false;
-      return true;
+  function renderAc(){
+    var box = document.getElementById('g-ac'), q = S.acQ.trim().toLowerCase();
+    var L = ac.filter(function(x){
+      if (q && (x.name+' '+x.manufacturer+' '+x.code).toLowerCase().indexOf(q) < 0) return false;
+      var f = (fAc[x.code]||[]).length > 0;
+      return !(S.acFilter==='flown' && !f) && !(S.acFilter==='not' && f);
     });
-    var flownAll = aircraft.filter(function(x){ return (flightsByAircraft[x.code]||[]).length; }).length;
-    document.getElementById('aircraft-count').textContent = flownAll + ' / ' + aircraft.length + ' 탑승';
-
-    if (!list.length){
-      box.innerHTML = '<div class="empty"><span class="big">🔍</span><p>조건에 맞는 기종이 없어요.</p></div>';
-      return;
-    }
-    box.innerHTML = CAT_ORDER.map(function(cat){
-      var items = list.filter(function(x){ return x.category === cat; })
-                      .sort(function(a,b){ return a.name.localeCompare(b.name); });
-      if (!items.length) return '';
-      var flown = items.filter(function(x){ return (flightsByAircraft[x.code]||[]).length; }).length;
-      return '<div class="group">' + groupHead('', CAT_LABEL[cat], flown, items.length) +
-        '<div class="grid">' + items.map(aircraftCard).join('') + '</div></div>';
+    if (!L.length){ box.innerHTML='<div class="none"><span>🔍</span><p>결과가 없어요.</p></div>'; return; }
+    box.innerHTML = CAT_O.map(function(k){
+      var it = L.filter(function(x){ return x.category===k; }).sort(function(a,b){ return a.name.localeCompare(b.name); });
+      if (!it.length) return '';
+      var d = it.filter(function(x){ return (fAc[x.code]||[]).length; }).length;
+      return '<div class="grp">' + head('', CAT_L[k], d, it.length) +
+             '<div class="grid">' + it.map(acCell).join('') + '</div></div>';
     }).join('');
-    bindCards(box);
+    bind(box);
   }
 
-  // ---------- airports ----------
-  function renderAirports(){
-    var box = document.getElementById('airport-list');
-    var codes = Object.keys(airportVisits);
+  function renderAp(){
+    var box = document.getElementById('g-ap'), codes = Object.keys(visits);
     if (!codes.length){
-      box.innerHTML = '<div class="empty"><span class="big">✈️</span>' +
-        '<p>아직 방문한 공항이 없어요.<br><code>data/my-flights.json</code>에 탑승 기록을 추가하면 여기 모여요.</p></div>';
+      box.innerHTML = '<div class="none"><span>✈︎</span><p>아직 방문한 공항이 없어요.<br>' +
+        '<code>data/my-flights.json</code>에 기록을 추가하면 여기 모여요.</p></div>';
       return;
     }
-    var byCountry = {};
+    var by = {};
     codes.forEach(function(c){
-      var m = airportsByIata[c] || { name:c, city:'', country:'기타', iata:c };
-      (byCountry[m.country] = byCountry[m.country] || []).push({ iata:c, meta:m, count:airportVisits[c].count });
+      var m = apBy[c] || { name:c, city:'', country:'기타' };
+      (by[m.country] = by[m.country]||[]).push({ c:c, m:m, n:visits[c].n });
     });
-    var sum = function(k){ return byCountry[k].reduce(function(s,x){ return s + x.count; }, 0); };
-    box.innerHTML = Object.keys(byCountry).sort(function(a,b){ return sum(b) - sum(a) || a.localeCompare(b); }).map(function(c){
-      var items = byCountry[c].sort(function(a,b){ return b.count - a.count || a.iata.localeCompare(b.iata); });
-      var rows = items.map(function(x){
-        var col = PALETTE[hashIdx(x.iata, PALETTE.length)];
-        return '<div class="arow" data-type="airport" data-id="' + esc(x.iata) + '" style="--ring-solid:' + col + '">' +
-          '<span class="acode">' + esc(x.iata) + '</span>' +
-          '<span class="aname">' + esc(x.meta.name) +
-            (x.meta.city ? ' <span class="acity">' + esc(x.meta.city) + '</span>' : '') + '</span>' +
-          '<span class="acount">' + x.count + '회</span></div>';
-      }).join('');
-      return '<div class="group"><div class="group-head">' +
-        '<span class="group-name">' + esc(c) + '</span>' +
-        '<span class="group-prog"><span class="group-count">' + items.length + '개 · ' + sum(c) + '회</span></span>' +
-      '</div><div class="rowlist">' + rows + '</div></div>';
+    var tot = function(k){ return by[k].reduce(function(s,x){ return s+x.n; },0); };
+    box.innerHTML = Object.keys(by).sort(function(a,b){ return tot(b)-tot(a)||a.localeCompare(b); }).map(function(c){
+      var it = by[c].sort(function(a,b){ return b.n-a.n||a.c.localeCompare(b.c); });
+      return '<div class="grp"><div class="grp-h"><span class="t">' + e(c) + '</span>' +
+        '<span class="c">' + it.length + '개 · ' + tot(c) + '회</span></div><div class="rows">' +
+        it.map(function(x){
+          return '<button class="row" data-t="ap" data-id="' + e(x.c) + '">' +
+            '<span class="code n">' + e(x.c) + '</span><span class="an">' + e(x.m.name) +
+            (x.m.city ? ' <i>' + e(x.m.city) + '</i>' : '') + '</span>' +
+            '<span class="rc">' + x.n + '회</span></button>';
+        }).join('') + '</div></div>';
     }).join('');
-    Array.prototype.forEach.call(box.querySelectorAll('.arow'), function(el){
-      el.addEventListener('click', function(){ openModal('airport', el.getAttribute('data-id')); });
-    });
+    bind(box);
   }
 
-  // ---------- hero ----------
   function renderHero(){
-    var flown = airlines.filter(function(a){ return (flightsByAirline[a.id]||[]).length; });
-    var pct = airlines.length ? (flown.length / airlines.length * 100) : 0;
-    var pctTxt = pct > 0 && pct < 1 ? pct.toFixed(1) : Math.round(pct);
-    var countries = {}; flown.forEach(function(a){ countries[a.country] = 1; });
-    var acFlown = aircraft.filter(function(x){ return (flightsByAircraft[x.code]||[]).length; }).length;
-
-    document.getElementById('hero-mount').innerHTML =
-      '<div class="hero">' +
-        '<div class="hero-top"><span class="hero-label">탄 항공사</span>' +
-          '<span class="hero-pct">' + pctTxt + '%</span></div>' +
-        '<div class="hero-count">' + flown.length + '<span class="of"> / ' + airlines.length + '</span></div>' +
-        '<div class="track"><div class="track-fill" style="width:' + Math.max(pct, flown.length ? 1.5 : 0) + '%"></div></div>' +
-        '<div class="hero-row">' +
-          '<div class="hero-stat"><div class="hero-stat-num">' + (flightsData.flights||[]).length + '</div><div class="hero-stat-label">탑승</div></div>' +
-          '<div class="hero-stat"><div class="hero-stat-num">' + Object.keys(airportVisits).length + '</div><div class="hero-stat-label">공항</div></div>' +
-          '<div class="hero-stat"><div class="hero-stat-num">' + acFlown + '<span class="of">/' + aircraft.length + '</span></div><div class="hero-stat-label">기종</div></div>' +
-          '<div class="hero-stat"><div class="hero-stat-num">' + Object.keys(countries).length + '</div><div class="hero-stat-label">국가</div></div>' +
-        '</div>' +
-      '</div>';
+    var f = air.filter(function(a){ return (fAir[a.id]||[]).length; });
+    var pct = air.length ? f.length/air.length*100 : 0;
+    var cs = {}; f.forEach(function(a){ cs[a.country]=1; });
+    var acN = ac.filter(function(x){ return (fAc[x.code]||[]).length; }).length;
+    document.getElementById('hero').innerHTML =
+      '<div class="hero-num n"><b>' + f.length + '</b><span>/ ' + air.length + '</span></div>' +
+      '<div class="track"><i style="width:' + Math.max(pct, f.length?1.5:0) + '%"></i></div>' +
+      '<div class="hero-sub"><b>' + (mine.flights||[]).length + '</b> 탑승 · <b>' +
+        Object.keys(visits).length + '</b> 공항 · <b>' + acN + '</b>/' + ac.length + ' 기종 · <b>' +
+        Object.keys(cs).length + '</b> 국가</div>';
   }
 
-  // ---------- modal ----------
-  function flightItems(flights, opts){
-    opts = opts || {};
-    return '<ul class="flights">' + flights.map(function(f){
-      var bits = [];
-      if (opts.showAirline){
-        var al = airlines.filter(function(x){ return x.id === f.airline; })[0];
-        bits.push(esc(al ? al.name : (f.airline || '')));
-      }
-      if (f.flightNumber) bits.push(esc(f.flightNumber));
-      if (opts.showAircraft && f.aircraft) bits.push(esc(acName(f.aircraft)));
-      if (f.cabinClass) bits.push(esc(CABIN[f.cabinClass] || f.cabinClass));
-      return '<li class="fitem">' +
-        '<div class="fdate">' + esc(f.date || '') + (opts.dir ? ' · ' + (f.from === opts.dir ? '출발' : '도착') : '') + '</div>' +
-        '<div class="froute num">' + esc(f.from || '?') + '<span class="arr">→</span>' + esc(f.to || '?') + '</div>' +
-        (bits.length ? '<div class="fmeta"><span>' + bits.join('</span><span>') + '</span></div>' : '') +
-        (f.notes ? '<div class="fnote">' + esc(f.notes) + '</div>' : '') +
-      '</li>';
+  function flights(list, o){
+    o = o || {};
+    return '<ul class="fl">' + list.map(function(f){
+      var b = [];
+      if (o.al){ var a = air.filter(function(x){ return x.id===f.airline; })[0]; b.push(e(a?a.name:(f.airline||''))); }
+      if (f.flightNumber) b.push(e(f.flightNumber));
+      if (o.ac && f.aircraft) b.push(e(acName(f.aircraft)));
+      if (f.cabinClass) b.push(e(CABIN[f.cabinClass]||f.cabinClass));
+      return '<li><div class="d">' + e(f.date||'') + (o.dir ? ' · ' + (f.from===o.dir?'출발':'도착') : '') + '</div>' +
+        '<div class="r">' + e(f.from||'?') + '<i>→</i>' + e(f.to||'?') + '</div>' +
+        (b.length ? '<div class="m"><span>' + b.join('</span><span>') + '</span></div>' : '') +
+        (f.notes ? '<div class="nt">' + e(f.notes) + '</div>' : '') + '</li>';
     }).join('') + '</ul>';
   }
-  function byDateDesc(arr){
-    return arr.slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
-  }
-  function emptyFlights(msg){ return '<div class="empty"><span class="big">✈️</span><p>' + msg + '</p></div>'; }
+  function desc(a){ return a.slice().sort(function(x,y){ return (y.date||'').localeCompare(x.date||''); }); }
+  function nada(m){ return '<div class="none"><span>✈︎</span><p>' + m + '</p></div>'; }
 
-  function airlineSheet(id){
-    var a = airlines.filter(function(x){ return x.id === id; })[0];
-    if (!a) return { color:'', html:emptyFlights('항공사를 찾을 수 없어요.') };
-    var f = byDateDesc(flightsByAirline[id] || []), brand = brandOf(a);
-    var metas = [];
-    if (a.iata) metas.push(a.iata + (a.icao ? ' · ' + a.icao : ''));
-    if (a.alliance) metas.push(a.alliance);
-    if (a.flagCarrier) metas.push('플래그 캐리어');
-    if (a.destinations) metas.push('취항지 ' + a.destinations);
-    if (a.passengersMillions) metas.push('연 ' + a.passengersMillions + '백만 명');
-    return { color: brand, html:
-      '<div class="sheet-head">' + logoHTML(a, true) +
-        '<div><h2>' + esc(a.name) + '</h2>' +
-        '<div class="sheet-sub">' + (a.flag||'') + ' ' + esc(a.country) + '</div></div></div>' +
-      (metas.length ? '<div class="metas"><span class="meta">' + metas.map(esc).join('</span><span class="meta">') + '</span></div>' : '') +
-      (f.length
-        ? '<div class="sheet-count">' + f.length + '회 탑승</div>' + flightItems(f, { showAircraft:true })
-        : emptyFlights('아직 탑승 기록이 없어요.'))
-    };
+  function sheetAir(id){
+    var a = air.filter(function(x){ return x.id===id; })[0];
+    if (!a) return nada('찾을 수 없어요.');
+    var f = desc(fAir[id]||[]), t = [];
+    if (a.iata) t.push(a.iata + (a.icao ? ' · ' + a.icao : ''));
+    if (a.alliance) t.push(a.alliance);
+    if (a.flagCarrier) t.push('플래그 캐리어');
+    if (a.destinations) t.push('취항지 ' + a.destinations);
+    if (a.passengersMillions) t.push('연 ' + a.passengersMillions + '백만 명');
+    return '<div class="sh-h">' + tile(a, true) + '<div><h2>' + e(a.name) + '</h2>' +
+      '<p>' + (a.flag||'') + ' ' + e(a.country) + '</p></div></div>' +
+      (t.length ? '<div class="tags"><b>' + t.map(e).join('</b><b>') + '</b></div>' : '') +
+      (f.length ? '<div class="lbl">' + f.length + '회 탑승</div>' + flights(f, { ac:1 })
+                : nada('아직 탑승 기록이 없어요.'));
   }
-
-  function aircraftSheet(code){
-    var x = aircraftByCode[code];
-    if (!x) return { color:'', html:emptyFlights('기종을 찾을 수 없어요.') };
-    var f = byDateDesc(flightsByAircraft[code] || []), c = CAT_COLOR[x.category] || '#64748b';
-    return { color: c, html:
-      '<div class="sheet-head">' + monoChip(c, esc(x.code), true) +
-        '<div><h2>' + esc(x.name) + '</h2>' +
-        '<div class="sheet-sub">' + esc(x.manufacturer) + '</div></div></div>' +
-      '<div class="metas"><span class="meta">' + CAT_LABEL[x.category] + '</span><span class="meta">' + esc(x.code) + '</span></div>' +
-      (f.length
-        ? '<div class="sheet-count">' + f.length + '회 탑승</div>' + flightItems(f, { showAirline:true })
-        : emptyFlights('아직 이 기종을 탄 기록이 없어요.'))
-    };
+  function sheetAc(code){
+    var x = acBy[code];
+    if (!x) return nada('찾을 수 없어요.');
+    var f = desc(fAc[code]||[]);
+    return '<div class="sh-h">' + acTile(x, true) + '<div><h2>' + e(x.name) + '</h2>' +
+      '<p>' + e(x.manufacturer) + '</p></div></div>' +
+      '<div class="tags"><b>' + CAT_L[x.category] + '</b><b>' + e(x.code) + '</b></div>' +
+      (f.length ? '<div class="lbl">' + f.length + '회 탑승</div>' + flights(f, { al:1 })
+                : nada('아직 이 기종을 탄 기록이 없어요.'));
+  }
+  function sheetAp(c){
+    var m = apBy[c] || { name:c, city:'', country:'' }, v = visits[c] || { f:[] };
+    var f = desc(v.f), col = pal(c);
+    return '<div class="sh-h"><div class="tile big"><div class="mg" style="background:' + col + '">' + e(c) +
+      '</div></div><div><h2>' + e(m.name) + '</h2><p>' + e(m.city||'') +
+      (m.city&&m.country?' · ':'') + e(m.country||'') + '</p></div></div>' +
+      '<div class="lbl">' + f.length + '회 방문</div>' + flights(f, { al:1, dir:c });
   }
 
-  function airportSheet(iata){
-    var m = airportsByIata[iata] || { name:iata, city:'', country:'' };
-    var v = airportVisits[iata] || { flights:[] };
-    var f = byDateDesc(v.flights), col = PALETTE[hashIdx(iata, PALETTE.length)];
-    return { color: col, html:
-      '<div class="sheet-head">' + monoChip(col, esc(iata), true) +
-        '<div><h2>' + esc(m.name) + '</h2>' +
-        '<div class="sheet-sub">' + esc(m.city || '') + (m.city && m.country ? ' · ' : '') + esc(m.country || '') + '</div></div></div>' +
-      '<div class="sheet-count">' + f.length + '회 방문</div>' +
-      flightItems(f, { showAirline:true, dir:iata })
-    };
-  }
-
-  function openModal(type, id){
-    var r = type === 'airline' ? airlineSheet(id)
-          : type === 'aircraft' ? aircraftSheet(id)
-          : airportSheet(id);
-    document.getElementById('sheet-bar').style.background = r.color || 'var(--accent)';
-    document.getElementById('modal-content').innerHTML = r.html;
-    document.getElementById('modal').classList.add('open');
+  function open(t, id){
+    document.getElementById('sh').innerHTML =
+      t==='air' ? sheetAir(id) : t==='ac' ? sheetAc(id) : sheetAp(id);
+    document.getElementById('ov').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-  function closeModal(){
-    document.getElementById('modal').classList.remove('open');
+  function close(){
+    document.getElementById('ov').classList.remove('open');
     document.body.style.overflow = '';
   }
-
-  function bindCards(root){
-    Array.prototype.forEach.call(root.querySelectorAll('.card[data-type]'), function(el){
-      el.addEventListener('click', function(){
-        openModal(el.getAttribute('data-type'), el.getAttribute('data-id'));
-      });
+  function bind(root){
+    Array.prototype.forEach.call(root.querySelectorAll('[data-t]'), function(el){
+      el.addEventListener('click', function(){ open(el.getAttribute('data-t'), el.getAttribute('data-id')); });
     });
   }
-
-  function segment(sel, key, cb){
-    var btns = document.querySelectorAll(sel + ' .chip-btn');
-    Array.prototype.forEach.call(btns, function(b){
-      b.addEventListener('click', function(){
-        Array.prototype.forEach.call(btns, function(x){ x.classList.remove('active'); });
-        b.classList.add('active');
-        state[key] = b.getAttribute('data-sort') || b.getAttribute('data-filter');
+  function seg(sel, key, cb){
+    var b = document.querySelectorAll(sel + ' .opt');
+    Array.prototype.forEach.call(b, function(x){
+      x.addEventListener('click', function(){
+        Array.prototype.forEach.call(b, function(y){ y.classList.remove('on'); });
+        x.classList.add('on');
+        S[key] = x.getAttribute('data-sort') || x.getAttribute('data-filter');
         cb();
       });
     });
   }
 
   function init(){
-    var debounce = function(fn){
-      var t; return function(){ clearTimeout(t); t = setTimeout(fn, 120); };
-    };
-    var as = document.getElementById('airline-search');
-    as.addEventListener('input', debounce(function(){ state.search = as.value; renderAirlines(); }));
-    var xs = document.getElementById('aircraft-search');
-    xs.addEventListener('input', debounce(function(){ state.acSearch = xs.value; renderAircraft(); }));
-
-    segment('#airline-sort-group', 'sort', renderAirlines);
-    segment('#airline-filter-group', 'filter', renderAirlines);
-    segment('#aircraft-filter-group', 'acFilter', renderAircraft);
-
+    var deb = function(fn){ var t; return function(){ clearTimeout(t); t=setTimeout(fn,120); }; };
+    var qa = document.getElementById('q-air');
+    qa.addEventListener('input', deb(function(){ S.q = qa.value; renderAir(); }));
+    var qc = document.getElementById('q-ac');
+    qc.addEventListener('input', deb(function(){ S.acQ = qc.value; renderAc(); }));
+    seg('#sort-air','sort',renderAir); seg('#filt-air','filter',renderAir); seg('#filt-ac','acFilter',renderAc);
     var tabs = document.querySelectorAll('.tab');
     Array.prototype.forEach.call(tabs, function(t){
       t.addEventListener('click', function(){
-        Array.prototype.forEach.call(tabs, function(x){ x.classList.remove('active'); });
+        Array.prototype.forEach.call(tabs, function(y){ y.classList.remove('active'); });
         t.classList.add('active');
-        Array.prototype.forEach.call(document.querySelectorAll('.tab-panel'), function(p){ p.classList.remove('active'); });
+        Array.prototype.forEach.call(document.querySelectorAll('.panel'), function(p){ p.classList.remove('active'); });
         document.getElementById('tab-' + t.getAttribute('data-tab')).classList.add('active');
       });
     });
-
-    document.getElementById('modal-close').addEventListener('click', closeModal);
-    document.getElementById('modal').addEventListener('click', function(e){
-      if (e.target.id === 'modal') closeModal();
-    });
-    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeModal(); });
+    document.getElementById('x').addEventListener('click', close);
+    document.getElementById('ov').addEventListener('click', function(ev){ if (ev.target.id==='ov') close(); });
+    document.addEventListener('keydown', function(ev){ if (ev.key==='Escape') close(); });
   }
 
-  loadData().then(function(){
-    renderHero(); renderAirlines(); renderAircraft(); renderAirports(); init();
+  load().then(function(){
+    renderHero(); renderAir(); renderAc(); renderAp(); init();
   }).catch(function(err){
-    document.getElementById('airline-grid').innerHTML =
-      '<div class="empty"><span class="big">⚠️</span><p>데이터를 불러오지 못했어요.<br>' +
-      '로컬에서 볼 땐 <code>python3 -m http.server</code>로 열어주세요.</p></div>';
+    document.getElementById('g-air').innerHTML =
+      '<div class="none"><span>⚠︎</span><p>데이터를 불러오지 못했어요.<br>로컬에선 <code>python3 -m http.server</code>로 열어주세요.</p></div>';
     console.error(err);
   });
 })();
