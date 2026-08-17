@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Flying — 세계 항공사 체크리스트</title>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2S4N123Q9E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2S4N123Q9E');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --bg-card: #ffffff;
+    --bg-raised: #ffffff;
+    --text: #14161c;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --accent: #2563eb;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-hover: 0 10px 24px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e0f13;
+    --bg-card: #191b22;
+    --bg-raised: #20222b;
+    --text: #e8e9ed;
+    --text-muted: #8b8f9c;
+    --border: #2a2d38;
+    --accent: #6ea8fe;
+    --shadow: 0 1px 3px rgba(0,0,0,.4);
+    --shadow-hover: 0 10px 24px rgba(0,0,0,.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0e0f13; --bg-card:#191b22; --bg-raised:#20222b; --text:#e8e9ed; --text-muted:#8b8f9c; --border:#2a2d38; --accent:#6ea8fe; --shadow:0 1px 3px rgba(0,0,0,.4); --shadow-hover:0 10px 24px rgba(0,0,0,.5); }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f7f9; --bg-card:#ffffff; --bg-raised:#ffffff; --text:#14161c; --text-muted:#6b7280; --border:#e5e7eb; --accent:#2563eb;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04); --shadow-hover: 0 10px 24px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: 4rem;
+  }
+  a { color: inherit; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.25rem; }
+
+  .page-header { padding: 2.5rem 0 1.25rem; text-align: center; }
+  .page-header h1 { font-size: 2rem; font-weight: 800; margin: 0 0 .3rem; letter-spacing: -.02em; }
+  .page-header .subtitle { color: var(--text-muted); font-size: .92rem; margin: 0; }
+  .back-link { display:inline-block; margin-top: .9rem; font-size: .8rem; color: var(--text-muted); text-decoration: none; border: 1px solid var(--border); padding: .35rem .8rem; border-radius: 999px; }
+  .back-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  .stats-bar {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem;
+    margin: 1.5rem 0;
+  }
+  .stat {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+    padding: .7rem 1.1rem; text-align: center; min-width: 84px; box-shadow: var(--shadow);
+  }
+  .stat-num { font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; }
+  .stat-total { font-size: .85rem; font-weight: 600; color: var(--text-muted); }
+  .stat-label { font-size: .68rem; color: var(--text-muted); margin-top: .15rem; }
+
+  .tabs {
+    display: flex; justify-content: center; gap: .4rem; margin: 1.5rem 0 .5rem;
+    position: sticky; top: 0; z-index: 20; background: var(--bg); padding: .6rem 0;
+  }
+  .tab {
+    font-family: inherit; font-size: .85rem; font-weight: 700; padding: .55rem 1.2rem;
+    border-radius: 999px; border: 1px solid var(--border); background: var(--bg-card);
+    color: var(--text-muted); cursor: pointer; transition: all .15s;
+  }
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: 1rem 0;
+    justify-content: space-between;
+  }
+  .search-input {
+    flex: 1 1 200px; font-family: inherit; font-size: .85rem; padding: .55rem .9rem;
+    border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text);
+  }
+  .search-input:focus { outline: none; border-color: var(--accent); }
+  .btn-group { display: flex; gap: .35rem; flex-wrap: wrap; }
+  .pill-btn {
+    font-family: inherit; font-size: .74rem; font-weight: 600; padding: .4rem .75rem;
+    border-radius: 999px; border: 1px solid var(--border); background: var(--bg-card);
+    color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all .15s;
+  }
+  .pill-btn.active { background: var(--text); border-color: var(--text); color: var(--bg); }
+  :root[data-theme="dark"] .pill-btn.active { background: var(--accent); border-color: var(--accent); color:#0e0f13; }
+  @media (prefers-color-scheme: dark) { .pill-btn.active { background: var(--accent); border-color: var(--accent); color:#0e0f13; } }
+  .pill-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  .info-note {
+    font-size: .72rem; color: var(--text-muted); background: var(--bg-card);
+    border: 1px dashed var(--border); border-radius: 10px; padding: .6rem .8rem; margin: .8rem 0 1.2rem;
+    line-height: 1.5;
+  }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+    gap: .6rem; margin: .8rem 0;
+  }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+    padding: .9rem .6rem .7rem; display: flex; flex-direction: column; align-items: center; gap: .4rem;
+    cursor: pointer; transition: transform .15s, box-shadow .15s; position: relative; text-align: center;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+  .card:not(.flown) { opacity: .68; }
+  .card:not(.flown) .logo-wrap img,
+  .card:not(.flown) .badge { filter: grayscale(1) opacity(.55); }
+  .card.flown { box-shadow: 0 0 0 1.5px var(--accent-color, var(--accent)) inset; }
+  .logo-wrap { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; }
+  .logo-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .badge {
+    width: 52px; height: 52px; border-radius: 13px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: .78rem; letter-spacing: .01em; text-shadow: 0 1px 2px rgba(0,0,0,.2);
+  }
+  .card-name { font-size: .74rem; font-weight: 700; line-height: 1.25; }
+  .card-sub { font-size: .64rem; color: var(--text-muted); }
+  .flown-badge { font-size: .62rem; font-weight: 800; color: var(--accent-color, var(--accent)); position: absolute; top: .5rem; right: .55rem; }
+
+  .country-group { margin: 1.6rem 0; }
+  .country-heading {
+    font-size: .85rem; font-weight: 700; margin: 0 0 .6rem; display: flex; align-items: center; gap: .4rem;
+    padding-bottom: .4rem; border-bottom: 1px solid var(--border);
+  }
+  .country-heading .count { font-weight: 500; color: var(--text-muted); font-size: .75rem; }
+
+  .airport-rows { display: flex; flex-direction: column; gap: .3rem; }
+  .airport-row {
+    display: flex; align-items: center; gap: .7rem; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: .55rem .8rem; cursor: pointer; transition: border-color .15s;
+  }
+  .airport-row:hover { border-color: var(--accent); }
+  .airport-code { font-weight: 800; font-size: .8rem; width: 2.6rem; flex-shrink: 0; color: var(--accent); }
+  .airport-name { flex: 1; font-size: .8rem; }
+  .airport-count { font-size: .72rem; color: var(--text-muted); font-weight: 700; flex-shrink: 0; }
+
+  .empty-state { color: var(--text-muted); font-size: .85rem; text-align: center; padding: 2.5rem 1rem; }
+
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 100;
+    opacity: 0; visibility: hidden; transition: opacity .2s;
+  }
+  .modal-overlay.visible { opacity: 1; visibility: visible; }
+  .modal {
+    background: var(--bg-raised); border-radius: 18px; padding: 1.6rem; max-width: 480px; width: 100%;
+    max-height: 85vh; overflow-y: auto; position: relative; box-shadow: var(--shadow-hover);
+    transform: scale(.96); transition: transform .2s;
+  }
+  .modal-overlay.visible .modal { transform: scale(1); }
+  .modal-close {
+    position: absolute; top: .9rem; right: .9rem; width: 32px; height: 32px; border-radius: 50%;
+    border: none; background: var(--bg); color: var(--text-muted); font-size: 1.1rem; cursor: pointer;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal-header { display: flex; gap: .9rem; align-items: center; margin-bottom: 1rem; }
+  .logo-wrap.large { width: 64px; height: 64px; flex-shrink: 0; }
+  .badge.modal-badge { width: 64px; height: 64px; border-radius: 16px; font-size: .95rem; }
+  .modal-header h2 { font-size: 1.15rem; margin: 0 0 .2rem; }
+  .modal-sub { font-size: .82rem; color: var(--text-muted); }
+  .modal-meta { font-size: .74rem; color: var(--text-muted); margin-top: .3rem; }
+  .flight-count { font-size: .78rem; font-weight: 700; color: var(--accent); margin: .8rem 0 .6rem; }
+  .flight-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+  .flight-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: .65rem .85rem; }
+  .flight-date { font-size: .75rem; font-weight: 700; color: var(--text-muted); }
+  .flight-route { font-size: .92rem; font-weight: 700; margin: .15rem 0; }
+  .flight-detail { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; color: var(--text-muted); }
+  .flight-notes { font-size: .76rem; margin-top: .35rem; padding-top: .35rem; border-top: 1px dashed var(--border); color: var(--text); }
+
+  footer.page-footer { text-align: center; color: var(--text-muted); font-size: .72rem; margin-top: 3rem; }
+
+  @media (max-width: 560px) {
+    .page-header h1 { font-size: 1.6rem; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); }
+    .modal { padding: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-header">
+      <h1>✈️ Flying</h1>
+      <p class="subtitle">세계 항공사 완주 체크리스트 — 타본 항공사는 색깔로, 안 타본 건 회색으로</p>
+      <a class="back-link" href="/">.. home</a>
+      <div class="stats-bar" id="stats-bar"></div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="airlines">항공사</button>
+      <button class="tab" data-tab="aircraft">기종</button>
+      <button class="tab" data-tab="airports">공항</button>
+    </nav>
+
+    <section id="tab-airlines" class="tab-panel active">
+      <div class="controls">
+        <input type="search" class="search-input" id="airline-search" placeholder="항공사, 국가, 코드로 검색...">
+        <div class="btn-group" id="airline-filter-group">
+          <button class="pill-btn active" data-filter="all">전체</button>
+          <button class="pill-btn" data-filter="flown">탄 것만</button>
+          <button class="pill-btn" data-filter="not-flown">안 탄 것만</button>
+        </div>
+      </div>
+      <div class="btn-group" id="airline-sort-group">
+        <button class="pill-btn active" data-sort="alpha">알파벳순</button>
+        <button class="pill-btn" data-sort="country">국적별</button>
+        <button class="pill-btn" data-sort="destinations">취항지순</button>
+        <button class="pill-btn" data-sort="passengers">탑승객순</button>
+      </div>
+      <div class="info-note">
+        항공사 목록은 OpenFlights 오픈데이터 기반이며 정기 여객 항공사만 추려서 정리했어요. 일부 최신 변경(신설/폐업)이 반영되지 않았을 수 있습니다 —
+        <code>flying/data/my-flights.json</code>의 <code>hiddenAirlines</code>에 코드를 추가하면 목록에서 숨길 수 있고, 없는 항공사는 <code>customAirlines</code>로 추가할 수 있어요.
+        취항지 수는 2014년 노선 데이터 기준 참고용, 탑승객 수는 2024년 상위 항공사만 있어요(위키피디아).
+      </div>
+      <div id="airline-grid" class="grid"></div>
+    </section>
+
+    <section id="tab-aircraft" class="tab-panel">
+      <div class="controls">
+        <input type="search" class="search-input" id="aircraft-search" placeholder="기종, 제작사로 검색...">
+        <div class="btn-group" id="aircraft-filter-group">
+          <button class="pill-btn active" data-filter="all">전체</button>
+          <button class="pill-btn" data-filter="flown">탄 것만</button>
+          <button class="pill-btn" data-filter="not-flown">안 탄 것만</button>
+        </div>
+      </div>
+      <div id="aircraft-grid"></div>
+    </section>
+
+    <section id="tab-airports" class="tab-panel">
+      <p class="info-note">공항은 전 세계 6,000개+라 체크리스트 대신, 탑승 기록에 적은 출발/도착 공항에서 자동으로 모아서 보여줘요. <code>my-flights.json</code>에 기록을 추가하면 여기 반영됩니다.</p>
+      <div id="airport-list"></div>
+    </section>
+
+    <footer class="page-footer">data: OpenFlights · soaring-symbols (MIT) · Wikipedia</footer>
+  </div>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CATEGORY_COLOR = { narrowbody:'#2563eb', widebody:'#7c3aed', regional:'#0d9488', turboprop:'#16a34a', supersonic:'#dc2626' };
+  var CATEGORY_LABEL = { narrowbody:'협동체', widebody:'광동체', regional:'리저널', turboprop:'터보프롭', supersonic:'초음속기' };
+  var CABIN_LABEL = { economy:'이코노미', premium_economy:'프리미엄 이코노미', business:'비즈니스', first:'퍼스트' };
+
+  var airlines = [], aircraft = [], airports = [], flightsData = { flights: [], hiddenAirlines: [], customAirlines: [] };
+  var airportsByIata = {}, aircraftByCode = {};
+  var flightsByAirline = {}, flightsByAircraft = {}, airportVisits = {};
+
+  var state = { sort: 'alpha', filter: 'all', search: '', acFilter: 'all', acSearch: '' };
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function hashColor(str){
+    var h = 0;
+    str = str || 'X';
+    for (var i = 0; i < str.length; i++) { h = str.charCodeAt(i) + ((h << 5) - h); }
+    var hue = Math.abs(h) % 360;
+    return 'hsl(' + hue + ', 55%, 40%)';
+  }
+
+  function airlineColor(a){
+    return (a.color && /^#/.test(a.color)) ? a.color : hashColor(a.iata || a.id || a.name);
+  }
+
+  function initials(a){
+    return (a.iata || a.name.slice(0, 2)).toUpperCase();
+  }
+
+  function aircraftName(code){
+    var ac = aircraftByCode[code];
+    return ac ? ac.name : code;
+  }
+
+  // ---------- data loading ----------
+  function loadData(){
+    return Promise.all([
+      fetch('data/airlines.json').then(function(r){ return r.json(); }),
+      fetch('data/aircraft.json').then(function(r){ return r.json(); }),
+      fetch('data/airports.json').then(function(r){ return r.json(); }),
+      fetch('data/my-flights.json').then(function(r){ return r.json(); })
+    ]).then(function(results){
+      var al = results[0], ac = results[1], ap = results[2], mf = results[3];
+      aircraft = ac;
+      airports = ap;
+      flightsData = mf || { flights: [], hiddenAirlines: [], customAirlines: [] };
+
+      airports.forEach(function(a){ airportsByIata[a.iata] = a; });
+      aircraft.forEach(function(a){ aircraftByCode[a.code] = a; });
+
+      var hidden = {};
+      (flightsData.hiddenAirlines || []).forEach(function(id){ hidden[id] = true; });
+      airlines = al.filter(function(a){ return !hidden[a.id]; });
+      (flightsData.customAirlines || []).forEach(function(c){
+        airlines.push({
+          id: c.id, name: c.name, iata: c.iata || '', icao: '', country: c.country || '',
+          countryCode: c.countryCode || '', flag: c.flag || '🏳️',
+          destinations: 0, passengersMillions: null, alliance: '', flagCarrier: false,
+          color: c.color || '', hasLogo: false, slug: ''
+        });
+      });
+
+      (flightsData.flights || []).forEach(function(f){
+        if (f.airline){
+          (flightsByAirline[f.airline] = flightsByAirline[f.airline] || []).push(f);
+        }
+        if (f.aircraft){
+          (flightsByAircraft[f.aircraft] = flightsByAircraft[f.aircraft] || []).push(f);
+        }
+        [f.from, f.to].forEach(function(code){
+          if (!code) return;
+          airportVisits[code] = airportVisits[code] || { count: 0, flights: [] };
+          airportVisits[code].count++;
+          airportVisits[code].flights.push(f);
+        });
+      });
+    });
+  }
+
+  // ---------- rendering: airlines ----------
+  function airlineCardHTML(a){
+    var flights = flightsByAirline[a.id] || [];
+    var flown = flights.length > 0;
+    var color = airlineColor(a);
+    var logo = a.hasLogo
+      ? '<img src="logos/' + a.slug + '.svg" alt="" loading="lazy">'
+      : '<div class="badge" style="background:' + color + '">' + escapeHtml(initials(a)) + '</div>';
+    return '' +
+      '<div class="card ' + (flown ? 'flown' : '') + '" data-type="airline" data-id="' + a.id + '" style="--accent-color:' + color + '">' +
+        (flown ? '<div class="flown-badge">✓' + flights.length + '</div>' : '') +
+        '<div class="logo-wrap">' + logo + '</div>' +
+        '<div class="card-name">' + escapeHtml(a.name) + '</div>' +
+        '<div class="card-sub">' + (a.flag || '') + ' ' + escapeHtml(a.country) + '</div>' +
+      '</div>';
+  }
+
+  function visibleAirlines(){
+    var q = state.search.trim().toLowerCase();
+    return airlines.filter(function(a){
+      if (q){
+        var hay = (a.name + ' ' + a.country + ' ' + (a.iata || '')).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      var flown = (flightsByAirline[a.id] || []).length > 0;
+      if (state.filter === 'flown' && !flown) return false;
+      if (state.filter === 'not-flown' && flown) return false;
+      return true;
+    });
+  }
+
+  function renderAirlines(){
+    var grid = document.getElementById('airline-grid');
+    var list = visibleAirlines();
+
+    if (state.sort === 'alpha'){
+      list.sort(function(a, b){ return a.name.localeCompare(b.name); });
+      grid.innerHTML = list.map(airlineCardHTML).join('');
+    } else if (state.sort === 'destinations'){
+      list.sort(function(a, b){ return (b.destinations - a.destinations) || a.name.localeCompare(b.name); });
+      grid.innerHTML = list.map(airlineCardHTML).join('');
+    } else if (state.sort === 'passengers'){
+      list.sort(function(a, b){
+        var pa = a.passengersMillions, pb = b.passengersMillions;
+        if (pa == null && pb == null) return a.name.localeCompare(b.name);
+        if (pa == null) return 1;
+        if (pb == null) return -1;
+        return pb - pa;
+      });
+      grid.innerHTML = list.map(airlineCardHTML).join('');
+    } else if (state.sort === 'country'){
+      var groups = {};
+      list.forEach(function(a){ (groups[a.country] = groups[a.country] || []).push(a); });
+      var countries = Object.keys(groups).sort(function(a, b){ return a.localeCompare(b); });
+      grid.innerHTML = countries.map(function(c){
+        var items = groups[c].sort(function(a, b){ return a.name.localeCompare(b.name); });
+        var flag = items[0].flag || '';
+        return '<div class="country-group"><h3 class="country-heading">' + flag + ' ' + escapeHtml(c) +
+          ' <span class="count">' + items.length + '</span></h3><div class="grid">' +
+          items.map(airlineCardHTML).join('') + '</div></div>';
+      }).join('');
+    }
+    attachCardHandlers();
+  }
+
+  // ---------- rendering: aircraft ----------
+  function aircraftCardHTML(ac){
+    var flights = flightsByAircraft[ac.code] || [];
+    var flown = flights.length > 0;
+    var color = CATEGORY_COLOR[ac.category] || '#666';
+    return '' +
+      '<div class="card ' + (flown ? 'flown' : '') + '" data-type="aircraft" data-id="' + ac.code + '" style="--accent-color:' + color + '">' +
+        (flown ? '<div class="flown-badge">✓' + flights.length + '</div>' : '') +
+        '<div class="logo-wrap"><div class="badge" style="background:' + color + '">' + escapeHtml(ac.code) + '</div></div>' +
+        '<div class="card-name">' + escapeHtml(ac.name) + '</div>' +
+        '<div class="card-sub">' + escapeHtml(ac.manufacturer) + '</div>' +
+      '</div>';
+  }
+
+  function renderAircraft(){
+    var container = document.getElementById('aircraft-grid');
+    var q = state.acSearch.trim().toLowerCase();
+    var list = aircraft.filter(function(ac){
+      if (!q) return true;
+      return (ac.name + ' ' + ac.manufacturer).toLowerCase().indexOf(q) !== -1;
+    }).filter(function(ac){
+      var flown = (flightsByAircraft[ac.code] || []).length > 0;
+      if (state.acFilter === 'flown' && !flown) return false;
+      if (state.acFilter === 'not-flown' && flown) return false;
+      return true;
+    });
+    var order = ['narrowbody', 'widebody', 'regional', 'turboprop', 'supersonic'];
+    container.innerHTML = order.map(function(cat){
+      var items = list.filter(function(a){ return a.category === cat; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+      if (!items.length) return '';
+      return '<div class="country-group"><h3 class="country-heading">' + CATEGORY_LABEL[cat] +
+        ' <span class="count">' + items.length + '</span></h3><div class="grid">' +
+        items.map(aircraftCardHTML).join('') + '</div></div>';
+    }).join('');
+    attachCardHandlers();
+  }
+
+  // ---------- rendering: airports (derived from flight log) ----------
+  function renderAirports(){
+    var container = document.getElementById('airport-list');
+    var entries = Object.keys(airportVisits);
+    if (!entries.length){
+      container.innerHTML = '<p class="empty-state">아직 방문 기록이 없어요. my-flights.json에 탑승 기록을 추가해보세요 ✈️</p>';
+      return;
+    }
+    var byCountry = {};
+    entries.forEach(function(iata){
+      var meta = airportsByIata[iata] || { name: iata, city: '', country: 'Unknown', iata: iata };
+      var v = airportVisits[iata];
+      (byCountry[meta.country] = byCountry[meta.country] || []).push({ iata: iata, meta: meta, count: v.count });
+    });
+    var countries = Object.keys(byCountry).sort(function(a, b){
+      var sa = byCountry[a].reduce(function(s, x){ return s + x.count; }, 0);
+      var sb = byCountry[b].reduce(function(s, x){ return s + x.count; }, 0);
+      return sb - sa;
+    });
+    container.innerHTML = countries.map(function(c){
+      var items = byCountry[c].sort(function(a, b){ return b.count - a.count; });
+      var rows = items.map(function(x){
+        return '<div class="airport-row" data-type="airport" data-id="' + x.iata + '">' +
+          '<span class="airport-code">' + x.iata + '</span>' +
+          '<span class="airport-name">' + escapeHtml(x.meta.name) + (x.meta.city ? ' · ' + escapeHtml(x.meta.city) : '') + '</span>' +
+          '<span class="airport-count">' + x.count + '회</span>' +
+        '</div>';
+      }).join('');
+      return '<div class="country-group"><h3 class="country-heading">' + escapeHtml(c) +
+        ' <span class="count">' + items.length + '개 공항</span></h3><div class="airport-rows">' + rows + '</div></div>';
+    }).join('');
+    Array.prototype.forEach.call(container.querySelectorAll('.airport-row'), function(el){
+      el.addEventListener('click', function(){ openModal('airport', el.getAttribute('data-id')); });
+    });
+  }
+
+  // ---------- stats ----------
+  function renderStats(){
+    var flownIds = {};
+    Object.keys(flightsByAirline).forEach(function(id){
+      if (flightsByAirline[id].length > 0) flownIds[id] = true;
+    });
+    var flownAirlines = airlines.filter(function(a){ return flownIds[a.id]; });
+    var pct = airlines.length ? Math.round(flownAirlines.length / airlines.length * 100) : 0;
+    var countries = {};
+    flownAirlines.forEach(function(a){ countries[a.country] = true; });
+    var totalFlights = (flightsData.flights || []).length;
+    var airportCount = Object.keys(airportVisits).length;
+    var acFlownCount = aircraft.filter(function(ac){ return (flightsByAircraft[ac.code] || []).length > 0; }).length;
+
+    document.getElementById('stats-bar').innerHTML =
+      '<div class="stat"><div class="stat-num">' + flownAirlines.length + '<span class="stat-total">/' + airlines.length + '</span></div><div class="stat-label">항공사 (' + pct + '%)</div></div>' +
+      '<div class="stat"><div class="stat-num">' + totalFlights + '</div><div class="stat-label">총 탑승</div></div>' +
+      '<div class="stat"><div class="stat-num">' + airportCount + '</div><div class="stat-label">방문 공항</div></div>' +
+      '<div class="stat"><div class="stat-num">' + acFlownCount + '<span class="stat-total">/' + aircraft.length + '</span></div><div class="stat-label">기종</div></div>' +
+      '<div class="stat"><div class="stat-num">' + Object.keys(countries).length + '</div><div class="stat-label">국가</div></div>';
+  }
+
+  // ---------- modal ----------
+  function airlineModalHTML(id){
+    var a = airlines.filter(function(x){ return x.id === id; })[0];
+    if (!a) return '<p class="empty-state">항공사를 찾을 수 없어요.</p>';
+    var flights = (flightsByAirline[id] || []).slice().sort(function(x, y){ return (y.date || '').localeCompare(x.date || ''); });
+    var color = airlineColor(a);
+    var logo = a.hasLogo
+      ? '<img src="logos/' + a.slug + '.svg" class="modal-logo" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">'
+      : '<div class="badge modal-badge" style="background:' + color + '">' + escapeHtml(initials(a)) + '</div>';
+
+    var metaBits = [];
+    if (a.alliance) metaBits.push(escapeHtml(a.alliance));
+    if (a.flagCarrier) metaBits.push('플래그 캐리어');
+    if (a.destinations) metaBits.push('취항지 ' + a.destinations + '곳');
+    if (a.passengersMillions) metaBits.push('연간 ' + a.passengersMillions + '백만 명');
+
+    var body;
+    if (!flights.length){
+      body = '<p class="empty-state">아직 탑승 기록이 없어요 ✈️</p>';
+    } else {
+      body = '<div class="flight-count">' + flights.length + '회 탑승</div><ul class="flight-list">' +
+        flights.map(function(f){
+          var details = [];
+          if (f.flightNumber) details.push('<span>' + escapeHtml(f.flightNumber) + '</span>');
+          if (f.aircraft) details.push('<span>' + escapeHtml(aircraftName(f.aircraft)) + '</span>');
+          if (f.cabinClass) details.push('<span>' + escapeHtml(CABIN_LABEL[f.cabinClass] || f.cabinClass) + '</span>');
+          return '<li class="flight-item">' +
+            '<div class="flight-date">' + escapeHtml(f.date || '') + '</div>' +
+            '<div class="flight-route">' + escapeHtml(f.from || '?') + ' → ' + escapeHtml(f.to || '?') + '</div>' +
+            (details.length ? '<div class="flight-detail">' + details.join('') + '</div>' : '') +
+            (f.notes ? '<div class="flight-notes">' + escapeHtml(f.notes) + '</div>' : '') +
+          '</li>';
+        }).join('') + '</ul>';
+    }
+
+    return '<div class="modal-header">' +
+        '<div class="logo-wrap large">' + logo + '</div>' +
+        '<div><h2>' + escapeHtml(a.name) + '</h2>' +
+          '<div class="modal-sub">' + (a.flag || '') + ' ' + escapeHtml(a.country) + '</div>' +
+          (metaBits.length ? '<div class="modal-meta">' + metaBits.join(' · ') + '</div>' : '') +
+        '</div>' +
+      '</div>' + body;
+  }
+
+  function aircraftModalHTML(code){
+    var ac = aircraftByCode[code];
+    if (!ac) return '<p class="empty-state">기종을 찾을 수 없어요.</p>';
+    var flights = (flightsByAircraft[code] || []).slice().sort(function(x, y){ return (y.date || '').localeCompare(x.date || ''); });
+    var color = CATEGORY_COLOR[ac.category] || '#666';
+    var body;
+    if (!flights.length){
+      body = '<p class="empty-state">아직 이 기종을 탄 기록이 없어요 ✈️</p>';
+    } else {
+      body = '<div class="flight-count">' + flights.length + '회 탑승</div><ul class="flight-list">' +
+        flights.map(function(f){
+          var al = airlines.filter(function(x){ return x.id === f.airline; })[0];
+          return '<li class="flight-item">' +
+            '<div class="flight-date">' + escapeHtml(f.date || '') + '</div>' +
+            '<div class="flight-route">' + escapeHtml(f.from || '?') + ' → ' + escapeHtml(f.to || '?') + '</div>' +
+            '<div class="flight-detail"><span>' + escapeHtml(al ? al.name : (f.airline || '')) + '</span>' +
+            (f.flightNumber ? '<span>' + escapeHtml(f.flightNumber) + '</span>' : '') + '</div>' +
+            (f.notes ? '<div class="flight-notes">' + escapeHtml(f.notes) + '</div>' : '') +
+          '</li>';
+        }).join('') + '</ul>';
+    }
+    return '<div class="modal-header">' +
+        '<div class="logo-wrap large"><div class="badge modal-badge" style="background:' + color + '">' + escapeHtml(ac.code) + '</div></div>' +
+        '<div><h2>' + escapeHtml(ac.name) + '</h2>' +
+          '<div class="modal-sub">' + escapeHtml(ac.manufacturer) + '</div>' +
+          '<div class="modal-meta">' + CATEGORY_LABEL[ac.category] + '</div>' +
+        '</div>' +
+      '</div>' + body;
+  }
+
+  function airportModalHTML(iata){
+    var meta = airportsByIata[iata] || { name: iata, city: '', country: '' };
+    var v = airportVisits[iata] || { flights: [] };
+    var flights = v.flights.slice().sort(function(x, y){ return (y.date || '').localeCompare(x.date || ''); });
+    var body = '<div class="flight-count">' + flights.length + '회 방문</div><ul class="flight-list">' +
+      flights.map(function(f){
+        var al = airlines.filter(function(x){ return x.id === f.airline; })[0];
+        var dir = f.from === iata ? '출발' : (f.to === iata ? '도착' : '');
+        return '<li class="flight-item">' +
+          '<div class="flight-date">' + escapeHtml(f.date || '') + ' · ' + dir + '</div>' +
+          '<div class="flight-route">' + escapeHtml(f.from || '?') + ' → ' + escapeHtml(f.to || '?') + '</div>' +
+          '<div class="flight-detail"><span>' + escapeHtml(al ? al.name : (f.airline || '')) + '</span>' +
+          (f.flightNumber ? '<span>' + escapeHtml(f.flightNumber) + '</span>' : '') + '</div>' +
+        '</li>';
+      }).join('') + '</ul>';
+    return '<div class="modal-header">' +
+        '<div class="logo-wrap large"><div class="badge modal-badge" style="background:' + hashColor(iata) + '">' + escapeHtml(iata) + '</div></div>' +
+        '<div><h2>' + escapeHtml(meta.name) + '</h2>' +
+          '<div class="modal-sub">' + escapeHtml(meta.city || '') + (meta.city ? ' · ' : '') + escapeHtml(meta.country || '') + '</div>' +
+        '</div>' +
+      '</div>' + body;
+  }
+
+  function openModal(type, id){
+    var html = '';
+    if (type === 'airline') html = airlineModalHTML(id);
+    else if (type === 'aircraft') html = aircraftModalHTML(id);
+    else if (type === 'airport') html = airportModalHTML(id);
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal').classList.add('visible');
+  }
+  function closeModal(){ document.getElementById('modal').classList.remove('visible'); }
+
+  function attachCardHandlers(){
+    Array.prototype.forEach.call(document.querySelectorAll('.card[data-type]'), function(el){
+      el.addEventListener('click', function(){
+        openModal(el.getAttribute('data-type'), el.getAttribute('data-id'));
+      });
+    });
+  }
+
+  // ---------- wiring ----------
+  function initControls(){
+    document.getElementById('airline-search').addEventListener('input', function(e){
+      state.search = e.target.value; renderAirlines();
+    });
+    document.getElementById('aircraft-search').addEventListener('input', function(e){
+      state.acSearch = e.target.value; renderAircraft();
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('#airline-sort-group .pill-btn'), function(btn){
+      btn.addEventListener('click', function(){
+        Array.prototype.forEach.call(document.querySelectorAll('#airline-sort-group .pill-btn'), function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        state.sort = btn.getAttribute('data-sort');
+        renderAirlines();
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#airline-filter-group .pill-btn'), function(btn){
+      btn.addEventListener('click', function(){
+        Array.prototype.forEach.call(document.querySelectorAll('#airline-filter-group .pill-btn'), function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        state.filter = btn.getAttribute('data-filter');
+        renderAirlines();
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#aircraft-filter-group .pill-btn'), function(btn){
+      btn.addEventListener('click', function(){
+        Array.prototype.forEach.call(document.querySelectorAll('#aircraft-filter-group .pill-btn'), function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        state.acFilter = btn.getAttribute('data-filter');
+        renderAircraft();
+      });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(btn){
+      btn.addEventListener('click', function(){
+        Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        Array.prototype.forEach.call(document.querySelectorAll('.tab-panel'), function(p){ p.classList.remove('active'); });
+        document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('modal').addEventListener('click', function(e){
+      if (e.target.id === 'modal') closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeModal();
+    });
+  }
+
+  function boot(){
+    loadData().then(function(){
+      renderStats();
+      renderAirlines();
+      renderAircraft();
+      renderAirports();
+      initControls();
+    }).catch(function(err){
+      document.getElementById('airline-grid').innerHTML =
+        '<p class="empty-state">데이터를 불러오지 못했어요. 로컬에서 볼 땐 <code>python3 -m http.server</code>처럼 로컬 서버로 열어야 fetch가 동작해요.<br><small>' + escapeHtml(err.message) + '</small></p>';
+      console.error(err);
+    });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
