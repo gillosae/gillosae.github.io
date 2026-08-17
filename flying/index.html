@@ -60,7 +60,6 @@
 
   .page-header { padding: 2.5rem 0 1.25rem; text-align: center; }
   .page-header h1 { font-size: 2rem; font-weight: 800; margin: 0 0 .3rem; letter-spacing: -.02em; }
-  .page-header .subtitle { color: var(--text-muted); font-size: .92rem; margin: 0; }
   .back-link { display:inline-block; margin-top: .9rem; font-size: .8rem; color: var(--text-muted); text-decoration: none; border: 1px solid var(--border); padding: .35rem .8rem; border-radius: 999px; }
   .back-link:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -110,12 +109,6 @@
   :root[data-theme="dark"] .pill-btn.active { background: var(--accent); border-color: var(--accent); color:#0e0f13; }
   @media (prefers-color-scheme: dark) { .pill-btn.active { background: var(--accent); border-color: var(--accent); color:#0e0f13; } }
   .pill-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
-
-  .info-note {
-    font-size: .72rem; color: var(--text-muted); background: var(--bg-card);
-    border: 1px dashed var(--border); border-radius: 10px; padding: .6rem .8rem; margin: .8rem 0 1.2rem;
-    line-height: 1.5;
-  }
 
   .grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
@@ -204,7 +197,6 @@
   <div class="wrap">
     <header class="page-header">
       <h1>✈️ Flying</h1>
-      <p class="subtitle">세계 항공사 완주 체크리스트 — 타본 항공사는 색깔로, 안 타본 건 회색으로</p>
       <a class="back-link" href="/">.. home</a>
       <div class="stats-bar" id="stats-bar"></div>
     </header>
@@ -230,11 +222,6 @@
         <button class="pill-btn" data-sort="destinations">취항지순</button>
         <button class="pill-btn" data-sort="passengers">탑승객순</button>
       </div>
-      <div class="info-note">
-        항공사 목록은 OpenFlights 오픈데이터 기반이며 정기 여객 항공사만 추려서 정리했어요. 일부 최신 변경(신설/폐업)이 반영되지 않았을 수 있습니다 —
-        <code>flying/data/my-flights.json</code>의 <code>hiddenAirlines</code>에 코드를 추가하면 목록에서 숨길 수 있고, 없는 항공사는 <code>customAirlines</code>로 추가할 수 있어요.
-        취항지 수는 2014년 노선 데이터 기준 참고용, 탑승객 수는 2024년 상위 항공사만 있어요(위키피디아).
-      </div>
       <div id="airline-grid" class="grid"></div>
     </section>
 
@@ -251,7 +238,6 @@
     </section>
 
     <section id="tab-airports" class="tab-panel">
-      <p class="info-note">공항은 전 세계 6,000개+라 체크리스트 대신, 탑승 기록에 적은 출발/도착 공항에서 자동으로 모아서 보여줘요. <code>my-flights.json</code>에 기록을 추가하면 여기 반영됩니다.</p>
       <div id="airport-list"></div>
     </section>
 
@@ -299,6 +285,32 @@
 
   function initials(a){
     return (a.iata || a.name.slice(0, 2)).toUpperCase();
+  }
+
+  // logos: self-hosted MIT-licensed SVGs (soaring-symbols) for major carriers;
+  // everyone else falls back to a live-fetched logo, and if that 404s, to a
+  // plain monogram badge. Nothing beyond the 93 MIT set is copied into the repo.
+  window.__logoErr = function(img, color, txt, isModal){
+    var badge = document.createElement('div');
+    badge.className = isModal ? 'badge modal-badge' : 'badge';
+    badge.style.background = color;
+    badge.textContent = txt;
+    img.replaceWith(badge);
+  };
+
+  function airlineLogoHTML(a, isModal){
+    var color = airlineColor(a);
+    var initialsTxt = escapeHtml(initials(a));
+    var imgClass = isModal ? ' class="modal-logo"' : '';
+    var errArgs = "this,'" + color + "','" + initialsTxt + "'," + (isModal ? 'true' : 'false');
+    if (a.hasLogo){
+      return '<img src="logos/' + a.slug + '.svg"' + imgClass + ' alt="" loading="lazy" onerror="__logoErr(' + errArgs + ')">';
+    }
+    if (a.iata){
+      var url = 'https://pics.avs.io/200/200/' + encodeURIComponent(a.iata) + '.png';
+      return '<img src="' + url + '"' + imgClass + ' alt="" loading="lazy" onerror="__logoErr(' + errArgs + ')">';
+    }
+    return '<div class="badge' + (isModal ? ' modal-badge' : '') + '" style="background:' + color + '">' + initialsTxt + '</div>';
   }
 
   function aircraftName(code){
@@ -356,9 +368,7 @@
     var flights = flightsByAirline[a.id] || [];
     var flown = flights.length > 0;
     var color = airlineColor(a);
-    var logo = a.hasLogo
-      ? '<img src="logos/' + a.slug + '.svg" alt="" loading="lazy">'
-      : '<div class="badge" style="background:' + color + '">' + escapeHtml(initials(a)) + '</div>';
+    var logo = airlineLogoHTML(a, false);
     return '' +
       '<div class="card ' + (flown ? 'flown' : '') + '" data-type="airline" data-id="' + a.id + '" style="--accent-color:' + color + '">' +
         (flown ? '<div class="flown-badge">✓' + flights.length + '</div>' : '') +
@@ -517,9 +527,7 @@
     if (!a) return '<p class="empty-state">항공사를 찾을 수 없어요.</p>';
     var flights = (flightsByAirline[id] || []).slice().sort(function(x, y){ return (y.date || '').localeCompare(x.date || ''); });
     var color = airlineColor(a);
-    var logo = a.hasLogo
-      ? '<img src="logos/' + a.slug + '.svg" class="modal-logo" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">'
-      : '<div class="badge modal-badge" style="background:' + color + '">' + escapeHtml(initials(a)) + '</div>';
+    var logo = airlineLogoHTML(a, true);
 
     var metaBits = [];
     if (a.alliance) metaBits.push(escapeHtml(a.alliance));
