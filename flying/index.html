@@ -108,6 +108,8 @@
   .name { font-size: .68rem; font-weight: 600; line-height: 1.34; letter-spacing: -.015em;
           height: 2.68em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   .cell.off .name { color: var(--ink3); font-weight: 500; }
+  .val { font-family:'Inter',sans-serif; font-size: .625rem; font-weight: 600; color: var(--ink3);
+         font-variant-numeric: tabular-nums; margin-top: -4px; }
 
   .cnt { position: absolute; top: -4px; right: -4px; min-width: 17px; height: 17px; padding: 0 4px;
          border-radius: 99px; background: var(--accent); color: #fff; font-family:'Inter',sans-serif;
@@ -314,14 +316,22 @@
     });
   }
 
-  function cell(o, n, art){
+  function cell(o, n, art, val){
     return '<button class="cell' + (n?'':' off') + '" data-t="' + o._t + '" data-id="' + e(o._id) + '">' +
       art + (n ? '<span class="cnt n">' + n + '</span>' : '') +
-      '<span class="name">' + e(o._n) + '</span></button>';
+      '<span class="name">' + e(o._n) + '</span>' +
+      (val ? '<span class="val">' + e(val) + '</span>' : '') + '</button>';
+  }
+  // when a numeric sort is active the figure is shown on the card, so the
+  // ordering is legible instead of looking arbitrary
+  function metric(a){
+    if (S.sort === 'destinations') return a.destinations ? a.destinations + '개 취항' : '';
+    if (S.sort === 'passengers') return a.passengersMillions ? a.passengersMillions + 'M명' : '';
+    return '';
   }
   function airCell(a){
     a._t='air'; a._id=a.id; a._n=a.name;
-    return cell(a, (fAir[a.id]||[]).length, tile(a));
+    return cell(a, (fAir[a.id]||[]).length, tile(a), metric(a));
   }
   function acCell(x){
     x._t='ac'; x._id=x.code; x._n=x.name;
@@ -330,6 +340,10 @@
   function head(flag, name, done, all){
     return '<div class="grp-h">' + (flag?'<span class="f">'+flag+'</span>':'') +
       '<span class="t">' + e(name) + '</span><span class="c">' + done + ' / ' + all + '</span></div>';
+  }
+  function headPlain(name, right){
+    return '<div class="grp-h"><span class="t">' + e(name) + '</span>' +
+      '<span class="c">' + e(right) + '</span></div>';
   }
 
   function renderAir(){
@@ -349,13 +363,24 @@
         return '<div class="grp">' + head(it[0].flag, c, d, it.length) +
                '<div class="grid">' + it.map(airCell).join('') + '</div></div>';
       }).join('');
+    } else if (S.sort==='destinations' || S.sort==='passengers'){
+      // ranking only means something for airlines that actually have the figure;
+      // the rest would otherwise trail off alphabetically and read as broken
+      var val = S.sort==='destinations' ? function(a){ return a.destinations || 0; }
+                                        : function(a){ return a.passengersMillions || 0; };
+      var has = [], none = [];
+      L.forEach(function(a){ (val(a) > 0 ? has : none).push(a); });
+      has.sort(function(a,b){ return val(b)-val(a) || a.name.localeCompare(b.name); });
+      none.sort(function(a,b){ return a.name.localeCompare(b.name); });
+      box.className = '';
+      var html = '<div class="grid">' + has.map(airCell).join('') + '</div>';
+      if (none.length){
+        html += '<div class="grp">' + headPlain('데이터 없음', none.length + '개') +
+                '<div class="grid">' + none.map(airCell).join('') + '</div></div>';
+      }
+      box.innerHTML = html;
     } else {
-      L.sort(S.sort==='destinations' ? function(a,b){ return (b.destinations-a.destinations)||a.name.localeCompare(b.name); }
-        : S.sort==='passengers' ? function(a,b){
-            var x=a.passengersMillions, y=b.passengersMillions;
-            if (x==null&&y==null) return a.name.localeCompare(b.name);
-            if (x==null) return 1; if (y==null) return -1; return y-x; }
-        : function(a,b){ return a.name.localeCompare(b.name); });
+      L.sort(function(a,b){ return a.name.localeCompare(b.name); });
       box.innerHTML = L.map(airCell).join('');
     }
     bind(box);
