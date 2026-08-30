@@ -13,8 +13,8 @@ const config = {
     timezone: "-12:00",
     events: [
         {
-            name: "AAAI",
-            date: "2026-07-28",
+            name: "CHI",
+            date: "2026-09-10",
             time: "23:59:59",
             est: false
         },
