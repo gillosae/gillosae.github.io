@@ -13,26 +13,32 @@ const config = {
     timezone: "-12:00",
     events: [
         {
-            name: "CHI",
-            date: "2026-09-10",
-            time: "23:59:59",
-            est: false
-        },
-        {
-            name: "ICASSP",
-            date: "2026-09-16",
-            time: "23:59:59",
-            est: false
-        },
-        {
             name: "ICLR",
             date: "2026-09-24",
+            time: "23:59:59",
+            est: false
+        },
+        {
+            name: "NAACL",
+            date: "2026-10-12",
+            time: "23:59:59",
+            est: false
+        },
+        {
+            name: "CVPR",
+            date: "2026-11-16",
+            time: "23:59:59",
+            est: false
+        },
+        {
+            name: "SIGIR",
+            date: "2026-12-16",
             time: "23:59:59",
             est: true
         },
         {
-            name: "CVPR",
-            date: "2026-11-13",
+            name: "ACL",
+            date: "2026-01-06",
             time: "23:59:59",
             est: true
         },
@@ -44,9 +50,9 @@ const config = {
         },
         {
             name: "Interspeech",
-            date: "2027-03-01",
+            date: "2027-02-16",
             time: "23:59:59",
-            est: true
+            est: false
         }
     ]
 };
