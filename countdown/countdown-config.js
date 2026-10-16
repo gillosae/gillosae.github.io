@@ -13,18 +13,6 @@ const config = {
     timezone: "-12:00",
     events: [
         {
-            name: "ICLR",
-            date: "2026-09-24",
-            time: "23:59:59",
-            est: false
-        },
-        {
-            name: "NAACL",
-            date: "2026-10-12",
-            time: "23:59:59",
-            est: false
-        },
-        {
             name: "CVPR",
             date: "2026-11-16",
             time: "23:59:59",
@@ -34,13 +22,13 @@ const config = {
             name: "SIGIR",
             date: "2026-12-16",
             time: "23:59:59",
-            est: true
+            est: false
         },
         {
             name: "ACL",
             date: "2026-01-06",
             time: "23:59:59",
-            est: true
+            est: false
         },
         {
             name: "ICML",
