@@ -25,8 +25,8 @@ const config = {
             est: false
         },
         {
-            name: "ACL",
-            date: "2026-01-06",
+            name: "ACL ARR",
+            date: "2027-01-06",
             time: "23:59:59",
             est: false
         },
