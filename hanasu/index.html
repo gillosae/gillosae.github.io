@@ -249,6 +249,7 @@
   .sug:hover { border-color:var(--accent); }
   .sug .ja { font-family:var(--jp); font-size:1rem; line-height:1.8; }
   .sug .ko { color:var(--ink3); font-size:.78rem; }
+  .sug .pr { color:var(--accent); font-size:.8rem; }
   .typing { display:flex; gap:5px; padding:16px 18px; }
   .typing span { width:7px; height:7px; border-radius:50%; background:var(--ink3); animation:blink 1.2s infinite ease-in-out; }
   .typing span:nth-child(2) { animation-delay:.15s; } .typing span:nth-child(3) { animation-delay:.3s; }
@@ -265,6 +266,12 @@
   .live { min-height:1.5em; max-width:560px; font-family:var(--jp); color:var(--ink2); text-align:center; font-size:.95rem; }
   .live.err { font-family:var(--kr); color:var(--bad); font-size:.85rem; }
   .typebox { display:flex; gap:8px; width:100%; max-width:560px; }
+  details.keybox summary { cursor:pointer; }
+  details.keybox[open] summary { margin-bottom:6px; }
+  details.keybox p { margin:6px 0; }
+  .cmd { margin:8px 0; padding:10px 12px; border-radius:10px; background:var(--panel2); font-size:.8rem; overflow-x:auto; white-space:pre; }
+  code { font-size:.9em; background:var(--panel2); padding:1px 5px; border-radius:5px; }
+  #ollama-status { white-space:nowrap; }
 
   @media (max-width: 760px) {
     .wrap { padding:20px 16px 48px; }
@@ -326,7 +333,7 @@
   <footer>
     <p>가나가 아직 낯설다면 <a href="/taberu/">가나 훈련</a>부터 해 보세요.</p>
     <p>음성 인식은 브라우저 기본 기능을 써요. Chrome은 Google, Safari는 Apple 서버로 음성이 전송돼요. 진행 기록은 이 브라우저에만 저장돼요.</p>
-    <p>프리토킹 대화 내용은 입력한 API 키로 Anthropic API에 직접 전송돼요.</p>
+    <p>프리토킹은 내 Mac의 Ollama(밖으로 나가지 않음) 또는 입력한 API 키로 Anthropic API를 써서 대화해요.</p>
   </footer>
 </div>
 
@@ -908,7 +915,7 @@ function loadVoices() {
   const v = pickVoice();
   if (v) sel.value = v.name;
 }
-function speak(text, { slow = false, btn = null } = {}) {
+function speak(text, { slow = false, btn = null, onend = null } = {}) {
   if (!('speechSynthesis' in window)) return toast('이 브라우저는 음성 재생을 지원하지 않아요.');
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -916,21 +923,23 @@ function speak(text, { slow = false, btn = null } = {}) {
   u.rate = slow ? 0.6 : 0.95;
   const v = pickVoice();
   if (v) u.voice = v;
-  if (btn) {
-    btn.classList.add('playing');
-    u.onend = u.onerror = () => btn.classList.remove('playing');
-  }
+  btn?.classList.add('playing');
+  // 끝까지 읽었을 때만 onend (취소·오류로 끊긴 경우는 제외)
+  u.onend = () => { btn?.classList.remove('playing'); onend?.(); };
+  u.onerror = () => btn?.classList.remove('playing');
   speechSynthesis.speak(u);
 }
 
 // ----- ASR -----
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+// Brave는 API만 노출하고 Google 음성 서버를 막아 두어 항상 'network' 오류가 난다
+const IS_BRAVE = !!navigator.brave;
+const SR = IS_BRAVE ? null : window.SpeechRecognition || window.webkitSpeechRecognition;
 const SR_ERR = {
   'not-allowed': '마이크 권한이 막혀 있어요. 주소창 옆 자물쇠 아이콘에서 마이크를 허용해 주세요.',
   'service-not-allowed': '음성 인식 서비스를 쓸 수 없어요. Safari라면 설정 › Siri에서 받아쓰기를 켜 주세요.',
   'no-speech': '말소리가 들리지 않았어요. 마이크를 누르고 바로 말해 보세요.',
   'audio-capture': '마이크를 찾지 못했어요.',
-  'network': '음성 인식 서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요.',
+  'network': '음성 인식 서버에 연결하지 못했어요. 이 브라우저가 음성 인식을 막고 있을 수 있어요. Safari나 Chrome으로 열어 보세요.',
   'language-not-supported': '이 브라우저는 일본어 음성 인식을 지원하지 않아요.',
 };
 let rec = null;
@@ -1243,7 +1252,7 @@ Feedback on the learner's last utterance ("feedback")
 - If you can't understand the utterance at all, use "fix" with your best guess, or ask again in "reply".
 - Example: the Korean recognizer gives 「와타시와 어제 토모다치토 영화오 미마시타」 → status "mixed", words [{"ko":"어제","ja":"昨日[きのう]"},{"ko":"영화","ja":"映画[えいが]"}], corrected "私[わたし]^は 昨日[きのう] 友達[ともだち]と 映画[えいが]を 見[み]ました。", note_ko "", and reply asks something about the movie.
 
-"reply_ko" is a natural Korean translation of "reply". "suggestions" holds two or three short, different answers the learner could say next (for example one agreeing, one declining or offering an alternative, one adding a detail), each using patterns they know, with "ko" giving the Korean meaning.
+"reply_ko" is a natural Korean translation of "reply". "suggestions" holds two or three short, different answers the learner could say back to your reply (for example one agreeing, one declining or offering an alternative, one adding a detail) — answers in the learner's voice, never a repeat of your own question — each using patterns they know, with "ko" giving the Korean meaning.
 
 Japanese markup for "reply", "corrected", every "words" "ja" and every suggestion "ja"
 - Follow every run of kanji with its reading in hiragana in square brackets: 学生[がくせい], 行[い]きます, 一緒[いっしょ]に. Only kanji get brackets; never bracket kana or katakana.
@@ -1292,6 +1301,261 @@ const TALK_SCHEMA = {
   additionalProperties: false,
 };
 
+// 내 Mac의 Ollama: 대화가 끊기지 않도록 두 번에 나눠 부른다.
+// 1) 대답: 짧은 세 줄 텍스트(JA/KANA/KO)를 스트리밍해서 JA 줄이 끝나는 즉시 읽어 준다.
+// 2) 피드백: 같은 대화 기록 뒤에 요청만 덧붙여 JSON으로 받는다. 앞부분이 같아서 Ollama 캐시를 그대로 쓴다.
+// 작은 모델은 인라인 후리가나 표기를 잘 못 지켜서 일본어와 히라가나 읽기를 따로 받고, 후리가나·한글 발음은 페이지에서 만든다.
+const OLLAMA_URL = 'http://localhost:11434';
+const LOCAL_SYSTEM = `You are ゆき, a friendly Japanese conversation partner for a Korean beginner who finished a short crash course. You are having a real-time spoken conversation, so be quick and natural.
+
+- Polite です/ます, very easy words (JLPT N5). One or two short sentences, then one easy question.
+- Stay in the scenario from the first message. React to what the learner said, like a friend.
+- The learner's message may mix Korean words, Japanese, and Japanese written in Hangul (와타시와 = わたしは, 데스 = です, 마시타 = ました, 토 = と, 오 = を). Work out what they meant and answer that. Ignore spelling and recognition errors. Don't correct them here; corrections are given separately.
+
+Always answer in exactly these three lines and nothing else:
+JA: your reply in natural Japanese with kanji
+KANA: the same reply fully in hiragana, with a space between phrases
+KO: Korean translation
+Example:
+JA: いいですね！どんな映画でしたか？
+KANA: いいですね どんな えいがでしたか
+KO: 좋네요! 어떤 영화였어요?
+
+What the learner has studied: ${UNITS.map(u => `${u.title} (${u.goal})`).join('; ')}.`;
+
+// 피드백 요청은 대화 기록 맨 끝에만 붙이고 기록에는 남기지 않는다 (앞부분 캐시 유지)
+const LOCAL_FEEDBACK_RULES = `Pause the conversation. Answer only with JSON in the given schema.
+- feedback.status: "none" if there is no learner message yet; "good" for correct, natural Japanese (if they wrote it in Hangul or romaji, put the Japanese in "corrected", otherwise leave it empty); "fix" for Japanese with a mistake ("corrected" is the natural version); "mixed" when they used some Korean words ("words" maps each Korean word to Japanese, "corrected" is the whole sentence in Japanese); "translate" when it was all Korean ("corrected" is the sentence in Japanese).
+- Ignore spelling, kanji/kana choice and speech-recognition errors; judge grammar, particles, conjugation and word choice.
+- feedback.note_ko: one short tip in casual Korean 반말 (…야, …해), or "".
+- Every Japanese text is {"ja": normal Japanese with kanji, "kana": its full reading in hiragana with a space between phrases}. Empty text is {"ja":"","kana":""}.
+- suggestions: exactly two short ANSWERS the learner could say back to your last reply (in the learner's voice, never your own question again), each with "ko".
+Example for 「와타시와 어제 토모다치토 영화오 미마시타」:
+{"feedback":{"status":"mixed","words":[{"ko":"어제","ja":"昨日","kana":"きのう"},{"ko":"영화","ja":"映画","kana":"えいが"}],"corrected":{"ja":"私は昨日友達と映画を見ました。","kana":"わたしは きのう ともだちと えいがを みました"},"note_ko":"\\"~랑\\"은 と로 말하면 돼."},"suggestions":[{"ja":"面白かったです。","kana":"おもしろかったです","ko":"재밌었어요."},{"ja":"アニメの映画です。","kana":"アニメの えいがです","ko":"애니메이션 영화예요."}]}`;
+
+const JK = { type: 'object', properties: { ja: { type: 'string' }, kana: { type: 'string' } }, required: ['ja', 'kana'], additionalProperties: false };
+const FEEDBACK_SCHEMA_LOCAL = {
+  type: 'object',
+  properties: {
+    feedback: {
+      type: 'object',
+      properties: {
+        status: TALK_SCHEMA.properties.feedback.properties.status,
+        words: {
+          type: 'array',
+          items: { type: 'object', properties: { ko: { type: 'string' }, ja: { type: 'string' }, kana: { type: 'string' } }, required: ['ko', 'ja', 'kana'], additionalProperties: false },
+        },
+        corrected: JK,
+        note_ko: { type: 'string' },
+      },
+      required: ['status', 'words', 'corrected', 'note_ko'],
+      additionalProperties: false,
+    },
+    suggestions: {
+      type: 'array',
+      items: { type: 'object', properties: { ja: { type: 'string' }, kana: { type: 'string' }, ko: { type: 'string' } }, required: ['ja', 'kana', 'ko'], additionalProperties: false },
+    },
+  },
+  required: ['feedback', 'suggestions'],
+  additionalProperties: false,
+};
+
+// 「私は昨日映画を見ました」 + 「わたしは きのう えいがを みました」 → 私[わたし]は昨日[きのう]映画[えいが]を見[み]ました
+const KANJI_ONLY = new RegExp(`^[${KANJI}]+$`, 'u');
+const KANJI_ANY = new RegExp(`[${KANJI}]`, 'u');
+const kanaOnly = s => [...s].map(hira).join('').replace(/[^ぁ-ゖー]/g, '');
+// 읽기 안에 같은 가나가 또 나오면(友達[ともだち]と) 첫 매치가 틀리므로,
+// 가능한 나눔을 모두 보고 한자 한 글자당 읽기 길이가 가장 자연스러운 것을 고른다
+function alignRuby(ja, kana) {
+  const k = kanaOnly(kana);
+  const runs = ja.match(new RegExp(`[${KANJI}]+|[^${KANJI}]+`, 'gu')) || [];
+  if (!k || !runs.some(r => KANJI_ONLY.test(r))) return ja;
+  const lits = runs.map(r => (KANJI_ONLY.test(r) ? null : kanaOnly(r)));
+  const reads = [];
+  let best = null, bestScore = Infinity, steps = 0;
+  (function go(ri, pos, score) {
+    if (++steps > 20000 || score >= bestScore) return;
+    if (ri === runs.length) {
+      if (pos === k.length) { bestScore = score; best = reads.slice(); }
+      return;
+    }
+    if (lits[ri] != null) {
+      if (k.startsWith(lits[ri], pos)) go(ri + 1, pos + lits[ri].length, score);
+      return;
+    }
+    const n = [...runs[ri]].length;
+    for (let len = 1; len <= Math.min(k.length - pos, n * 4 + 1); len++) {
+      reads.push(k.slice(pos, pos + len));
+      go(ri + 1, pos + len, score + (len / n - 1.8) ** 2);
+      reads.pop();
+    }
+  })(0, 0, 0);
+  if (!best) return ja;
+  let g = 0;
+  return runs.map(r => (KANJI_ONLY.test(r) ? `${r}[${best[g++]}]` : r)).join('');
+}
+// 어절 끝의 は/へ는 조사로 보고 와/에로 읽는다 (こんにちは도 여기서 맞게 된다)
+const kanaMarkup = kana => kana.trim().split(/\s+/).map(c => c.replace(/([はへ])([、。？！?!]*)$/, '^$1$2')).join(' ');
+// 읽기에 띄어쓰기가 없을 때: 한자 단어·가타카나 단어·지시어·조사 바로 뒤의 は/へ를 조사로 본다
+const markParticles = markup => markup
+  .replace(/(\]|[ァ-ヺー]|これ|それ|あれ|どれ|ここ|そこ|どこ|こんにち|こんばん|わたし|あなた|で|に|と|の|から|まで)([はへ])/g, '$1^$2');
+function prepJK(v) {
+  if (!v || !str(v.ja)) return null;
+  const markup = alignRuby(v.ja.trim(), str(v.kana));
+  const p = prep({ j: markParticles(markup) });
+  // 읽기가 어절로 띄어 있으면 그걸로 발음을 만들고, 아니면 후리가나를 붙인 표기로 만든다.
+  // 후리가나 맞추기에 실패해 한자가 남았을 때만 띄어쓰기 없는 읽기를 쓴다
+  if (/\S\s+\S/.test(str(v.kana))) p.pron = toHangul(parse(kanaMarkup(v.kana)));
+  else if (str(v.kana) && markup === v.ja.trim() && KANJI_ANY.test(markup)) p.pron = toHangul(parse(markParticles(v.kana.trim())));
+  return p;
+}
+
+// 세 줄 대답 "JA: …\nKANA: …\nKO: …" 읽기. 줄이 끝난 것만 돌려준다
+function parseReplyLines(text, final) {
+  const out = {};
+  const lines = text.split('\n');
+  if (!final) lines.pop();
+  for (const line of lines) {
+    const m = line.match(/^\s*(JA|KANA|KO)\s*[:：]\s*(.*)$/i);
+    if (m && !out[m[1].toLowerCase()]) out[m[1].toLowerCase()] = m[2].trim();
+  }
+  // 형식을 안 지키고 일본어 한 줄만 쓴 경우
+  if (final && !out.ja) out.ja = (lines.find(l => /[぀-ヿ一-鿿]/.test(l)) || '').trim();
+  return out;
+}
+
+const ollama = { models: [], status: 'idle', warm: '', fbCtl: null };
+const ollamaModel = () => prefs.ollamaModel || ollama.models[0] || 'qwen3:8b';
+// num_ctx가 바뀌면 Ollama가 모델을 다시 올리므로 모든 요청이 같은 값을 쓴다
+const OLLAMA_OPTS = { num_ctx: 8192, temperature: 0.6 };
+
+async function checkOllama() {
+  ollama.status = 'checking';
+  renderOllamaStatus();
+  try {
+    const res = await fetch(`${OLLAMA_URL}/api/tags`);
+    if (!res.ok) throw new Error(String(res.status));
+    ollama.models = ((await res.json()).models || []).map(m => m.name);
+    // 처음엔 대화가 빠른 작은 모델을 고른다
+    if (!ollama.models.includes(prefs.ollamaModel)) {
+      prefs.ollamaModel = ollama.models.find(m => /^qwen3:(8b|4b)/.test(m)) || ollama.models[0];
+    }
+    ollama.status = ollama.models.length ? 'ok' : 'empty';
+  } catch (e) {
+    ollama.status = 'fail';
+  }
+  if (view === 'talk' && prefs.talkEngine !== 'claude') renderTalk();
+  if (ollama.status === 'ok') warmOllama();
+}
+
+// 대화에 보낼 메시지: 규칙, 장면 설정, 최근 대화
+function ollamaMessages() {
+  const recent = talk.messages.slice(1).slice(-24).map(m => ({
+    role: m.role,
+    content: Array.isArray(m.content) ? m.content.filter(b => b.type === 'text').map(b => b.text).join('') : m.content,
+  }));
+  return [{ role: 'system', content: LOCAL_SYSTEM }, talk.messages[0], ...recent];
+}
+
+// 스트리밍으로 받아 조각마다 onText(지금까지 전체)를 부른다
+async function ollamaChat(messages, { format, onText, signal, options } = {}) {
+  const model = ollamaModel();
+  const body = { model, messages, stream: true, keep_alive: '30m', options: { ...OLLAMA_OPTS, ...options } };
+  if (format) body.format = format;
+  if (/qwen3|deepseek-r1/i.test(model)) body.think = false;
+  let res;
+  try {
+    res = await fetch(`${OLLAMA_URL}/api/chat`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), signal });
+  } catch (e) {
+    if (signal?.aborted) throw { local: 'aborted' };
+    ollama.status = 'fail';
+    throw { local: 'connect' };
+  }
+  if (res.status === 403) { ollama.status = 'fail'; throw { local: 'connect' }; }
+  if (res.status === 404) throw { local: 'model', model };
+  if (!res.ok || !res.body) throw { local: 'http', status: res.status };
+  const reader = res.body.getReader(), dec = new TextDecoder();
+  let buf = '', text = '';
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let nl;
+      while ((nl = buf.indexOf('\n')) >= 0) {
+        const line = buf.slice(0, nl).trim();
+        buf = buf.slice(nl + 1);
+        if (!line) continue;
+        let chunk;
+        try { chunk = JSON.parse(line); } catch (e) { continue; }
+        if (chunk.error) throw { local: 'http', status: chunk.error };
+        const piece = chunk.message?.content || '';
+        if (piece) { text += piece; onText?.(text); }
+      }
+    }
+  } catch (e) {
+    if (signal?.aborted) throw { local: 'aborted' };
+    throw e.local ? e : { local: 'connect' };
+  }
+  return text;
+}
+
+// 모델을 메모리에 올리고 규칙 프롬프트를 미리 읽혀 둔다 → 첫 대답이 빨라진다
+async function warmOllama() {
+  const model = ollamaModel();
+  if (ollama.warm === model) return;
+  ollama.warm = model;
+  try {
+    await ollamaChat([{ role: 'system', content: LOCAL_SYSTEM }, { role: 'user', content: '.' }], { options: { num_predict: 1 } });
+  } catch (e) {
+    ollama.warm = '';
+  }
+}
+
+// 대답 다음에 피드백과 대답 후보를 받는다. 그사이 학습자가 또 말하면 취소해서 대답이 밀리지 않게 한다
+async function ollamaFeedback(me, ai) {
+  ollama.fbCtl?.abort();
+  const ctl = (ollama.fbCtl = new AbortController());
+  const token = talk.token;
+  ai.fbPending = true;
+  renderChat(false);
+  try {
+    const ask = `[FEEDBACK] ${me ? `The learner's last message was 「${me.text}」.` : 'There is no learner message yet (status "none").'} Your last reply was 「${ai.text}」; the suggestions answer that.\n${LOCAL_FEEDBACK_RULES}`;
+    const raw = await ollamaChat([...ollamaMessages(), { role: 'user', content: ask }], { format: FEEDBACK_SCHEMA_LOCAL, signal: ctl.signal });
+    if (token !== talk.token) return;
+    const out = JSON.parse(raw);
+    const fb = out.feedback || {};
+    const corrected = prepJK(fb.corrected);
+    let status = fb.status;
+    // 작은 모델이 "good"이라면서 다른 문장을 고쳐 주는 경우: 일본어로만 말했다면 고칠 점으로 본다
+    if (me && status === 'good' && corrected && !/[가-힣]/.test(me.text) && norm(corrected.text) !== norm(me.text)) status = 'fix';
+    if (me && (status === 'good' || (['fix', 'mixed', 'translate'].includes(status) && corrected))) {
+      me.fb = {
+        status,
+        note: str(fb.note_ko),
+        p: corrected,
+        words: (Array.isArray(fb.words) ? fb.words : []).filter(w => w && str(w.ko))
+          .map(w => { const p = prepJK(w); return p && Object.assign(p, { ko: w.ko.trim() }); }).filter(Boolean).slice(0, 6),
+      };
+    }
+    ai.sugs = (Array.isArray(out.suggestions) ? out.suggestions : [])
+      .map(s => { const p = s && prepJK(s); return p && Object.assign(p, { ko: str(s.ko) }); }).filter(Boolean).slice(0, 3);
+  } catch (e) {
+    // 피드백은 덤이라 실패해도 대화는 계속한다
+  } finally {
+    if (ollama.fbCtl === ctl) ollama.fbCtl = null;
+    ai.fbPending = false;
+    if (token === talk.token) renderChat(false);
+  }
+}
+
+function localErrText(e) {
+  if (e.local === 'connect') return 'Ollama에 연결하지 못했어요. 위의 "Ollama 연결이 안 되면"을 확인해 주세요.';
+  if (e.local === 'model') return `'${e.model}' 모델이 없어요. 터미널에서 ollama pull ${e.model} 을 실행해 주세요.`;
+  if (e.local === 'http') return `Ollama 오류 (${e.status}). 잠시 후 다시 시도해 주세요.`;
+  return '답을 읽지 못했어요. 다시 시도해 주세요.';
+}
+
 const talk = { messages: [], log: [], busy: false, listening: false, typing: false, token: 0 };
 let apiKey = '';
 try { apiKey = localStorage.getItem(KEY_STORE) || ''; } catch (e) {}
@@ -1332,6 +1596,7 @@ async function send() {
   talk.busy = true;
   renderChat();
   setComposer();
+  if (prefs.talkEngine !== 'claude') return sendLocal(token);
   try {
     const res = await callClaude();
     if (token !== talk.token) return;
@@ -1343,43 +1608,106 @@ async function send() {
       if (!out) throw new Error('no output');
       // thinking·fallback 블록까지 그대로 돌려줘야 다음 턴에서 대화 기록이 유지된다
       talk.messages.push({ role: 'assistant', content: res.content });
+      const mk = v => (str(v) ? prep({ j: v }) : null);
+      const withKo = (p, ko) => (p ? Object.assign(p, { ko: str(ko).trim() }) : null);
       const me = talk.log[talk.log.length - 1];
       const fb = out.feedback || {};
-      if (me && me.who === 'me' && (fb.status === 'good' || (['fix', 'mixed', 'translate'].includes(fb.status) && str(fb.corrected)))) {
+      const corrected = mk(fb.corrected);
+      if (me && me.who === 'me' && (fb.status === 'good' || (['fix', 'mixed', 'translate'].includes(fb.status) && corrected))) {
         me.fb = {
           status: fb.status,
           note: str(fb.note_ko),
-          p: str(fb.corrected) ? prep({ j: str(fb.corrected) }) : null,
-          words: (Array.isArray(fb.words) ? fb.words : []).filter(w => w && str(w.ko) && str(w.ja)).slice(0, 6)
-            .map(w => Object.assign(prep({ j: w.ja }), { ko: w.ko.trim() })),
+          p: corrected,
+          words: (Array.isArray(fb.words) ? fb.words : []).filter(w => w && str(w.ko))
+            .map(w => withKo(mk(w.ja), w.ko)).filter(Boolean).slice(0, 6),
         };
       }
-      const ai = prep({ j: str(out.reply) });
+      const ai = mk(out.reply);
       ai.who = 'ai';
       ai.ko = str(out.reply_ko);
       ai.sugs = (Array.isArray(out.suggestions) ? out.suggestions : [])
-        .filter(s => s && str(s.ja)).slice(0, 3).map(s => Object.assign(prep({ j: s.ja }), { ko: str(s.ko) }));
+        .map(s => s && withKo(mk(s.ja), s.ko)).filter(Boolean).slice(0, 3);
       talk.log.push(ai);
-      if (prefs.talkAuto !== false) speak(ai.text);
+      if (prefs.talkAuto !== false) speak(ai.text, { onend: autoListen });
     }
   } catch (e) {
     if (token !== talk.token) return;
     talk.log.push({ who: 'err', text: errText(e), retry: true });
   }
+  finishTurn();
+}
+
+function finishTurn() {
   talk.busy = false;
   renderChat();
   setComposer();
+  if (talk.listenAfter) { talk.listenAfter = false; autoListen(); }
 }
 
+// ゆき가 말을 마치면 바로 마이크를 연다 (자동 듣기)
+function autoListen() {
+  if (prefs.talkHands === false || !SR || view !== 'talk' || !$('#drill').hidden || talk.listening) return;
+  if ('speechSynthesis' in window && (speechSynthesis.speaking || speechSynthesis.pending)) return;
+  if (talk.busy) { talk.listenAfter = true; return; }
+  talkListen('ja');
+}
+
+// 로컬: 대답 세 줄을 스트리밍해 JA 줄이 끝나는 즉시 보여 주고 읽은 뒤, 피드백은 따로 받는다
+async function sendLocal(token) {
+  ollama.fbCtl?.abort();
+  const last = talk.log[talk.log.length - 1];
+  const me = last && last.who === 'me' ? last : null;
+  let spoke = false, ai = null;
+  const say = p => {
+    if (spoke || prefs.talkAuto === false) return;
+    spoke = true;
+    speak(p.text, { onend: autoListen });
+  };
+  try {
+    const text = await ollamaChat(ollamaMessages(), {
+      options: { num_predict: 200 },
+      onText: t => {
+        if (token !== talk.token) return;
+        const r = parseReplyLines(t, false);
+        const p = r.ja && prepJK({ ja: r.ja, kana: r.kana || '' });
+        if (!p) return;
+        talk.pending = Object.assign(p, { ko: r.ko || '' });
+        say(p);
+        renderChat();
+      },
+    });
+    if (token !== talk.token) return;
+    const r = parseReplyLines(text, true);
+    ai = prepJK({ ja: r.ja, kana: r.kana || '' });
+    if (!ai) throw { local: 'json' };
+    talk.messages.push({ role: 'assistant', content: text.trim() });
+    Object.assign(ai, { who: 'ai', ko: r.ko || '', sugs: [] });
+    talk.pending = null;
+    talk.log.push(ai);
+    say(ai);
+  } catch (e) {
+    if (token !== talk.token) return;
+    talk.pending = null;
+    talk.log.push({ who: 'err', text: localErrText(e), retry: true });
+  }
+  finishTurn();
+  if (ai) ollamaFeedback(me, ai);
+}
+
+const engineReady = () => (prefs.talkEngine === 'claude' ? !!apiKey : ollama.status !== 'fail');
+
 function startTalk() {
-  if (!apiKey) return toast('API 키를 먼저 넣어 주세요.');
+  if (prefs.talkEngine === 'claude' && !apiKey) return toast('API 키를 먼저 넣어 주세요.');
   talk.token++;
   rec?.abort();
+  ollama.fbCtl?.abort();
+  talk.pending = null;
+  talk.listenAfter = false;
   const scene = SCENES.find(s => s[0] === prefs.talkScene) || SCENES[0];
   const level = prefs.talkLevel === 'intro' ? '입문 (use only the unit 1–4 patterns)' : '초급 (all units)';
   talk.messages = [{
     role: 'user',
-    content: `Start a new conversation. Scenario: ${scene[2]} Level: ${level}. You speak first: a greeting and one easy question. feedback.status is "none".`,
+    content: `Start a new conversation. Scenario: ${scene[2]} Level: ${level}. You speak first: a greeting and one easy question.${prefs.talkEngine === 'claude' ? ' feedback.status is "none".' : ''}`,
   }];
   talk.log = [];
   talk.listening = false;
@@ -1391,11 +1719,13 @@ function userSay(text, via) {
   text = text.trim();
   if (!text || talk.busy || !talk.messages.length) return;
   talk.log.push({ who: 'me', text, via });
+  // 로컬 모델은 대답 형식을 자주 잊어서 매 턴 끝에 다시 알려 준다
+  const tail = prefs.talkEngine === 'claude' ? '' : '\nReply now in the three lines JA / KANA / KO.';
   talk.messages.push({
     role: 'user',
-    content: via === 'mix' ? `The learner spoke, maybe mixing Korean and Japanese (Korean speech recognizer, so Japanese parts appear in Hangul phonetic spelling): 「${text}」`
+    content: (via === 'mix' ? `The learner spoke, maybe mixing Korean and Japanese (Korean speech recognizer, so Japanese parts appear in Hangul phonetic spelling): 「${text}」`
       : via === 'ja' ? `The learner said (Japanese speech recognizer): 「${text}」`
-      : `The learner typed (may mix Korean and Japanese): 「${text}」`,
+      : `The learner typed (may mix Korean and Japanese): 「${text}」`) + tail,
   });
   send();
 }
@@ -1457,8 +1787,28 @@ function tryCorrection(i) {
 
 const optionsHTML = (list, sel) => list.map(([v, label]) => `<option value="${v}"${v === sel ? ' selected' : ''}>${esc(label)}</option>`).join('');
 
+const ENGINES = [['ollama', '내 Mac · Ollama (무료)'], ['claude', 'Claude API (키 필요)']];
+
+function renderOllamaStatus() {
+  const el = $('#ollama-status');
+  if (!el) return;
+  el.textContent = { idle: '', checking: '연결 확인 중…', ok: '✓ 연결됨', empty: '설치된 모델이 없어요 (터미널: ollama pull qwen3:8b)', fail: '연결 안 됨' }[ollama.status] || '';
+}
+
+function ollamaHelpHTML() {
+  return `<details class="keybox"${ollama.status === 'fail' ? ' open' : ''}>
+      <summary><b>Ollama 연결이 안 되면</b></summary>
+      <p class="fine">이 페이지에서 내 Mac의 Ollama를 부르려면 이 주소를 Ollama에 한 번 허용해 줘야 해요. 터미널에서 실행하세요 (Mac을 재시동하면 다시 실행):</p>
+      <pre class="cmd">launchctl setenv OLLAMA_ORIGINS "${esc(location.origin)}"
+brew services restart ollama</pre>
+      <p class="fine">브라우저가 로컬 네트워크(localhost) 접근을 물으면 허용하세요. 설정 없이 쓰려면 사이트를 내 Mac에서 띄워도 돼요: 저장소 폴더에서 <code>python3 -m http.server 4000</code> 실행 후 http://localhost:4000/hanasu/ 로 접속.</p>
+      <button class="btn sm" data-talk="ollama-check">다시 연결</button>
+    </details>`;
+}
+
 function renderTalk() {
-  const auto = prefs.talkAuto !== false, trans = prefs.talkTrans !== false;
+  const auto = prefs.talkAuto !== false, trans = prefs.talkTrans !== false, local = prefs.talkEngine !== 'claude';
+  if (local && ollama.status === 'idle') checkOllama();
   $('#lesson').innerHTML = `
     <div class="unit-head">
       <div>
@@ -1467,7 +1817,15 @@ function renderTalk() {
         <p class="goal">배운 문형을 섞어서 AI 친구 ゆき와 자유롭게 대화해요. 어색한 말은 바로 고쳐 줘요.</p>
       </div>
     </div>
-    ${apiKey ? '' : `
+    <div class="talk-bar">
+      <label class="field">대화 엔진 <select id="talk-engine">${optionsHTML(ENGINES, local ? 'ollama' : 'claude')}</select></label>
+      ${local ? `<label class="field">모델 <select id="ollama-model">${ollama.models.length
+        ? ollama.models.map(m => `<option${m === prefs.ollamaModel ? ' selected' : ''}>${esc(m)}</option>`).join('')
+        : '<option value="">모델 없음</option>'}</select></label><span class="fine" id="ollama-status"></span>`
+      : `<label class="field">모델 <select id="talk-model">${optionsHTML(MODELS, prefs.talkModel)}</select></label>
+        ${apiKey ? '<button class="link" id="talk-key-clear">API 키 지우기</button>' : ''}`}
+    </div>
+    ${local ? ollamaHelpHTML() : apiKey ? '' : `
     <div class="keybox">
       <b>Anthropic API 키가 필요해요</b>
       <p class="fine">대화 상대는 Claude예요. 키는 이 브라우저(localStorage)에만 저장되고 api.anthropic.com으로만 직접 전송돼요. 공용 컴퓨터에서는 쓰지 마세요.</p>
@@ -1477,11 +1835,10 @@ function renderTalk() {
     <div class="talk-bar">
       <label class="field">장면 <select id="talk-scene">${optionsHTML(SCENES, prefs.talkScene)}</select></label>
       <label class="field">난이도 <select id="talk-level">${optionsHTML(LEVELS, prefs.talkLevel)}</select></label>
-      <label class="field">모델 <select id="talk-model">${optionsHTML(MODELS, prefs.talkModel)}</select></label>
       <button class="chip" id="talk-trans" aria-pressed="${trans}">번역</button>
       <button class="chip" id="talk-auto" aria-pressed="${auto}">자동 재생</button>
+      ${SR ? `<button class="chip" id="talk-hands" aria-pressed="${prefs.talkHands !== false}" title="ゆき가 말을 마치면 마이크가 자동으로 켜져요">자동 듣기</button>` : ''}
       ${talk.messages.length ? '<button class="btn sm" data-talk="start">새 대화</button>' : ''}
-      ${apiKey ? '<button class="link" id="talk-key-clear">API 키 지우기</button>' : ''}
     </div>
     <div class="chat" id="chat"></div>
     <div class="composer" id="composer">
@@ -1498,6 +1855,7 @@ function renderTalk() {
     </div>`;
   renderChat(false);
   setComposer();
+  renderOllamaStatus();
 }
 
 function entryHTML(e, i, last) {
@@ -1512,11 +1870,16 @@ function entryHTML(e, i, last) {
       <div class="pr">${esc(e.pron)}</div>
       ${e.ko ? `<div class="ko">${esc(e.ko)}</div>` : ''}
       <div class="acts"><button class="icon-btn sm" data-say="${i}" aria-label="듣기">${ICON.play}</button><button class="btn sm" data-say-slow="${i}">천천히</button></div>
-    </div>${sugs}</div>`;
+    </div>${sugs}${e.fbPending ? '<div class="sugs-lab">고칠 점·대답 후보 정리하는 중…</div>' : ''}</div>`;
   }
   const f = e.fb;
   let fb = '';
-  if (f && f.status === 'good') fb = `<div class="fb good">✓ 완벽해!${f.note ? ` ${esc(f.note)}` : ''}</div>`;
+  if (f && f.status === 'good') {
+    // 한글 발음으로 맞게 말했으면 일본어로 어떻게 쓰는지도 보여 준다
+    const written = f.p && /[가-힣]/.test(e.text)
+      ? `<div class="fb-say">일본어로 쓰면 <span class="ja" lang="ja">「${rubyHTML(f.p.segs)}」</span></div><div class="pr">${esc(f.p.pron)}</div>` : '';
+    fb = `<div class="fb good">✓ 완벽해!${f.note ? ` ${esc(f.note)}` : ''}${written}</div>`;
+  }
   else if (f && f.p) {
     const words = (f.words || []).map((w, j) => `<button class="fb-word" data-word="${i}.${j}">일본어로 <b>'${esc(w.ko)}'</b>${topicJosa(w.ko)} <span class="jp" lang="ja">${rubyHTML(w.segs)}</span><span class="pr">(${esc(w.pron)})</span>${copula(w.pron)}.</button>`).join('');
     fb = `<div class="fb">
@@ -1548,12 +1911,16 @@ function renderChat(scroll = true) {
   if (!talk.log.length && !talk.busy) {
     chat.innerHTML = `<div class="empty">
       <p>장면을 고르고 시작하면 ゆき가 먼저 말을 걸어요.<br>마이크를 누르고 일본어로 대답하세요. 모르는 단어가 있으면 <b>섞어서</b> 버튼을 누르고<br>그 부분만 한국어로 말해도 돼요. 일본어로 뭐라고 하는지 알려 줘요.</p>
-      <button class="btn primary" data-talk="start"${apiKey ? '' : ' disabled'}>${ICON.chat} 대화 시작</button></div>`;
+      <button class="btn primary" data-talk="start"${engineReady() ? '' : ' disabled'}>${ICON.chat} 대화 시작</button></div>`;
     return;
   }
   const lastAi = talk.log.map(e => e.who).lastIndexOf('ai');
+  const p = talk.busy && talk.pending;
   chat.innerHTML = talk.log.map((e, i) => entryHTML(e, i, i === lastAi && i === talk.log.length - 1 && !talk.busy)).join('')
-    + (talk.busy ? '<div class="msg ai"><div class="who">ゆき</div><div class="bubble typing" aria-label="입력 중"><span></span><span></span><span></span></div></div>' : '');
+    + (p ? `<div class="msg ai"><div class="who">ゆき</div><div class="bubble">
+        <div class="ja" lang="ja">${rubyHTML(p.segs)}</div><div class="pr">${esc(p.pron)}</div>${p.ko ? `<div class="ko">${esc(p.ko)}</div>` : ''}
+        </div></div>`
+      : talk.busy ? '<div class="msg ai"><div class="who">ゆき</div><div class="bubble typing" aria-label="입력 중"><span></span><span></span><span></span></div></div>' : '');
   if (scroll) $('#composer')?.scrollIntoView({ block: 'end', behavior: 'smooth' });
 }
 
@@ -1586,6 +1953,7 @@ function onTalkClick(e) {
   const ds = t.dataset, entry = i => talk.log[+i];
   if (ds.talk === 'start') startTalk();
   else if (ds.talk === 'retry') { talk.log = talk.log.filter(x => x.who !== 'err'); send(); }
+  else if (ds.talk === 'ollama-check') checkOllama();
   else if (ds.say != null) speak(entry(ds.say).text, { btn: t });
   else if (ds.saySlow != null) speak(entry(ds.saySlow).text, { slow: true, btn: t });
   else if (ds.sug != null) { const [i, j] = ds.sug.split('.'); speak(entry(i).sugs[+j].text); }
@@ -1597,6 +1965,7 @@ function onTalkClick(e) {
   else if (t.id === 'talk-type') { talk.typing = !talk.typing; $('#talk-form').hidden = !talk.typing; if (talk.typing) $('#talk-input').focus(); }
   else if (t.id === 'talk-trans') { prefs.talkTrans = prefs.talkTrans === false; store.save(); applyPrefs(); t.setAttribute('aria-pressed', prefs.talkTrans); }
   else if (t.id === 'talk-auto') { prefs.talkAuto = prefs.talkAuto === false; store.save(); t.setAttribute('aria-pressed', prefs.talkAuto); }
+  else if (t.id === 'talk-hands') { prefs.talkHands = prefs.talkHands === false; store.save(); t.setAttribute('aria-pressed', prefs.talkHands); }
   else if (t.id === 'talk-key-clear') {
     apiKey = '';
     try { localStorage.removeItem(KEY_STORE); } catch (err) {}
@@ -1620,11 +1989,14 @@ $('#lesson').addEventListener('submit', e => {
   }
 });
 $('#lesson').addEventListener('change', e => {
-  const key = { 'talk-scene': 'talkScene', 'talk-level': 'talkLevel', 'talk-model': 'talkModel' }[e.target.id];
+  const key = { 'talk-scene': 'talkScene', 'talk-level': 'talkLevel', 'talk-model': 'talkModel', 'talk-engine': 'talkEngine', 'ollama-model': 'ollamaModel' }[e.target.id];
   if (!key) return;
   prefs[key] = e.target.value;
   store.save();
-  if (key !== 'talkModel' && talk.messages.length) toast('새 대화부터 적용돼요.');
+  // 엔진·모델은 진행 중인 대화에도 다음 턴부터 바로 적용된다
+  if (key === 'talkEngine') renderTalk();
+  else if (key === 'ollamaModel') warmOllama();
+  else if ((key === 'talkScene' || key === 'talkLevel') && talk.messages.length) toast('새 대화부터 적용돼요.');
 });
 
 // ----- 이벤트 -----
@@ -1716,6 +2088,8 @@ if (!SR || !window.isSecureContext) {
   b.hidden = false;
   b.textContent = !window.isSecureContext
     ? '마이크는 https 주소에서만 쓸 수 있어요. 듣기와 읽기는 그대로 쓸 수 있어요.'
+    : IS_BRAVE
+    ? 'Brave는 음성 인식을 막아 두어서 마이크 채점이 동작하지 않아요. Safari나 Chrome으로 열어 주세요. 듣기와 읽기는 그대로 쓸 수 있어요.'
     : '이 브라우저는 음성 인식을 지원하지 않아요. Chrome · Edge · Safari에서 열어 주세요. 듣기와 읽기는 그대로 쓸 수 있어요.';
 }
 if ('speechSynthesis' in window) {
