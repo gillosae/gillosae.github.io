@@ -235,8 +235,13 @@
   .btn.on { border-color:var(--accent); color:var(--accent); }
   .fb { margin-top:8px; width:100%; text-align:left; border-radius:14px; padding:10px 14px; font-size:.88rem; border:1px solid var(--line); background:var(--panel); }
   .fb.good { background:var(--ok-soft); color:var(--ok); border-color:transparent; }
-  .fb .lab { font-size:.74rem; font-weight:700; letter-spacing:.04em; color:var(--accent); }
-  .fb .fb-note { color:var(--ink2); margin-top:2px; }
+  .fb-word { display:block; width:100%; text-align:left; padding:3px 0; color:var(--ink); line-height:1.9; }
+  .fb-word .jp { font-size:1.08rem; }
+  .fb-word .pr { margin-left:2px; }
+  .fb-word:hover .jp { color:var(--accent); }
+  .fb-say { margin-top:4px; color:var(--ink); }
+  .fb-say .ja { font-size:1.15rem; }
+  .fb .fb-note { color:var(--ink2); margin-top:4px; }
   .fb .heard { font-size:.8rem; color:var(--ink3); margin-top:4px; }
   .sugs { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
   .sugs-lab { font-size:.74rem; color:var(--ink3); margin-left:6px; }
@@ -1222,17 +1227,25 @@ How to talk
 - Stay in the scenario given in the first message; if you play a role (staff, passer-by), stay in it.
 - React to what the learner actually said before moving on, the way a friend would.
 
+What the learner's turn looks like
+- Learners often mix Korean and Japanese: when they don't know a Japanese word they say it in Korean (for example 「わたしは 어제 ともだちと 영화を みました」). That is expected and good; never scold it.
+- Turns from the Japanese recognizer may show Korean words as odd kana or katakana that make no sense in Japanese; treat those as the Korean words they sound like.
+- Turns from the Korean recognizer ("mixed" button) show Korean words normally and Japanese parts as Hangul phonetic spelling: 와타시와 = 私は, 데스 = です, 마시타 = ました, 토 = と, 오 = を. Reconstruct what they meant from both.
+- Speech recognition also makes ordinary mistakes: ignore kanji-versus-kana choices, missing punctuation and spacing, and sound-alike words that don't fit. Judge only grammar, particles, conjugation, word choice and naturalness.
+
 Feedback on the learner's last utterance ("feedback")
-- The text comes from speech recognition: ignore kanji-versus-kana choices, missing punctuation and spacing, and words that look like recognition errors (a sound-alike word that doesn't fit). Judge only grammar, particles, conjugation, word choice and naturalness. Typed text gets the same treatment.
-- "none": there is no learner utterance yet (the opening turn). "corrected" and "note_ko" are empty.
-- "good": understandable and natural. "corrected" is empty; "note_ko" is at most one short, specific Korean sentence of praise, or empty.
-- "fix": something was wrong or unnatural. "corrected" is the most natural way to say what they meant, staying as close to their words as possible; "note_ko" is one or two short Korean sentences saying what changed and why.
-- "translate": the learner wrote in Korean because they didn't know how to say it. "corrected" is one simple Japanese sentence for what they meant; "note_ko" names the key word or pattern in Korean. "reply" then only invites them to try saying it (for example 言[い]って みて ください。) and does not move the conversation on; "suggestions" is empty.
+- "note_ko" is written in casual, warm Korean 반말, like a friendly tutor-friend (…야, …해, …겠지?), one or two short sentences. The page itself prints the "일본어로 '…'는 …야." lines from "words" and the "「…」라고 말했으면 더 좋았겠지?" line from "corrected", so don't repeat those in "note_ko"; use it only for an extra tip (why a particle or conjugation changes), or leave it empty.
+- "none": no learner utterance yet (the opening turn). "words", "corrected" and "note_ko" are empty.
+- "good": all Japanese, understandable and natural. "words" and "corrected" are empty; "note_ko" is short, specific praise, or empty.
+- "fix": all Japanese, but something is wrong or unnatural. "words" is empty; "corrected" is the most natural way to say what they meant, staying as close to their words as possible; "note_ko" says what changed and why.
+- "mixed": part Korean, part Japanese. "words" lists each Korean word or phrase they used with its Japanese ("ko" is the Korean exactly as they meant it, without particles; "ja" is the Japanese word in markup, in the form that fits this sentence). "corrected" is the whole sentence in natural Japanese, keeping their Japanese parts where they were right. "reply" responds to what they meant and keeps the conversation going.
+- "translate": entirely Korean (they didn't know how to start). "words" holds the key words; "corrected" is one simple Japanese sentence for what they meant; "reply" only invites them to try saying it (for example 言[い]って みて ください。) without moving the conversation on, and "suggestions" is empty.
 - If you can't understand the utterance at all, use "fix" with your best guess, or ask again in "reply".
+- Example: the Korean recognizer gives 「와타시와 어제 토모다치토 영화오 미마시타」 → status "mixed", words [{"ko":"어제","ja":"昨日[きのう]"},{"ko":"영화","ja":"映画[えいが]"}], corrected "私[わたし]^は 昨日[きのう] 友達[ともだち]と 映画[えいが]を 見[み]ました。", note_ko "", and reply asks something about the movie.
 
 "reply_ko" is a natural Korean translation of "reply". "suggestions" holds two or three short, different answers the learner could say next (for example one agreeing, one declining or offering an alternative, one adding a detail), each using patterns they know, with "ko" giving the Korean meaning.
 
-Japanese markup for "reply", "corrected" and every suggestion "ja"
+Japanese markup for "reply", "corrected", every "words" "ja" and every suggestion "ja"
 - Follow every run of kanji with its reading in hiragana in square brackets: 学生[がくせい], 行[い]きます, 一緒[いっしょ]に. Only kanji get brackets; never bracket kana or katakana.
 - Write the topic particle は as ^は and the direction particle へ as ^へ: 私[わたし]^は, 日本[にほん]^へ. は inside a word stays as is (はい, はじめまして), but the greeting is こんにち^は.
 - Put a half-width space between phrases (文節) so a Korean pronunciation guide can be generated: 私[わたし]^は 韓国人[かんこくじん]です。
@@ -1247,11 +1260,20 @@ const TALK_SCHEMA = {
     feedback: {
       type: 'object',
       properties: {
-        status: { type: 'string', enum: ['none', 'good', 'fix', 'translate'] },
+        status: { type: 'string', enum: ['none', 'good', 'fix', 'mixed', 'translate'] },
+        words: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: { ko: { type: 'string' }, ja: { type: 'string' } },
+            required: ['ko', 'ja'],
+            additionalProperties: false,
+          },
+        },
         corrected: { type: 'string' },
         note_ko: { type: 'string' },
       },
-      required: ['status', 'corrected', 'note_ko'],
+      required: ['status', 'words', 'corrected', 'note_ko'],
       additionalProperties: false,
     },
     reply: { type: 'string' },
@@ -1323,8 +1345,14 @@ async function send() {
       talk.messages.push({ role: 'assistant', content: res.content });
       const me = talk.log[talk.log.length - 1];
       const fb = out.feedback || {};
-      if (me && me.who === 'me' && (fb.status === 'good' || ((fb.status === 'fix' || fb.status === 'translate') && str(fb.corrected)))) {
-        me.fb = { status: fb.status, note: str(fb.note_ko), p: str(fb.corrected) ? prep({ j: str(fb.corrected) }) : null };
+      if (me && me.who === 'me' && (fb.status === 'good' || (['fix', 'mixed', 'translate'].includes(fb.status) && str(fb.corrected)))) {
+        me.fb = {
+          status: fb.status,
+          note: str(fb.note_ko),
+          p: str(fb.corrected) ? prep({ j: str(fb.corrected) }) : null,
+          words: (Array.isArray(fb.words) ? fb.words : []).filter(w => w && str(w.ko) && str(w.ja)).slice(0, 6)
+            .map(w => Object.assign(prep({ j: w.ja }), { ko: w.ko.trim() })),
+        };
       }
       const ai = prep({ j: str(out.reply) });
       ai.who = 'ai';
@@ -1358,16 +1386,16 @@ function startTalk() {
   send();
 }
 
+// via: 'ja' 일본어 인식기, 'mix' 한국어 인식기(섞어 말하기), 'type' 직접 입력
 function userSay(text, via) {
   text = text.trim();
   if (!text || talk.busy || !talk.messages.length) return;
-  const ko = /[가-힣]/.test(text);
-  talk.log.push({ who: 'me', text, ko, via });
+  talk.log.push({ who: 'me', text, via });
   talk.messages.push({
     role: 'user',
-    content: ko ? `The learner asked in Korean how to say this (feedback.status must be "translate"): 「${text}」`
-      : via === 'voice' ? `The learner said (speech recognition, Japanese): 「${text}」`
-      : `The learner typed (Japanese): 「${text}」`,
+    content: via === 'mix' ? `The learner spoke, maybe mixing Korean and Japanese (Korean speech recognizer, so Japanese parts appear in Hangul phonetic spelling): 「${text}」`
+      : via === 'ja' ? `The learner said (Japanese speech recognizer): 「${text}」`
+      : `The learner typed (may mix Korean and Japanese): 「${text}」`,
   });
   send();
 }
@@ -1391,7 +1419,7 @@ function talkListen(lang) {
         $('#talk-live').textContent = SR_ERR[error] || SR_ERR['no-speech'];
         return;
       }
-      userSay(transcripts[0], 'voice');
+      userSay(transcripts[0], lang === 'ko' ? 'mix' : 'ja');
     },
   });
 }
@@ -1459,12 +1487,12 @@ function renderTalk() {
     <div class="composer" id="composer">
       <div class="live" id="talk-live"></div>
       <div class="comp-row">
-        <button class="side-btn" id="talk-ko"><span class="icon-btn">${ICON.mic}</span>한국어로</button>
+        <button class="side-btn" id="talk-ko" aria-label="한국어와 일본어 섞어서 말하기"><span class="icon-btn">${ICON.mic}</span>섞어서</button>
         <button class="mic talk" id="talk-mic"></button>
         <button class="side-btn" id="talk-type"><span class="icon-btn">${ICON.keyboard}</span>입력</button>
       </div>
       <form class="typebox" id="talk-form"${talk.typing || !SR ? '' : ' hidden'}>
-        <input id="talk-input" placeholder="일본어로 입력 (한국어로 쓰면 표현을 알려 줘요)" autocomplete="off" aria-label="메시지 입력">
+        <input id="talk-input" placeholder="일본어로 입력 (모르는 말은 한국어로 섞어도 돼요)" autocomplete="off" aria-label="메시지 입력">
         <button class="btn primary">보내기</button>
       </form>
     </div>`;
@@ -1488,11 +1516,12 @@ function entryHTML(e, i, last) {
   }
   const f = e.fb;
   let fb = '';
-  if (f && f.status === 'good') fb = `<div class="fb good">✓ 자연스러워요${f.note ? ` · ${esc(f.note)}` : ''}</div>`;
+  if (f && f.status === 'good') fb = `<div class="fb good">✓ 완벽해!${f.note ? ` ${esc(f.note)}` : ''}</div>`;
   else if (f && f.p) {
+    const words = (f.words || []).map((w, j) => `<button class="fb-word" data-word="${i}.${j}">일본어로 <b>'${esc(w.ko)}'</b>${topicJosa(w.ko)} <span class="jp" lang="ja">${rubyHTML(w.segs)}</span><span class="pr">(${esc(w.pron)})</span>${copula(w.pron)}.</button>`).join('');
     fb = `<div class="fb">
-      <div class="lab">${f.status === 'translate' ? '일본어로는 이렇게' : '더 자연스럽게'}</div>
-      <div class="ja" lang="ja">${rubyHTML(f.p.segs, f.status2)}</div>
+      ${words}
+      <div class="fb-say"><span class="ja" lang="ja">「${rubyHTML(f.p.segs, f.status2)}」</span>${f.status === 'translate' ? '라고 하면 돼.' : '라고 말했으면 더 좋았겠지?'}</div>
       <div class="pr">${esc(f.p.pron)}</div>
       ${f.note ? `<div class="fb-note">${esc(f.note)}</div>` : ''}
       <div class="acts">
@@ -1503,16 +1532,22 @@ function entryHTML(e, i, last) {
       ${e.tryMsg ? `<div class="heard">${esc(e.tryMsg)}</div>` : ''}
     </div>`;
   }
-  return `<div class="msg me"><div class="who">나${e.ko ? ' · 한국어로 질문' : e.via === 'voice' ? ' · 음성' : ''}</div>
-    <div class="bubble"${e.ko ? '' : ' lang="ja"'}>${esc(e.text)}</div>${fb}</div>`;
+  const hangul = /[가-힣]/.test(e.text);
+  return `<div class="msg me"><div class="who">나${e.via === 'mix' ? ' · 섞어서' : e.via === 'ja' ? ' · 음성' : ''}</div>
+    <div class="bubble"${hangul ? '' : ' lang="ja"'}>${esc(e.text)}</div>${fb}</div>`;
 }
+
+// '어제'는 / '학생'은, 昨日(키노-)야 / 本(혼)이야
+const hasFinal = s => { const x = lastSyl(s); return x >= 0 && x % 28 !== 0; };
+const topicJosa = w => (hasFinal(w) ? '은' : '는');
+const copula = pron => (hasFinal(pron) ? '이야' : '야');
 
 function renderChat(scroll = true) {
   const chat = $('#chat');
   if (!chat) return;
   if (!talk.log.length && !talk.busy) {
     chat.innerHTML = `<div class="empty">
-      <p>장면을 고르고 시작하면 ゆき가 먼저 말을 걸어요.<br>마이크를 누르고 일본어로 대답하세요. 막히면 <b>한국어로</b> 버튼으로 물어보면 돼요.</p>
+      <p>장면을 고르고 시작하면 ゆき가 먼저 말을 걸어요.<br>마이크를 누르고 일본어로 대답하세요. 모르는 단어가 있으면 <b>섞어서</b> 버튼을 누르고<br>그 부분만 한국어로 말해도 돼요. 일본어로 뭐라고 하는지 알려 줘요.</p>
       <button class="btn primary" data-talk="start"${apiKey ? '' : ' disabled'}>${ICON.chat} 대화 시작</button></div>`;
     return;
   }
@@ -1541,7 +1576,7 @@ function setComposer() {
   const live = $('#talk-live');
   if (talk.busy) { live.className = 'live'; live.textContent = 'ゆき가 생각하는 중…'; }
   else if (talk.listening === 'ja') { live.className = 'live'; live.textContent = '일본어로 말해 보세요…'; }
-  else if (talk.listening === 'ko') { live.className = 'live'; live.textContent = '하고 싶은 말을 한국어로 말해 보세요…'; }
+  else if (talk.listening === 'ko') { live.className = 'live'; live.textContent = '한국어·일본어 섞어서 말해 보세요…'; }
   else if (!live.classList.contains('err')) live.textContent = !talk.messages.length ? '' : SR ? '마이크를 눌러 대답하세요 (Space)' : '아래에 입력해서 대답하세요';
 }
 
@@ -1555,6 +1590,7 @@ function onTalkClick(e) {
   else if (ds.saySlow != null) speak(entry(ds.saySlow).text, { slow: true, btn: t });
   else if (ds.sug != null) { const [i, j] = ds.sug.split('.'); speak(entry(i).sugs[+j].text); }
   else if (ds.fbSay != null) speak(entry(ds.fbSay).fb.p.text, { btn: t });
+  else if (ds.word != null) { const [i, j] = ds.word.split('.'); speak(entry(i).fb.words[+j].text); }
   else if (ds.fbTry != null) tryCorrection(+ds.fbTry);
   else if (t.id === 'talk-mic') talkListen('ja');
   else if (t.id === 'talk-ko') talkListen('ko');
