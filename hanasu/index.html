@@ -196,6 +196,71 @@
     z-index:20; background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:12px; font-size:.9rem;
     box-shadow:var(--shadow); max-width:calc(100% - 32px); }
 
+  /* 프리토킹 */
+  .unit-btn.talk .n { color:var(--accent); display:grid; }
+  .unit-btn.talk .n svg { width:18px; height:18px; }
+  .keybox { margin-top:18px; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
+  .keybox form { display:flex; gap:8px; margin:10px 0 8px; }
+  .keybox input, .typebox input { flex:1; min-width:0; font:inherit; font-size:16px; padding:10px 12px; border-radius:10px;
+    border:1px solid var(--line); background:var(--bg); color:var(--ink); }
+  .fine { font-size:.8rem; color:var(--ink3); }
+  .talk-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:18px; }
+  .field { display:inline-flex; align-items:center; gap:6px; font-size:.82rem; color:var(--ink2); border:1px solid var(--line);
+    background:var(--panel); border-radius:10px; padding:5px 10px; }
+  .field select { font:inherit; color:var(--ink); background:transparent; border:0; cursor:pointer; max-width:150px; }
+  .field select option { color:#000; }
+  .chat { display:flex; flex-direction:column; gap:14px; margin-top:20px; min-height:200px; }
+  .empty { text-align:center; color:var(--ink2); padding:36px 16px; border:1px dashed var(--line); border-radius:16px;
+    display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .msg { max-width:min(580px, 92%); display:flex; flex-direction:column; }
+  .msg.ai { align-self:flex-start; }
+  .msg.me { align-self:flex-end; align-items:flex-end; }
+  .msg.sys { align-self:center; }
+  .who { font-size:.74rem; color:var(--ink3); margin:0 6px 4px; }
+  .bubble { padding:12px 16px; border-radius:18px; border:1px solid var(--line); background:var(--panel); }
+  .msg.ai .bubble { border-top-left-radius:6px; }
+  .msg.me .bubble { background:var(--accent-soft); border-color:transparent; border-top-right-radius:6px; font-size:1.05rem; }
+  .msg.me .bubble[lang="ja"] { font-family:var(--jp); }
+  .bubble .ja, .fb .ja { font-family:var(--jp); font-size:1.2rem; line-height:1.9; }
+  .bubble .pr, .fb .pr { color:var(--accent); font-size:.85rem; }
+  .bubble .ko { color:var(--ink2); font-size:.88rem; margin-top:2px; }
+  body.no-trans .chat .ko { display:none; }
+  .bubble.err { background:var(--bad-soft); border-color:transparent; color:var(--bad); font-size:.9rem; }
+  .bubble.err .link { color:inherit; margin-left:6px; }
+  .acts { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px; }
+  .icon-btn.sm { width:34px; height:34px; }
+  .icon-btn.sm svg { width:15px; height:15px; }
+  .btn.sm { padding:6px 12px; font-size:.84rem; border-radius:10px; }
+  .btn.sm svg { width:15px; height:15px; }
+  .btn.on { border-color:var(--accent); color:var(--accent); }
+  .fb { margin-top:8px; width:100%; text-align:left; border-radius:14px; padding:10px 14px; font-size:.88rem; border:1px solid var(--line); background:var(--panel); }
+  .fb.good { background:var(--ok-soft); color:var(--ok); border-color:transparent; }
+  .fb .lab { font-size:.74rem; font-weight:700; letter-spacing:.04em; color:var(--accent); }
+  .fb .fb-note { color:var(--ink2); margin-top:2px; }
+  .fb .heard { font-size:.8rem; color:var(--ink3); margin-top:4px; }
+  .sugs { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .sugs-lab { font-size:.74rem; color:var(--ink3); margin-left:6px; }
+  .sug { text-align:left; border:1px dashed var(--line); border-radius:12px; padding:7px 12px; display:flex; flex-direction:column; }
+  .sug:hover { border-color:var(--accent); }
+  .sug .ja { font-family:var(--jp); font-size:1rem; line-height:1.8; }
+  .sug .ko { color:var(--ink3); font-size:.78rem; }
+  .typing { display:flex; gap:5px; padding:16px 18px; }
+  .typing span { width:7px; height:7px; border-radius:50%; background:var(--ink3); animation:blink 1.2s infinite ease-in-out; }
+  .typing span:nth-child(2) { animation-delay:.15s; } .typing span:nth-child(3) { animation-delay:.3s; }
+  @keyframes blink { 0%, 80%, 100% { opacity:.25; } 40% { opacity:1; } }
+  .composer { position:sticky; bottom:0; z-index:2; margin-top:8px; padding:18px 0 max(14px, env(safe-area-inset-bottom));
+    background:linear-gradient(to bottom, transparent, var(--bg) 26%); display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .comp-row { display:flex; align-items:center; gap:18px; }
+  .mic.talk { width:72px; height:72px; }
+  .mic.talk svg { width:28px; height:28px; }
+  .side-btn { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:.74rem; color:var(--ink2); width:62px; }
+  .side-btn .icon-btn { width:44px; height:44px; }
+  .side-btn.on .icon-btn { background:var(--accent); color:var(--accent-ink); }
+  .side-btn:disabled { opacity:.4; }
+  .live { min-height:1.5em; max-width:560px; font-family:var(--jp); color:var(--ink2); text-align:center; font-size:.95rem; }
+  .live.err { font-family:var(--kr); color:var(--bad); font-size:.85rem; }
+  .typebox { display:flex; gap:8px; width:100%; max-width:560px; }
+
   @media (max-width: 760px) {
     .wrap { padding:20px 16px 48px; }
     .brand h1 { font-size:2rem; }
@@ -218,7 +283,7 @@
     .keys { display:none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .mic.on::before, .mic.on::after { animation:none; opacity:.6; }
+    .mic.on::before, .mic.on::after, .typing span { animation:none; opacity:.6; }
     .bar i, .ring .val { transition:none; }
   }
 </style>
@@ -256,6 +321,7 @@
   <footer>
     <p>가나가 아직 낯설다면 <a href="/taberu/">가나 훈련</a>부터 해 보세요.</p>
     <p>음성 인식은 브라우저 기본 기능을 써요. Chrome은 Google, Safari는 Apple 서버로 음성이 전송돼요. 진행 기록은 이 브라우저에만 저장돼요.</p>
+    <p>프리토킹 대화 내용은 입력한 API 키로 Anthropic API에 직접 전송돼요.</p>
   </footer>
 </div>
 
@@ -774,13 +840,17 @@ function grade(p, transcripts) {
   return best;
 }
 
-UNITS.forEach((u, ui) => u.phrases.forEach((p, pi) => {
-  Object.assign(p, { id: `${u.id}.${pi}`, ui, pi, segs: parse(p.j) });
+// { j: 표기, alt?: [...] } → 화면·발음·채점에 필요한 것을 채운다
+function prep(p) {
+  p.segs = parse(p.j);
   p.text = p.segs.map(s => (s.space ? '' : s.base)).join('');
   p.pron = toHangul(p.segs);
   p.graph = buildGraph(p.segs);
   p.altGraphs = (p.alt || []).map(a => buildGraph(parse(a)));
-}));
+  return p;
+}
+
+UNITS.forEach((u, ui) => u.phrases.forEach((p, pi) => prep(Object.assign(p, { id: `${u.id}.${pi}`, ui, pi }))));
 const ALL = UNITS.flatMap(u => u.phrases);
 
 // ---------- UI ----------
@@ -790,6 +860,8 @@ const ICON = {
   mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>',
   stop: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="2.5"/></svg>',
   close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.3 7.6L3.5 21l1.4-5A8.5 8.5 0 1 1 21 12z"/></svg>',
+  keyboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M7.5 14h9"/></svg>',
 };
 
 const store = (() => {
@@ -857,10 +929,10 @@ const SR_ERR = {
   'language-not-supported': '이 브라우저는 일본어 음성 인식을 지원하지 않아요.',
 };
 let rec = null;
-function listen({ onInterim, onDone }) {
-  speechSynthesis.cancel();
+function listen({ lang = 'ja-JP', onInterim, onDone }) {
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
   const r = new SR();
-  r.lang = 'ja-JP';
+  r.lang = lang;
   r.interimResults = true;
   r.maxAlternatives = 5;
   r.continuous = false;
@@ -882,11 +954,15 @@ function listen({ onInterim, onDone }) {
 
 // ----- 단원 목록 -----
 let cur = Math.min(prefs.unit || 0, UNITS.length - 1);
+let view = prefs.view === 'talk' ? 'talk' : 'lesson';
 
 function renderNav() {
-  $('#units').innerHTML = UNITS.map((u, ui) => {
+  $('#units').innerHTML = `<button class="unit-btn talk" data-view="talk"${view === 'talk' ? ' aria-current="true"' : ''}>
+      <span class="n">${ICON.chat}</span>
+      <span class="t">프리토킹<span class="s">AI와 자유 대화</span></span><span class="p"></span></button>` +
+  UNITS.map((u, ui) => {
     const done = u.phrases.filter(passed).length, all = u.phrases.length;
-    return `<button class="unit-btn${done === all ? ' done' : ''}" data-ui="${ui}"${ui === cur ? ' aria-current="true"' : ''}>
+    return `<button class="unit-btn${done === all ? ' done' : ''}" data-ui="${ui}"${view === 'lesson' && ui === cur ? ' aria-current="true"' : ''}>
       <span class="n">${pad(ui + 1)}</span>
       <span class="t">${esc(u.title)}<span class="s">${esc(u.ja)}</span></span>
       <span class="p">${done === all ? '✓' : `${done}/${all}`}</span></button>`;
@@ -933,12 +1009,23 @@ function renderLesson() {
     <ol class="phrases">${u.phrases.map(phraseRow).join('')}</ol>`;
 }
 
+const renderMain = () => (view === 'talk' ? renderTalk() : renderLesson());
+
 function selectUnit(ui) {
   cur = ui;
+  view = prefs.view = 'lesson';
   prefs.unit = ui;
   store.save();
   renderNav();
   renderLesson();
+  $('.layout').scrollIntoView({ block: 'start', behavior: 'smooth' });
+}
+
+function selectTalk() {
+  view = prefs.view = 'talk';
+  store.save();
+  renderNav();
+  renderTalk();
   $('.layout').scrollIntoView({ block: 'start', behavior: 'smooth' });
 }
 
@@ -963,7 +1050,7 @@ function closeDrill() {
   $('#drill').hidden = true;
   document.body.classList.remove('drilling');
   renderNav();
-  renderLesson();
+  renderMain();
 }
 
 function paintAnswer(status) {
@@ -1106,14 +1193,414 @@ function startReview() {
   openDrill({ items: tried, mode: 'shadow', title: '약한 문장 복습' });
 }
 
+// ----- 프리토킹 (Claude) -----
+const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.135.0/+esm';
+const KEY_STORE = 'hanasu.apikey';
+const MODELS = [
+  ['claude-opus-5-5', 'Opus 5.5 · 정확'],
+  ['claude-sonnet-5-5', 'Sonnet 5.5 · 균형'],
+  ['claude-haiku-5-5', 'Haiku 5.5 · 빠름'],
+];
+const SCENES = [
+  ['free', '자유 주제', 'A relaxed chat between new friends about everyday things. Pick a light topic yourself.'],
+  ['jiko', '자기소개', 'Two people meeting for the first time at a language exchange in Tokyo, introducing themselves.'],
+  ['cafe', '카페 주문', 'You are a staff member at a café in Tokyo. The learner is a customer ordering.'],
+  ['michi', '길 묻기', 'You are a local on a street in Shinjuku. The learner asks you for directions.'],
+  ['weekend', '주말 이야기', 'Two friends talking on Monday about last weekend and the next one.'],
+  ['food', '음식 이야기', 'Friends talking about favorite foods and Japanese food the learner wants to try.'],
+  ['travel', '여행 계획', 'The learner is planning a trip to Japan. Ask where, when, with whom, and what they want to do.'],
+  ['hotel', '호텔 체크인', 'You are a front-desk clerk at a hotel in Osaka. The learner checks in and asks questions.'],
+];
+const LEVELS = [['basic', '초급 · 전체 단원'], ['intro', '입문 · 1~4단원']];
+
+// 대화마다 바뀌는 장면·난이도는 첫 메시지로 보내고 system은 고정해 캐시가 맞게 한다
+const TALK_SYSTEM = `You are ゆき, a friendly Japanese conversation partner inside "はなす", a speaking-practice page for Korean adults who just finished a short Japanese crash course. The learner talks to you by voice and their speech is transcribed by the browser's speech recognizer. Your job is to keep a natural, encouraging conversation going in very simple Japanese so the learner gets as many chances to speak as possible, and to give short, useful feedback on each thing they say.
+
+How to talk
+- Polite です/ます style only. Use JLPT N5-level words and the grammar the learner has studied (listed at the end). At level 입문, stay within the unit 1–4 patterns; at level 초급 you may use every unit.
+- Keep "reply" to one or two short sentences and end it with one easy question or prompt the learner can answer with patterns they know. Never ask two questions at once.
+- Stay in the scenario given in the first message; if you play a role (staff, passer-by), stay in it.
+- React to what the learner actually said before moving on, the way a friend would.
+
+Feedback on the learner's last utterance ("feedback")
+- The text comes from speech recognition: ignore kanji-versus-kana choices, missing punctuation and spacing, and words that look like recognition errors (a sound-alike word that doesn't fit). Judge only grammar, particles, conjugation, word choice and naturalness. Typed text gets the same treatment.
+- "none": there is no learner utterance yet (the opening turn). "corrected" and "note_ko" are empty.
+- "good": understandable and natural. "corrected" is empty; "note_ko" is at most one short, specific Korean sentence of praise, or empty.
+- "fix": something was wrong or unnatural. "corrected" is the most natural way to say what they meant, staying as close to their words as possible; "note_ko" is one or two short Korean sentences saying what changed and why.
+- "translate": the learner wrote in Korean because they didn't know how to say it. "corrected" is one simple Japanese sentence for what they meant; "note_ko" names the key word or pattern in Korean. "reply" then only invites them to try saying it (for example 言[い]って みて ください。) and does not move the conversation on; "suggestions" is empty.
+- If you can't understand the utterance at all, use "fix" with your best guess, or ask again in "reply".
+
+"reply_ko" is a natural Korean translation of "reply". "suggestions" holds two or three short, different answers the learner could say next (for example one agreeing, one declining or offering an alternative, one adding a detail), each using patterns they know, with "ko" giving the Korean meaning.
+
+Japanese markup for "reply", "corrected" and every suggestion "ja"
+- Follow every run of kanji with its reading in hiragana in square brackets: 学生[がくせい], 行[い]きます, 一緒[いっしょ]に. Only kanji get brackets; never bracket kana or katakana.
+- Write the topic particle は as ^は and the direction particle へ as ^へ: 私[わたし]^は, 日本[にほん]^へ. は inside a word stays as is (はい, はじめまして), but the greeting is こんにち^は.
+- Put a half-width space between phrases (文節) so a Korean pronunciation guide can be generated: 私[わたし]^は 韓国人[かんこくじん]です。
+- Use Japanese punctuation (、。？). No romaji and no Korean inside Japanese fields.
+
+Patterns the learner has studied:
+${UNITS.map((u, i) => `Unit ${i + 1} ${u.title} (${u.goal}): ${u.phrases.map(p => p.text).join(' / ')}`).join('\n')}`;
+
+const TALK_SCHEMA = {
+  type: 'object',
+  properties: {
+    feedback: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', enum: ['none', 'good', 'fix', 'translate'] },
+        corrected: { type: 'string' },
+        note_ko: { type: 'string' },
+      },
+      required: ['status', 'corrected', 'note_ko'],
+      additionalProperties: false,
+    },
+    reply: { type: 'string' },
+    reply_ko: { type: 'string' },
+    suggestions: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: { ja: { type: 'string' }, ko: { type: 'string' } },
+        required: ['ja', 'ko'],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ['feedback', 'reply', 'reply_ko', 'suggestions'],
+  additionalProperties: false,
+};
+
+const talk = { messages: [], log: [], busy: false, listening: false, typing: false, token: 0 };
+let apiKey = '';
+try { apiKey = localStorage.getItem(KEY_STORE) || ''; } catch (e) {}
+let Anthropic = null;
+
+async function callClaude() {
+  if (!Anthropic) Anthropic = (await import(SDK_URL)).default;
+  const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
+  const model = MODELS.some(([id]) => id === prefs.talkModel) ? prefs.talkModel : MODELS[0][0];
+  const params = {
+    model,
+    max_tokens: 8000,
+    system: TALK_SYSTEM,
+    messages: talk.messages,
+    output_config: { effort: 'low', format: { type: 'json_schema', schema: TALK_SCHEMA } },
+    cache_control: { type: 'ephemeral' },
+  };
+  // 안전 분류기가 거절하면 서버가 다른 모델로 다시 돌린다 (Haiku 5.5는 서버 측 fallback 없음)
+  if (model !== 'claude-haiku-5-5') Object.assign(params, { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' });
+  return client.beta.messages.parse(params);
+}
+
+function errText(e) {
+  if (Anthropic && e instanceof Anthropic.AuthenticationError) return 'API 키가 올바르지 않아요. 키를 지우고 다시 넣어 주세요.';
+  if (Anthropic && e instanceof Anthropic.PermissionDeniedError) return '이 API 키로는 선택한 모델을 쓸 수 없어요. 다른 모델을 골라 보세요.';
+  if (Anthropic && e instanceof Anthropic.RateLimitError) return '요청이 너무 많아요. 잠시 후 다시 시도해 주세요.';
+  if (Anthropic && e instanceof Anthropic.BadRequestError) return `요청이 거부됐어요: ${e.message}`;
+  if (Anthropic && e instanceof Anthropic.APIConnectionError) return '서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요.';
+  if (Anthropic && e instanceof Anthropic.APIError) return `API 오류 (${e.status ?? '?'}): ${e.message}`;
+  if (!Anthropic) return 'Claude SDK를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.';
+  return '응답을 읽지 못했어요. 다시 시도해 주세요.';
+}
+
+const str = v => (typeof v === 'string' ? v : '');
+
+async function send() {
+  const token = talk.token;
+  talk.busy = true;
+  renderChat();
+  setComposer();
+  try {
+    const res = await callClaude();
+    if (token !== talk.token) return;
+    if (res.stop_reason === 'refusal') {
+      talk.messages.pop();
+      talk.log.push({ who: 'err', text: '이 말에는 답할 수 없대요. 다른 말로 해 보세요.' });
+    } else {
+      const out = res.parsed_output;
+      if (!out) throw new Error('no output');
+      // thinking·fallback 블록까지 그대로 돌려줘야 다음 턴에서 대화 기록이 유지된다
+      talk.messages.push({ role: 'assistant', content: res.content });
+      const me = talk.log[talk.log.length - 1];
+      const fb = out.feedback || {};
+      if (me && me.who === 'me' && (fb.status === 'good' || ((fb.status === 'fix' || fb.status === 'translate') && str(fb.corrected)))) {
+        me.fb = { status: fb.status, note: str(fb.note_ko), p: str(fb.corrected) ? prep({ j: str(fb.corrected) }) : null };
+      }
+      const ai = prep({ j: str(out.reply) });
+      ai.who = 'ai';
+      ai.ko = str(out.reply_ko);
+      ai.sugs = (Array.isArray(out.suggestions) ? out.suggestions : [])
+        .filter(s => s && str(s.ja)).slice(0, 3).map(s => Object.assign(prep({ j: s.ja }), { ko: str(s.ko) }));
+      talk.log.push(ai);
+      if (prefs.talkAuto !== false) speak(ai.text);
+    }
+  } catch (e) {
+    if (token !== talk.token) return;
+    talk.log.push({ who: 'err', text: errText(e), retry: true });
+  }
+  talk.busy = false;
+  renderChat();
+  setComposer();
+}
+
+function startTalk() {
+  if (!apiKey) return toast('API 키를 먼저 넣어 주세요.');
+  talk.token++;
+  rec?.abort();
+  const scene = SCENES.find(s => s[0] === prefs.talkScene) || SCENES[0];
+  const level = prefs.talkLevel === 'intro' ? '입문 (use only the unit 1–4 patterns)' : '초급 (all units)';
+  talk.messages = [{
+    role: 'user',
+    content: `Start a new conversation. Scenario: ${scene[2]} Level: ${level}. You speak first: a greeting and one easy question. feedback.status is "none".`,
+  }];
+  talk.log = [];
+  talk.listening = false;
+  send();
+}
+
+function userSay(text, via) {
+  text = text.trim();
+  if (!text || talk.busy || !talk.messages.length) return;
+  const ko = /[가-힣]/.test(text);
+  talk.log.push({ who: 'me', text, ko, via });
+  talk.messages.push({
+    role: 'user',
+    content: ko ? `The learner asked in Korean how to say this (feedback.status must be "translate"): 「${text}」`
+      : via === 'voice' ? `The learner said (speech recognition, Japanese): 「${text}」`
+      : `The learner typed (Japanese): 「${text}」`,
+  });
+  send();
+}
+
+// 일본어/한국어로 듣고 그대로 대화에 보낸다
+function talkListen(lang) {
+  if (!SR || talk.busy || !talk.messages.length) return;
+  if (talk.listening) { rec?.stop(); return; }
+  const token = talk.token;
+  talk.listening = lang;
+  setComposer();
+  listen({
+    lang: lang === 'ko' ? 'ko-KR' : 'ja-JP',
+    onInterim: t => { if (token === talk.token) $('#talk-live').textContent = t; },
+    onDone: ({ transcripts, error }) => {
+      if (token !== talk.token) return;
+      talk.listening = false;
+      setComposer();
+      if (!transcripts.length) {
+        $('#talk-live').classList.add('err');
+        $('#talk-live').textContent = SR_ERR[error] || SR_ERR['no-speech'];
+        return;
+      }
+      userSay(transcripts[0], 'voice');
+    },
+  });
+}
+
+// 고쳐 준 문장을 따라 말하면 기존 채점기로 점수를 매긴다
+function tryCorrection(i) {
+  const e = talk.log[i];
+  if (!SR || talk.busy || !e?.fb?.p) return;
+  if (talk.listening) { rec?.stop(); return; }
+  const token = talk.token;
+  talk.listening = 'fb';
+  e.trying = true;
+  e.tryMsg = '';
+  renderChat(false);
+  setComposer();
+  listen({
+    onInterim: () => {},
+    onDone: ({ transcripts, error }) => {
+      if (token !== talk.token) return;
+      talk.listening = false;
+      e.trying = false;
+      if (transcripts.length) {
+        const r = grade(e.fb.p, transcripts);
+        e.fb.score = Math.round(r.score * 100);
+        e.fb.status2 = r.status;
+        e.tryMsg = `들은 말: ${r.heard}`;
+      } else {
+        e.tryMsg = SR_ERR[error] || SR_ERR['no-speech'];
+      }
+      renderChat(false);
+      setComposer();
+    },
+  });
+}
+
+const optionsHTML = (list, sel) => list.map(([v, label]) => `<option value="${v}"${v === sel ? ' selected' : ''}>${esc(label)}</option>`).join('');
+
+function renderTalk() {
+  const auto = prefs.talkAuto !== false, trans = prefs.talkTrans !== false;
+  $('#lesson').innerHTML = `
+    <div class="unit-head">
+      <div>
+        <div class="eyebrow">FREE TALK · <span class="jp">ゆきと話そう</span></div>
+        <h2>프리토킹</h2>
+        <p class="goal">배운 문형을 섞어서 AI 친구 ゆき와 자유롭게 대화해요. 어색한 말은 바로 고쳐 줘요.</p>
+      </div>
+    </div>
+    ${apiKey ? '' : `
+    <div class="keybox">
+      <b>Anthropic API 키가 필요해요</b>
+      <p class="fine">대화 상대는 Claude예요. 키는 이 브라우저(localStorage)에만 저장되고 api.anthropic.com으로만 직접 전송돼요. 공용 컴퓨터에서는 쓰지 마세요.</p>
+      <form id="key-form"><input type="password" id="key-input" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" aria-label="Anthropic API 키"><button class="btn primary">저장</button></form>
+      <a class="fine" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">API 키 발급받기 →</a>
+    </div>`}
+    <div class="talk-bar">
+      <label class="field">장면 <select id="talk-scene">${optionsHTML(SCENES, prefs.talkScene)}</select></label>
+      <label class="field">난이도 <select id="talk-level">${optionsHTML(LEVELS, prefs.talkLevel)}</select></label>
+      <label class="field">모델 <select id="talk-model">${optionsHTML(MODELS, prefs.talkModel)}</select></label>
+      <button class="chip" id="talk-trans" aria-pressed="${trans}">번역</button>
+      <button class="chip" id="talk-auto" aria-pressed="${auto}">자동 재생</button>
+      ${talk.messages.length ? '<button class="btn sm" data-talk="start">새 대화</button>' : ''}
+      ${apiKey ? '<button class="link" id="talk-key-clear">API 키 지우기</button>' : ''}
+    </div>
+    <div class="chat" id="chat"></div>
+    <div class="composer" id="composer">
+      <div class="live" id="talk-live"></div>
+      <div class="comp-row">
+        <button class="side-btn" id="talk-ko"><span class="icon-btn">${ICON.mic}</span>한국어로</button>
+        <button class="mic talk" id="talk-mic"></button>
+        <button class="side-btn" id="talk-type"><span class="icon-btn">${ICON.keyboard}</span>입력</button>
+      </div>
+      <form class="typebox" id="talk-form"${talk.typing || !SR ? '' : ' hidden'}>
+        <input id="talk-input" placeholder="일본어로 입력 (한국어로 쓰면 표현을 알려 줘요)" autocomplete="off" aria-label="메시지 입력">
+        <button class="btn primary">보내기</button>
+      </form>
+    </div>`;
+  renderChat(false);
+  setComposer();
+}
+
+function entryHTML(e, i, last) {
+  if (e.who === 'err') {
+    return `<div class="msg sys"><div class="bubble err">${esc(e.text)}${e.retry ? '<button class="link" data-talk="retry">다시 시도</button>' : ''}</div></div>`;
+  }
+  if (e.who === 'ai') {
+    const sugs = last && e.sugs.length ? `<div class="sugs"><div class="sugs-lab">이렇게 대답해 볼까요? (누르면 들려줘요)</div>${
+      e.sugs.map((s, j) => `<button class="sug" data-sug="${i}.${j}"><span class="ja" lang="ja">${rubyHTML(s.segs)}</span><span class="pr">${esc(s.pron)}</span><span class="ko">${esc(s.ko)}</span></button>`).join('')}</div>` : '';
+    return `<div class="msg ai"><div class="who">ゆき</div><div class="bubble">
+      <div class="ja" lang="ja">${rubyHTML(e.segs)}</div>
+      <div class="pr">${esc(e.pron)}</div>
+      ${e.ko ? `<div class="ko">${esc(e.ko)}</div>` : ''}
+      <div class="acts"><button class="icon-btn sm" data-say="${i}" aria-label="듣기">${ICON.play}</button><button class="btn sm" data-say-slow="${i}">천천히</button></div>
+    </div>${sugs}</div>`;
+  }
+  const f = e.fb;
+  let fb = '';
+  if (f && f.status === 'good') fb = `<div class="fb good">✓ 자연스러워요${f.note ? ` · ${esc(f.note)}` : ''}</div>`;
+  else if (f && f.p) {
+    fb = `<div class="fb">
+      <div class="lab">${f.status === 'translate' ? '일본어로는 이렇게' : '더 자연스럽게'}</div>
+      <div class="ja" lang="ja">${rubyHTML(f.p.segs, f.status2)}</div>
+      <div class="pr">${esc(f.p.pron)}</div>
+      ${f.note ? `<div class="fb-note">${esc(f.note)}</div>` : ''}
+      <div class="acts">
+        <button class="icon-btn sm" data-fb-say="${i}" aria-label="듣기">${ICON.play}</button>
+        <button class="btn sm${e.trying ? ' on' : ''}" data-fb-try="${i}"${SR ? '' : ' disabled'}>${e.trying ? ICON.stop : ICON.mic} ${e.trying ? '듣는 중' : '따라 말하기'}</button>
+        ${f.score != null ? badge(f.score) : ''}
+      </div>
+      ${e.tryMsg ? `<div class="heard">${esc(e.tryMsg)}</div>` : ''}
+    </div>`;
+  }
+  return `<div class="msg me"><div class="who">나${e.ko ? ' · 한국어로 질문' : e.via === 'voice' ? ' · 음성' : ''}</div>
+    <div class="bubble"${e.ko ? '' : ' lang="ja"'}>${esc(e.text)}</div>${fb}</div>`;
+}
+
+function renderChat(scroll = true) {
+  const chat = $('#chat');
+  if (!chat) return;
+  if (!talk.log.length && !talk.busy) {
+    chat.innerHTML = `<div class="empty">
+      <p>장면을 고르고 시작하면 ゆき가 먼저 말을 걸어요.<br>마이크를 누르고 일본어로 대답하세요. 막히면 <b>한국어로</b> 버튼으로 물어보면 돼요.</p>
+      <button class="btn primary" data-talk="start"${apiKey ? '' : ' disabled'}>${ICON.chat} 대화 시작</button></div>`;
+    return;
+  }
+  const lastAi = talk.log.map(e => e.who).lastIndexOf('ai');
+  chat.innerHTML = talk.log.map((e, i) => entryHTML(e, i, i === lastAi && i === talk.log.length - 1 && !talk.busy)).join('')
+    + (talk.busy ? '<div class="msg ai"><div class="who">ゆき</div><div class="bubble typing" aria-label="입력 중"><span></span><span></span><span></span></div></div>' : '');
+  if (scroll) $('#composer')?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+}
+
+function setComposer() {
+  const mic = $('#talk-mic');
+  if (!mic) return;
+  const ready = !!SR && !talk.busy && talk.messages.length > 0;
+  const on = talk.listening === 'ja';
+  mic.classList.toggle('on', on);
+  mic.innerHTML = on ? ICON.stop : ICON.mic;
+  mic.disabled = !ready || (talk.listening && !on);
+  mic.setAttribute('aria-label', on ? '그만 듣기' : '일본어로 말하기');
+  const ko = $('#talk-ko');
+  ko.classList.toggle('on', talk.listening === 'ko');
+  ko.disabled = !ready || (talk.listening && talk.listening !== 'ko');
+  ko.hidden = !SR;
+  mic.hidden = !SR;
+  $('#talk-type').hidden = !SR;
+  $('#talk-form button').disabled = talk.busy || !talk.messages.length;
+  const live = $('#talk-live');
+  if (talk.busy) { live.className = 'live'; live.textContent = 'ゆき가 생각하는 중…'; }
+  else if (talk.listening === 'ja') { live.className = 'live'; live.textContent = '일본어로 말해 보세요…'; }
+  else if (talk.listening === 'ko') { live.className = 'live'; live.textContent = '하고 싶은 말을 한국어로 말해 보세요…'; }
+  else if (!live.classList.contains('err')) live.textContent = !talk.messages.length ? '' : SR ? '마이크를 눌러 대답하세요 (Space)' : '아래에 입력해서 대답하세요';
+}
+
+function onTalkClick(e) {
+  const t = e.target.closest('button, [data-sug]');
+  if (!t) return;
+  const ds = t.dataset, entry = i => talk.log[+i];
+  if (ds.talk === 'start') startTalk();
+  else if (ds.talk === 'retry') { talk.log = talk.log.filter(x => x.who !== 'err'); send(); }
+  else if (ds.say != null) speak(entry(ds.say).text, { btn: t });
+  else if (ds.saySlow != null) speak(entry(ds.saySlow).text, { slow: true, btn: t });
+  else if (ds.sug != null) { const [i, j] = ds.sug.split('.'); speak(entry(i).sugs[+j].text); }
+  else if (ds.fbSay != null) speak(entry(ds.fbSay).fb.p.text, { btn: t });
+  else if (ds.fbTry != null) tryCorrection(+ds.fbTry);
+  else if (t.id === 'talk-mic') talkListen('ja');
+  else if (t.id === 'talk-ko') talkListen('ko');
+  else if (t.id === 'talk-type') { talk.typing = !talk.typing; $('#talk-form').hidden = !talk.typing; if (talk.typing) $('#talk-input').focus(); }
+  else if (t.id === 'talk-trans') { prefs.talkTrans = prefs.talkTrans === false; store.save(); applyPrefs(); t.setAttribute('aria-pressed', prefs.talkTrans); }
+  else if (t.id === 'talk-auto') { prefs.talkAuto = prefs.talkAuto === false; store.save(); t.setAttribute('aria-pressed', prefs.talkAuto); }
+  else if (t.id === 'talk-key-clear') {
+    apiKey = '';
+    try { localStorage.removeItem(KEY_STORE); } catch (err) {}
+    renderTalk();
+  }
+}
+
+$('#lesson').addEventListener('submit', e => {
+  e.preventDefault();
+  if (e.target.id === 'key-form') {
+    const k = $('#key-input').value.trim();
+    if (!k) return;
+    apiKey = k;
+    try { localStorage.setItem(KEY_STORE, k); } catch (err) { toast('이 브라우저에선 키를 저장할 수 없어서 이번 방문에만 써요.'); }
+    renderTalk();
+  } else if (e.target.id === 'talk-form') {
+    const input = $('#talk-input');
+    if (talk.busy || !talk.messages.length || !input.value.trim()) return;
+    userSay(input.value, 'type');
+    input.value = '';
+  }
+});
+$('#lesson').addEventListener('change', e => {
+  const key = { 'talk-scene': 'talkScene', 'talk-level': 'talkLevel', 'talk-model': 'talkModel' }[e.target.id];
+  if (!key) return;
+  prefs[key] = e.target.value;
+  store.save();
+  if (key !== 'talkModel' && talk.messages.length) toast('새 대화부터 적용돼요.');
+});
+
 // ----- 이벤트 -----
 $('#units').addEventListener('click', e => {
+  if (e.target.closest('[data-view="talk"]')) return selectTalk();
   const b = e.target.closest('[data-ui]');
   if (b) selectUnit(+b.dataset.ui);
 });
 $('#review').addEventListener('click', startReview);
 
 $('#lesson').addEventListener('click', e => {
+  if (view === 'talk') return onTalkClick(e);
   const u = UNITS[cur], start = e.target.closest('[data-start]');
   if (start) {
     const mode = start.dataset.start;
@@ -1145,7 +1632,15 @@ $('#d-summary').addEventListener('click', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if ($('#drill').hidden) return;
+  if ($('#drill').hidden) {
+    const typingField = e.target.closest?.('input, select, textarea, [contenteditable]');
+    if (view === 'talk' && e.code === 'Space' && !typingField && !e.repeat && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      e.preventDefault();
+      document.activeElement?.blur?.();
+      talkListen(talk.listening === 'ko' ? 'ko' : 'ja');
+    }
+    return;
+  }
   if (e.key === 'Escape') return closeDrill();
   if (!$('#d-summary').hidden || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.code === 'Space') {
@@ -1163,6 +1658,7 @@ document.addEventListener('keydown', e => {
 function applyPrefs() {
   document.body.classList.toggle('no-furi', !prefs.furi);
   document.body.classList.toggle('no-pron', !prefs.pron);
+  document.body.classList.toggle('no-trans', prefs.talkTrans === false);
   $('#t-furi').setAttribute('aria-pressed', prefs.furi);
   $('#t-pron').setAttribute('aria-pressed', prefs.pron);
 }
@@ -1194,7 +1690,7 @@ if ('speechSynthesis' in window) {
 }
 applyPrefs();
 renderNav();
-renderLesson();
+renderMain();
 </script>
 </body>
 </html>

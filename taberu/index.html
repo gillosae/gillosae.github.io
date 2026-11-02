@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
     <title>일본어 가나 훈련</title>
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2S4N123Q9E"></script>
@@ -14,1091 +14,572 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+JP:wght@400;700&family=Zen+Maru+Gothic:wght@400;700&family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@400;700&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&family=Zen+Maru+Gothic:wght@400;700&family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@400;700&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #f6f3ec; --panel: #fffdf8; --panel2: #eeeae1; --line: #e3ddd1;
+            --ink: #1c1a17; --ink2: #67615a; --ink3: #9a948a;
+            --accent: #cf412a; --accent-soft: rgba(207, 65, 42, .10);
+            --ok: #1d8a4b; --ok-soft: rgba(29, 138, 75, .16);
+            --bad: #c8372a; --bad-soft: rgba(200, 55, 42, .14);
+            --shadow: 0 10px 32px rgba(40, 30, 20, .09);
+            --scrim: rgba(28, 26, 23, .38);
+            --gutter: 16px;
+            --side: 300px;
+            --jp: 'Noto Sans JP', sans-serif;
+            --kr: 'Noto Sans KR', sans-serif;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #131211; --panel: #1c1b19; --panel2: #282623; --line: #302e2a;
+                --ink: #f3efe8; --ink2: #aaa398; --ink3: #746e66;
+                --accent: #ff7a5f; --accent-soft: rgba(255, 122, 95, .14);
+                --ok: #5fd38d; --ok-soft: rgba(95, 211, 141, .18);
+                --bad: #ff7d6e; --bad-soft: rgba(255, 125, 110, .18);
+                --shadow: 0 10px 32px rgba(0, 0, 0, .45);
+                --scrim: rgba(0, 0, 0, .55);
+            }
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
         body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--kr);
+            line-height: 1.5;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body.click-mode { cursor: pointer; }
+        button, select, input { font: inherit; color: inherit; }
+        button {
+            background: none;
+            border: 0;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+        }
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .jp { font-family: var(--jp); }
+
+        /* 앱 기둥: 상단바 · 통계 · 카드 · 힌트 */
+        .app {
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
             flex-direction: column;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px var(--gutter) 6px;
+        }
+        .title {
+            flex: 1;
+            min-width: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mobile-menu-toggle, .chart-btn {
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--ink2);
+            transition: color .2s, border-color .2s, background .2s;
+        }
+        .mobile-menu-toggle {
+            width: 44px;
+            flex: none;
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+        }
+        .mobile-menu-toggle.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+        .chart-buttons { display: flex; gap: 6px; flex: none; }
+        .chart-btn { padding: 0 12px; font-size: .88rem; font-weight: 500; white-space: nowrap; }
+        .chart-btn .jp { font-size: 1.05rem; margin-right: 2px; color: var(--ink); }
+        .mobile-menu-toggle:hover, .chart-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        .progress {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            padding: 4px var(--gutter) 0;
+            font-size: .8rem;
+            color: var(--ink2);
+        }
+        .progress .chip {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            background: var(--panel2);
+            white-space: nowrap;
+        }
+        .progress b { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+        .stat-correct b { color: var(--ok); }
+        .stat-wrong b { color: var(--bad); }
+
+        /* 카드 */
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-family: 'Noto Sans KR', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #fff;
-            overflow: hidden;
-            user-select: none;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-            -webkit-tap-highlight-color: transparent;
+            padding: 16px var(--gutter) 8px;
         }
-
-        body.click-mode {
-            cursor: pointer;
-        }
-
-        .container {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .title {
-            font-size: 1.2rem;
-            color: #e94560;
-            letter-spacing: 0.3em;
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 4rem 6rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            width: min(100%, 600px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: clamp(24px, 5vmin, 48px) clamp(16px, 4vw, 40px);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            transition: border-color .25s ease, box-shadow .25s ease;
         }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 
-                0 35px 60px -15px rgba(0, 0, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
-        }
-
-        .card.correct {
-            border-color: #4ade80;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                0 0 30px rgba(74, 222, 128, 0.3);
-        }
-
+        .card.revealed { box-shadow: var(--shadow), 0 0 0 4px var(--accent-soft); }
+        .card.correct { border-color: var(--ok); box-shadow: var(--shadow), 0 0 0 4px var(--ok-soft); }
         .card.wrong {
-            border-color: #f87171;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                0 0 30px rgba(248, 113, 113, 0.3);
-            animation: shake 0.5s ease;
+            border-color: var(--bad);
+            box-shadow: var(--shadow), 0 0 0 4px var(--bad-soft);
+            animation: shake .45s ease;
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-10px); }
-            40% { transform: translateX(10px); }
-            60% { transform: translateX(-10px); }
-            80% { transform: translateX(10px); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
         }
 
+        /* 글자 크기는 화면 너비·높이 중 작은 쪽에 맞춰 연속적으로 줄어든다 */
         .hiragana {
-            font-family: 'Noto Sans JP', sans-serif;
-            font-size: 12rem;
+            font-family: var(--jp);
+            font-size: clamp(5rem, min(36vw, 28dvh), 13rem);
             font-weight: 400;
-            line-height: 1;
-            color: #fff;
-            text-shadow: 0 0 60px rgba(233, 69, 96, 0.3);
-            transition: transform 0.2s ease, font-size 0.3s ease;
+            line-height: 1.15;
+            white-space: nowrap;
+            color: var(--ink);
         }
-
-        .hiragana.char-2 {
-            font-size: 9rem;
-        }
-
-        .hiragana.char-3 {
-            font-size: 7rem;
+        .hiragana.char-2 { font-size: clamp(3.5rem, min(34vw, 20dvh), 9.5rem); }
+        .hiragana.char-3 { font-size: clamp(2.8rem, min(23vw, 15dvh), 7rem); }
+        .hiragana.new { animation: slideIn .35s cubic-bezier(.4, 0, .2, 1); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(.9) translateY(12px); }
+            to { opacity: 1; transform: none; }
         }
 
         .pronunciation {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: #e94560;
-            margin-top: 2rem;
-            min-height: 3.5rem;
+            margin-top: clamp(6px, 2vmin, 18px);
+            min-height: 1.4em;
+            font-size: clamp(1.6rem, 6vw, 2.4rem);
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--accent);
             opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(8px);
+            transition: opacity .3s ease, transform .3s ease;
         }
+        .pronunciation.visible { opacity: 1; transform: none; }
 
-        .pronunciation.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 타이핑 입력 */
-        .typing-area {
-            margin-top: 2rem;
-            display: none;
-        }
-
-        .typing-area.visible {
-            display: block;
-        }
-
+        .typing-area { display: none; width: 100%; margin-top: 12px; }
+        .typing-area.visible { display: flex; justify-content: center; }
         .typing-input {
-            font-family: 'Noto Sans KR', sans-serif;
-            font-size: 2rem;
+            width: min(100%, 260px);
+            height: 56px;
+            padding: 0 16px;
             text-align: center;
-            padding: 0.8rem 1.5rem;
-            width: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #fff;
+            font-size: 1.5rem;
+            background: var(--bg);
+            border: 2px solid var(--line);
+            border-radius: 16px;
+            color: var(--ink);
             outline: none;
-            transition: all 0.3s ease;
+            user-select: text;
+            -webkit-user-select: text;
+            transition: border-color .2s, background .2s;
         }
+        .typing-input:focus { border-color: var(--accent); background: var(--panel); }
+        .typing-input::placeholder { color: var(--ink3); font-size: 1.05rem; }
 
-        .typing-input:focus {
-            border-color: #e94560;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .typing-input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* 듣기 버튼 */
         .listen-btn {
-            margin: 1.5rem auto 0;
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
-            font-family: 'Noto Sans KR', sans-serif;
-            background: rgba(233, 69, 96, 0.2);
-            border: 1px solid #e94560;
-            border-radius: 12px;
-            color: #e94560;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
+            margin-top: 16px;
+            min-height: 44px;
+            padding: 0 20px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
+            gap: 8px;
+            border-radius: 99px;
+            border: 1px solid var(--line);
+            background: var(--panel2);
+            color: var(--ink2);
+            font-size: .95rem;
+            font-weight: 500;
+            transition: color .2s, border-color .2s, background .2s;
         }
-
-        .listen-btn:hover {
-            background: #e94560;
-            color: #fff;
-            transform: scale(1.05);
-        }
-
-        .listen-btn:active {
-            transform: scale(0.95);
-        }
-
-        .listen-btn.playing {
-            background: #e94560;
-            color: #fff;
-            animation: pulse-btn 1s infinite;
-        }
-
-        @keyframes pulse-btn {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .listen-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        .voice-select {
-            width: 100%;
-            padding: 0.6rem 1rem;
-            font-size: 0.8rem;
-            font-family: 'Noto Sans KR', sans-serif;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            outline: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' fill-opacity='0.5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.8rem center;
-            padding-right: 2rem;
-        }
-
-        .voice-select:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .voice-select:focus {
-            border-color: #e94560;
-        }
-
-        .voice-select option {
-            background: #1a1a2e;
-            color: #fff;
-            padding: 0.5rem;
-        }
+        .listen-btn:hover, .listen-btn.playing { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+        .listen-btn.playing { animation: pulse-btn 1s infinite; }
+        @keyframes pulse-btn { 50% { opacity: .65; } }
+        .listen-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
         .hint {
-            position: fixed;
-            bottom: 3rem;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 0.1em;
+            padding: 8px var(--gutter) 16px;
+            text-align: center;
+            font-size: .85rem;
+            color: var(--ink3);
         }
-
         .hint span {
             display: inline-block;
-            padding: 0.5rem 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            margin: 0 0.2rem;
+            margin-right: 4px;
+            padding: 1px 8px;
+            border: 1px solid var(--line);
+            border-bottom-width: 2px;
+            border-radius: 6px;
+            color: var(--ink2);
         }
 
-        /* 상단 컨트롤 영역 */
+        /* 설정: 휴대폰·세로 태블릿에선 아래에서 올라오는 시트 */
         .controls {
             position: fixed;
-            top: 2rem;
-            left: 2rem;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            width: min(100%, 560px);
+            max-height: min(85dvh, 680px);
+            margin: 0 auto;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
-            z-index: 100;
+            gap: 18px;
+            padding: 0 20px calc(20px + env(safe-area-inset-bottom));
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-bottom: 0;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -12px 40px rgba(0, 0, 0, .18);
+            cursor: default;
+            transform: translateY(105%);
+            visibility: hidden;
+            transition: transform .3s cubic-bezier(.2, .8, .2, 1), visibility 0s .3s;
         }
-
-        .toggle-group {
-            display: flex;
-            gap: 0.5rem;
+        .controls.open {
+            transform: none;
+            visibility: visible;
+            transition: transform .3s cubic-bezier(.2, .8, .2, 1);
         }
-
-        .toggle-group.font-group {
-            flex-wrap: wrap;
-            max-width: 280px;
-        }
-
-        .toggle-label {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 0.3rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .toggle-btn {
-            padding: 0.6rem 1rem;
-            font-size: 0.8rem;
-            font-family: 'Noto Sans KR', sans-serif;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
-        }
-
-        .toggle-btn:hover,
-        .toggle-btn:active {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .toggle-btn.active {
-            background: rgba(233, 69, 96, 0.2);
-            border-color: #e94560;
-            color: #e94560;
-        }
-
-        .toggle-btn.active:active {
-            background: rgba(233, 69, 96, 0.35);
-        }
-
-        .progress {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.5);
-            text-align: right;
-        }
-
-        .progress-count {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #e94560;
-        }
-
-        .stats {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            font-size: 0.75rem;
-        }
-
-        .stat-correct {
-            color: #4ade80;
-        }
-
-        .stat-wrong {
-            color: #f87171;
-        }
-
-        .round-info {
-            margin-top: 0.5rem;
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* 표 보기 버튼 */
-        .chart-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chart-btn {
-            flex: 1;
-            padding: 0.5rem;
-            font-size: 0.7rem;
-            font-family: 'Noto Sans KR', sans-serif;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-            color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
-
-        .chart-btn:hover,
-        .chart-btn:active {
-            background: rgba(233, 69, 96, 0.2);
-            border-color: #e94560;
-            color: #e94560;
-        }
-
-        /* 모달 */
-        .modal-overlay {
-            position: fixed;
+        .sheet-head {
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
+            z-index: 1;
             display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 1000;
+            justify-content: space-between;
+            padding: 18px 0 6px;
+            background: var(--panel);
+        }
+        .sheet-head::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 40px;
+            height: 4px;
+            margin-left: -20px;
+            border-radius: 99px;
+            background: var(--line);
+        }
+        .sheet-title { font-size: 1.05rem; font-weight: 700; }
+        .sheet-close {
+            min-height: 44px;
+            padding: 0 14px;
+            margin-right: -14px;
+            border-radius: 12px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .toggle-label {
+            margin-bottom: 8px;
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            color: var(--ink3);
+        }
+        .toggle-group {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: 1fr;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 14px;
+            background: var(--panel2);
+        }
+        .toggle-group.font-group {
+            grid-auto-flow: row;
+            grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+        }
+        .toggle-btn {
+            min-height: 44px;
+            padding: 0 8px;
+            border-radius: 10px;
+            font-size: .9rem;
+            color: var(--ink2);
+            white-space: nowrap;
+            transition: color .2s, background .2s;
+        }
+        .toggle-btn:hover { color: var(--ink); }
+        .toggle-btn.active {
+            background: var(--panel);
+            color: var(--accent);
+            font-weight: 700;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+        }
+        .voice-select {
+            width: 100%;
+            min-height: 44px;
+            padding: 0 40px 0 14px;
+            font-size: 1rem;
+            color: var(--ink);
+            background: var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239a948a' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 14px center;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            outline: none;
+        }
+        .voice-select:focus { border-color: var(--accent); }
+        .voice-select option { background: var(--panel); color: var(--ink); }
+
+        .mobile-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99;
+            background: var(--scrim);
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            cursor: default;
+            transition: opacity .3s ease, visibility 0s .3s;
         }
+        .mobile-overlay.visible { opacity: 1; visibility: visible; transition: opacity .3s ease; }
 
-        .modal-overlay.visible {
-            opacity: 1;
-            visibility: visible;
+        /* 가나 표 모달 */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+            background: var(--scrim);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            cursor: default;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .25s ease, visibility 0s .25s;
         }
-
+        .modal-overlay.visible { opacity: 1; visibility: visible; transition: opacity .25s ease; }
         .modal {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 90vw;
-            max-height: 90vh;
-            overflow: auto;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
+            width: min(100%, 720px);
+            max-height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            transform: translateY(12px) scale(.98);
+            transition: transform .25s ease;
         }
-
-        .modal-overlay.visible .modal {
-            transform: scale(1);
-        }
-
+        .modal-overlay.visible .modal { transform: none; }
         .modal-header {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            gap: 1rem;
+            gap: 12px;
+            padding: 12px 12px 12px 20px;
+            border-bottom: 1px solid var(--line);
         }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #e94560;
-        }
-
-        .modal-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
+        .modal-title { font-size: 1.15rem; font-weight: 700; }
+        .modal-controls { display: flex; align-items: center; gap: 8px; }
         .modal-reset {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            font-family: 'Noto Sans KR', sans-serif;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.3s ease;
+            min-height: 44px;
+            padding: 0 16px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            color: var(--ink2);
+            font-size: .9rem;
         }
-
-        .modal-reset:hover {
-            background: rgba(233, 69, 96, 0.3);
-            border-color: #e94560;
-            color: #e94560;
-        }
-
+        .modal-reset:hover { color: var(--accent); border-color: var(--accent); }
         .modal-close {
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: var(--panel2);
+            color: var(--ink2);
+            font-size: 1.5rem;
+            line-height: 1;
         }
-
-        .modal-close:hover {
-            background: #e94560;
-        }
-
+        .modal-close:hover { color: var(--accent); }
         .chart-container {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .chart-section {
-            text-align: center;
-        }
-
-        .chart-section-title {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 0.8rem;
-        }
-
-        .chart-grid {
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 4px;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+            gap: 20px 28px;
+            padding: 16px 20px 20px;
         }
-
+        .chart-section-title {
+            margin-bottom: 8px;
+            font-size: .82rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+            color: var(--ink3);
+        }
+        .chart-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
         .chart-cell {
-            width: 48px;
-            height: 48px;
+            aspect-ratio: 1;
+            min-height: 44px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            border-radius: 12px;
+            background: var(--panel2);
             cursor: pointer;
+            transition: opacity .2s ease, background .2s ease;
         }
+        .chart-cell:hover { background: var(--accent-soft); }
+        .chart-cell.empty { background: transparent; cursor: default; }
+        .chart-cell.clicked { opacity: .25; }
+        .chart-cell.clicked:hover { opacity: .45; }
+        .chart-char { font-size: clamp(1.25rem, 5vw, 1.6rem); line-height: 1.15; color: var(--ink); }
+        .chart-pron { margin-top: 1px; font-size: .68rem; color: var(--ink3); }
 
-        .chart-cell:hover {
-            background: rgba(233, 69, 96, 0.2);
-            transform: scale(1.1);
-        }
-
-        .chart-cell.empty {
-            background: transparent;
-            cursor: default;
-        }
-
-        .chart-cell.clicked {
-            opacity: 0.2;
-            transform: scale(1);
-        }
-
-        .chart-cell.clicked:hover {
-            opacity: 0.4;
-        }
-
-        .chart-char {
-            font-size: 1.4rem;
-            color: #fff;
-        }
-
-        .chart-pron {
-            font-size: 0.6rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 2px;
-        }
-
-        @media (max-width: 768px) {
-            .modal-overlay {
-                padding: 1rem;
-            }
-
-            .modal {
-                padding: 1.5rem;
-                max-height: calc(100vh - 2rem);
-                width: 100%;
-                max-width: calc(100vw - 2rem);
-            }
-
-            .modal-header {
-                flex-wrap: wrap;
-                gap: 0.8rem;
-            }
-
-            .modal-title {
-                font-size: 1.3rem;
-            }
-
-            .modal-controls {
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .chart-container {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            .chart-cell {
-                width: 44px;
-                height: 44px;
-            }
-
-            .chart-char {
-                font-size: 1.3rem;
-            }
-
-            .chart-pron {
-                font-size: 0.55rem;
-            }
-
-            .chart-grid {
-                gap: 3px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .modal {
-                padding: 1rem;
-            }
-
-            .chart-cell {
-                width: 38px;
-                height: 38px;
-            }
-
-            .chart-char {
-                font-size: 1.1rem;
-            }
-
-            .chart-section-title {
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Particle effects */
+        /* 배경에 천천히 떠오르는 점 */
         .particles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
+            inset: 0;
             z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
         }
-
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(233, 69, 96, 0.3);
+            bottom: 0;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
-            animation: float 15s infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        /* Card flip animation */
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 
-                    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                    0 0 0 0 rgba(233, 69, 96, 0);
-            }
-            50% {
-                box-shadow: 
-                    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                    0 0 0 20px rgba(233, 69, 96, 0);
-            }
-        }
-
-        .card.revealed {
-            animation: pulse 2s ease-in-out;
-        }
-
-        /* Character change animation */
-        @keyframes slideIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .hiragana.new {
-            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* 모바일 토글 메뉴 버튼 */
-        .mobile-menu-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            width: 44px;
-            height: 44px;
-            background: rgba(233, 69, 96, 0.2);
-            border: 1px solid #e94560;
-            border-radius: 12px;
-            color: #e94560;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 101;
-            transition: all 0.3s ease;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mobile-menu-toggle:hover {
-            background: #e94560;
-            color: #fff;
-        }
-
-        .mobile-menu-toggle.active {
-            background: #e94560;
-            color: #fff;
-        }
-
-        /* 모바일 오버레이 */
-        .mobile-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 99;
+            background: var(--accent);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            animation: float 15s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(10vh); opacity: 0; }
+            10%, 90% { opacity: .16; }
+            100% { transform: translateY(-110vh); opacity: 0; }
         }
 
-        .mobile-overlay.visible {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-menu-toggle {
-                display: flex;
-                top: calc(0.8rem + env(safe-area-inset-top));
-                left: calc(1rem + env(safe-area-inset-left));
+        /* 가로 태블릿·데스크톱: 설정을 왼쪽에 늘 펼쳐 둔다 */
+        @media (min-width: 1024px) {
+            body {
+                display: grid;
+                grid-template-columns: var(--side) minmax(0, 1fr);
             }
-
-            .mobile-overlay {
-                display: block;
-                pointer-events: none;
-            }
-
-            .mobile-overlay.visible {
-                pointer-events: auto;
-            }
-
             .controls {
-                position: fixed;
+                position: sticky;
                 top: 0;
-                left: -100%;
-                width: 280px;
-                height: 100%;
-                padding: calc(5rem + env(safe-area-inset-top)) calc(1.5rem + env(safe-area-inset-left)) calc(2rem + env(safe-area-inset-bottom)) calc(1.5rem + env(safe-area-inset-left));
-                background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-                border-right: 1px solid rgba(255, 255, 255, 0.1);
-                transform: translateX(0);
-                transition: left 0.3s ease;
-                overflow-y: auto;
-                z-index: 100;
-                -webkit-overflow-scrolling: touch;
-                box-shadow: none;
-            }
-
-            .controls.open {
-                left: 0;
-                box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
-            }
-
-            .toggle-group {
-                flex-wrap: wrap;
-            }
-
-            .toggle-group.font-group {
-                max-width: 100%;
-            }
-
-            .toggle-btn {
-                padding: 0.7rem 1rem;
-                font-size: 0.85rem;
-                min-height: 44px;
-            }
-
-            .toggle-label {
-                font-size: 0.75rem;
-                margin-top: 0.5rem;
-            }
-
-            .voice-select {
-                font-size: 0.9rem;
-                padding: 0.7rem 1rem;
-                min-height: 44px;
-            }
-
-            /* 모바일 가로형 progress 바 */
-            .progress {
-                position: fixed;
-                top: calc(env(safe-area-inset-top));
-                left: 0;
-                right: 0;
-                width: 100%;
-                max-width: none;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: flex-end;
-                gap: 1rem;
-                padding: 0.6rem 1rem;
-                padding-left: calc(4.5rem + env(safe-area-inset-left));
-                padding-right: calc(1rem + env(safe-area-inset-right));
-                font-size: 0.75rem;
-                background: rgba(26, 26, 46, 0.95);
+                width: auto;
+                height: 100vh;
+                height: 100dvh;
+                max-height: none;
+                margin: 0;
+                gap: 22px;
+                padding: calc(20px + env(safe-area-inset-top)) 24px 24px calc(24px + env(safe-area-inset-left));
+                border: 0;
+                border-right: 1px solid var(--line);
                 border-radius: 0;
-                border: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                z-index: 50;
-                text-align: left;
+                box-shadow: none;
+                transform: none;
+                visibility: visible;
+                transition: none;
             }
-
-            .progress-count {
-                font-size: 1rem;
-                display: inline;
-            }
-
-            .progress > br {
-                display: none;
-            }
-
-            .stats {
-                margin-top: 0;
-                padding-top: 0;
-                border-top: none;
-                display: flex;
-                align-items: center;
-            }
-
-            .stats-row {
-                flex-direction: row;
-                gap: 0.8rem;
-                font-size: 0.7rem;
-            }
-
-            .round-info {
-                margin-top: 0;
-                font-size: 0.65rem;
-                white-space: nowrap;
-            }
-
-            .chart-buttons {
-                flex-direction: row;
-                gap: 0.4rem;
-                margin-top: 0;
-                padding-top: 0;
-                border-top: none;
-            }
-
-            .chart-btn {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.65rem;
-            }
-
-            .hiragana {
-                font-size: 8rem;
-            }
-
-            .hiragana.char-2 {
-                font-size: 6rem;
-            }
-
-            .hiragana.char-3 {
-                font-size: 5rem;
-            }
-
-            .card {
-                padding: 3rem 3.5rem;
-                margin: 0 1rem;
-            }
-
-            .pronunciation {
-                font-size: 2rem;
-            }
-
-            .title {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .listen-btn {
-                padding: 0.7rem 1.5rem;
-                font-size: 0.9rem;
-                min-height: 44px;
-            }
-
-            .hint {
-                bottom: calc(1.5rem + env(safe-area-inset-bottom));
-                font-size: 0.8rem;
-                padding: 0 1rem;
-            }
-
-            .hint span {
-                padding: 0.4rem 0.8rem;
-            }
-
-            .container {
-                padding-top: 4rem;
-            }
+            .sheet-head { padding-top: 6px; }
+            .sheet-head::before, .sheet-close, .mobile-menu-toggle, .mobile-overlay { display: none; }
+            .app { padding-left: 0; }
+            .topbar { padding: calc(20px + env(safe-area-inset-top)) 32px 6px; }
+            .title { font-size: 1.3rem; }
+            .progress { justify-content: flex-start; padding: 4px 32px 0; font-size: .85rem; }
+            .container { padding: 24px 32px; }
+            .hint { padding-bottom: 24px; }
         }
 
-        @media (max-width: 480px) {
-            .controls {
-                width: 100%;
-                padding: calc(4.5rem + env(safe-area-inset-top)) calc(1.5rem + env(safe-area-inset-left)) calc(2rem + env(safe-area-inset-bottom)) calc(1.5rem + env(safe-area-inset-left));
-            }
-
-            .progress {
-                padding: 0.5rem 0.8rem;
-                padding-left: calc(4.2rem + env(safe-area-inset-left));
-                padding-right: calc(0.8rem + env(safe-area-inset-right));
-                gap: 0.5rem;
-                font-size: 0.65rem;
-            }
-
-            .progress-count {
-                font-size: 0.9rem;
-            }
-
-            .stats-row {
-                gap: 0.5rem;
-                font-size: 0.6rem;
-            }
-
-            .round-info {
-                font-size: 0.55rem;
-            }
-
-            .chart-buttons {
-                gap: 0.3rem;
-            }
-
-            .chart-btn {
-                padding: 0.3rem 0.5rem;
-                font-size: 0.6rem;
-            }
-
-            .hiragana {
-                font-size: 5.5rem;
-            }
-
-            .hiragana.char-2 {
-                font-size: 4rem;
-            }
-
-            .hiragana.char-3 {
-                font-size: 3rem;
-            }
-
-            .card {
-                padding: 2rem 2.5rem;
-                border-radius: 16px;
-                width: calc(100% - 2rem);
-                max-width: 320px;
-            }
-
-            .pronunciation {
-                font-size: 1.5rem;
-                margin-top: 1.5rem;
-            }
-
-            .title {
-                font-size: 0.9rem;
-                margin-bottom: 1.5rem;
-                letter-spacing: 0.2em;
-            }
-
-            .typing-area {
-                margin-top: 1.5rem;
-            }
-
-            .typing-input {
-                width: 100%;
-                max-width: 180px;
-                font-size: 1.3rem;
-                padding: 0.7rem 1rem;
-            }
-
-            .listen-btn {
-                margin-top: 1rem;
-                padding: 0.6rem 1.2rem;
-                font-size: 0.85rem;
-            }
-
-            .hint {
-                bottom: calc(1rem + env(safe-area-inset-bottom));
-                font-size: 0.75rem;
-            }
-
-            .hint span {
-                padding: 0.3rem 0.6rem;
-                font-size: 0.7rem;
-            }
-
-            .container {
-                padding: 1rem;
-                padding-top: 4rem;
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-
-        /* 가로 모드 (landscape) 모바일 최적화 */
+        /* 가로로 눕힌 휴대폰: 높이가 낮으니 여백을 줄인다 */
         @media (max-height: 500px) and (orientation: landscape) {
-            .container {
-                padding: 0.5rem;
-            }
+            .topbar { padding-top: 8px; }
+            .container { padding-top: 6px; padding-bottom: 4px; }
+            .card { padding: 12px 24px; border-radius: 20px; }
+            .pronunciation { margin-top: 2px; font-size: 1.4rem; }
+            .listen-btn { margin-top: 8px; }
+            .typing-area { margin-top: 6px; }
+            .typing-input { height: 48px; }
+            .hint { display: none; }
+        }
 
-            .title {
-                margin-bottom: 0.5rem;
-                font-size: 0.8rem;
-            }
+        /* 휴대폰 타이핑 모드: 키보드가 아래를 덮으므로 카드를 위쪽에 붙인다 */
+        @media (max-width: 767px) {
+            body:not(.click-mode) .container { justify-content: flex-start; }
+            .chart-btn { padding: 0 10px; }
+        }
 
-            .card {
-                padding: 1rem 2rem;
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
             }
-
-            .hiragana {
-                font-size: 4rem;
-            }
-
-            .hiragana.char-2 {
-                font-size: 3rem;
-            }
-
-            .hiragana.char-3 {
-                font-size: 2.5rem;
-            }
-
-            .pronunciation {
-                font-size: 1.2rem;
-                margin-top: 0.5rem;
-                min-height: 2rem;
-            }
-
-            .listen-btn {
-                margin-top: 0.5rem;
-                padding: 0.4rem 1rem;
-                font-size: 0.8rem;
-            }
-
-            .hint {
-                display: none;
-            }
-
-            .progress {
-                top: 0.5rem;
-                right: 0.5rem;
-                padding: 0.5rem;
-                font-size: 0.7rem;
-            }
-
-            .progress-count {
-                font-size: 1rem;
-            }
+            .particles { display: none; }
         }
     </style>
 </head>
 <body class="click-mode">
     <div class="particles" id="particles"></div>
-    
-    <!-- 모바일 메뉴 토글 -->
-    <button class="mobile-menu-toggle" id="mobile-menu-toggle">☰</button>
-    <div class="mobile-overlay" id="mobile-overlay"></div>
-    
-    <div class="controls" id="controls">
+
+    <aside class="controls" id="controls" aria-label="설정">
+        <div class="sheet-head">
+            <div class="sheet-title">설정</div>
+            <button class="sheet-close" id="sheet-close">완료</button>
+        </div>
         <div>
-            <div class="toggle-label">글꼴</div>
-            <div class="toggle-group font-group">
-                <button class="toggle-btn active" data-font="'Noto Sans JP', sans-serif">Sans</button>
-                <button class="toggle-btn" data-font="'Noto Serif JP', serif">Serif</button>
-                <button class="toggle-btn" data-font="'Zen Maru Gothic', sans-serif">Zen</button>
-                <button class="toggle-btn" data-font="'Kosugi Maru', sans-serif">Kosugi</button>
-                <button class="toggle-btn" data-font="'M PLUS Rounded 1c', sans-serif">M+</button>
-                <button class="toggle-btn" data-font="'Hachi Maru Pop', cursive">Hachi</button>
-                <button class="toggle-btn" data-font="random">랜덤</button>
+            <div class="toggle-label">문자</div>
+            <div class="toggle-group">
+                <button class="toggle-btn active" id="btn-script-hiragana">히라가나</button>
+                <button class="toggle-btn" id="btn-script-katakana">가타카나</button>
+                <button class="toggle-btn" id="btn-script-mixed">혼용</button>
             </div>
         </div>
         <div>
@@ -1117,68 +598,72 @@
             </div>
         </div>
         <div>
-            <div class="toggle-label">문자</div>
-            <div class="toggle-group">
-                <button class="toggle-btn active" id="btn-script-hiragana">히라가나</button>
-                <button class="toggle-btn" id="btn-script-katakana">가타카나</button>
-                <button class="toggle-btn" id="btn-script-mixed">혼용</button>
+            <div class="toggle-label">글꼴</div>
+            <div class="toggle-group font-group">
+                <button class="toggle-btn active" data-font="'Noto Sans JP', sans-serif" style="font-family:'Noto Sans JP', sans-serif">Sans</button>
+                <button class="toggle-btn" data-font="'Noto Serif JP', serif" style="font-family:'Noto Serif JP', serif">Serif</button>
+                <button class="toggle-btn" data-font="'Zen Maru Gothic', sans-serif" style="font-family:'Zen Maru Gothic', sans-serif">Zen</button>
+                <button class="toggle-btn" data-font="'Kosugi Maru', sans-serif" style="font-family:'Kosugi Maru', sans-serif">Kosugi</button>
+                <button class="toggle-btn" data-font="'M PLUS Rounded 1c', sans-serif" style="font-family:'M PLUS Rounded 1c', sans-serif">M+</button>
+                <button class="toggle-btn" data-font="'Hachi Maru Pop', cursive" style="font-family:'Hachi Maru Pop', cursive">Hachi</button>
+                <button class="toggle-btn" data-font="random">랜덤</button>
             </div>
         </div>
         <div>
             <div class="toggle-label">음성</div>
-            <select class="voice-select" id="voice-select">
+            <select class="voice-select" id="voice-select" aria-label="일본어 음성">
                 <option value="">로딩중...</option>
             </select>
         </div>
-    </div>
+    </aside>
+    <div class="mobile-overlay" id="mobile-overlay"></div>
 
-    <div class="progress">
-        <span class="progress-count" id="count">0</span>
-        <br>학습 횟수
-        <div class="stats">
-            <div class="stats-row">
-                <span class="stat-correct">정답: <span id="correct-count">0</span></span>
-                <span class="stat-wrong">오답: <span id="wrong-count">0</span></span>
+    <div class="app">
+        <header class="topbar">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="설정">☰</button>
+            <h1 class="title" id="main-title">히라가나 훈련</h1>
+            <div class="chart-buttons">
+                <button class="chart-btn" id="btn-hiragana-chart"><span class="jp">ひ</span>표</button>
+                <button class="chart-btn" id="btn-katakana-chart"><span class="jp">カ</span>표</button>
             </div>
-        </div>
-        <div class="round-info">
-            라운드 <span id="round">1</span> · <span id="remaining">71</span>개 남음
-        </div>
-        <div class="chart-buttons">
-            <button class="chart-btn" id="btn-hiragana-chart">ひ 표</button>
-            <button class="chart-btn" id="btn-katakana-chart">カ 표</button>
-        </div>
-    </div>
+        </header>
 
-    <div class="container">
-        <h1 class="title" id="main-title">히라가나 훈련</h1>
-        <div class="card" id="card">
-            <div class="hiragana" id="hiragana">あ</div>
-            <div class="pronunciation" id="pronunciation">아</div>
-            <div class="typing-area" id="typing-area">
-                <input type="text" class="typing-input" id="typing-input" placeholder="발음 입력" autocomplete="off">
+        <div class="progress">
+            <span class="chip">학습 <b class="progress-count" id="count">0</b></span>
+            <span class="chip stat-correct">정답 <b id="correct-count">0</b></span>
+            <span class="chip stat-wrong">오답 <b id="wrong-count">0</b></span>
+            <span class="chip round-info">라운드 <b id="round">1</b> · <b id="remaining">71</b>개 남음</span>
+        </div>
+
+        <main class="container">
+            <div class="card" id="card">
+                <div class="hiragana" id="hiragana">あ</div>
+                <div class="pronunciation" id="pronunciation">아</div>
+                <div class="typing-area" id="typing-area">
+                    <input type="text" class="typing-input" id="typing-input" placeholder="발음 입력" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+                </div>
+                <button class="listen-btn" id="listen-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                    듣기
+                </button>
             </div>
-            <button class="listen-btn" id="listen-btn">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                </svg>
-                듣기
-            </button>
-        </div>
-    </div>
+        </main>
 
-    <div class="hint" id="hint">
-        <span>클릭</span> 발음 보기 → 다음 글자
+        <div class="hint" id="hint">
+            <span>클릭</span> 발음 보기 → 다음 글자
+        </div>
     </div>
 
     <!-- 히라가나 모달 -->
     <div class="modal-overlay" id="hiragana-modal">
-        <div class="modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-label="히라가나 표">
             <div class="modal-header">
                 <h2 class="modal-title">히라가나 표</h2>
                 <div class="modal-controls">
                     <button class="modal-reset" id="reset-hiragana">리셋</button>
-                    <button class="modal-close" id="close-hiragana">&times;</button>
+                    <button class="modal-close" id="close-hiragana" aria-label="닫기">&times;</button>
                 </div>
             </div>
             <div class="chart-container" id="hiragana-chart"></div>
@@ -1187,12 +672,12 @@
 
     <!-- 가타카나 모달 -->
     <div class="modal-overlay" id="katakana-modal">
-        <div class="modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-label="가타카나 표">
             <div class="modal-header">
                 <h2 class="modal-title">가타카나 표</h2>
                 <div class="modal-controls">
                     <button class="modal-reset" id="reset-katakana">리셋</button>
-                    <button class="modal-close" id="close-katakana">&times;</button>
+                    <button class="modal-close" id="close-katakana" aria-label="닫기">&times;</button>
                 </div>
             </div>
             <div class="chart-container" id="katakana-chart"></div>
@@ -1749,7 +1234,7 @@
         // 클릭 이벤트 (클릭 모드용)
         document.body.addEventListener('click', (e) => {
             if (inputMode !== 'click') return;
-            if (e.target.closest('.controls')) return;
+            if (e.target.closest('.controls, .mobile-overlay, .modal-overlay')) return;
             handleClickMode();
         });
 
@@ -2149,6 +1634,11 @@
         });
 
         mobileOverlay.addEventListener('click', () => {
+            closeMobileMenu();
+        });
+
+        document.getElementById('sheet-close').addEventListener('click', (e) => {
+            e.stopPropagation();
             closeMobileMenu();
         });
 
