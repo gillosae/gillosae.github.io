@@ -22,6 +22,7 @@ countdown/             standalone deadline countdown, served at /countdown/
 flying/                flight log app, served at /flying/
   data/ logos/sq/
 taberu/                kana drill, served at /taberu/
+hanasu/                Japanese speaking course with ASR scoring, served at /hanasu/
 senujin/               wedding invitation, served at /senujin/
 yoonyoung/             wedding invitation, served at /yoonyoung/
 
