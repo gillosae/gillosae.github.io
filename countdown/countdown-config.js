@@ -28,7 +28,7 @@ const config = {
             name: "ICML",
             date: "2027-01-23",
             time: "23:59:59",
-            est: true
+            est: false
         },
         {
             name: "Interspeech",
