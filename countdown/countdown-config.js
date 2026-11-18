@@ -13,12 +13,6 @@ const config = {
     timezone: "-12:00",
     events: [
         {
-            name: "CVPR",
-            date: "2026-11-16",
-            time: "23:59:59",
-            est: false
-        },
-        {
             name: "SIGIR",
             date: "2026-12-16",
             time: "23:59:59",
@@ -32,7 +26,7 @@ const config = {
         },
         {
             name: "ICML",
-            date: "2027-01-15",
+            date: "2027-01-23",
             time: "23:59:59",
             est: true
         },
@@ -41,6 +35,12 @@ const config = {
             date: "2027-02-16",
             time: "23:59:59",
             est: false
-        }
+        },
+        {
+            name: "WASPAA",
+            date: "2027-04-22",
+            time: "23:59:59",
+            est: false
+        },
     ]
 };
